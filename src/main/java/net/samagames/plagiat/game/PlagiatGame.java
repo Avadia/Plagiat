@@ -251,6 +251,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         super.handleLogin(player);
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> this.getPlayer(player.getUniqueId()).loadCage());
         player.teleport(this.lobby);
+        player.getInventory().clear();
     }
 
     /**
