@@ -114,6 +114,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     public void startGame()
     {
         super.startGame();
+        this.giveKits();
         this.teleport();
         this.destroyLobby();
         this.modules.forEach(AbstractModule::handleGameStart);
@@ -128,6 +129,15 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                     player.setGameMode(GameMode.SURVIVAL);
             });
         }, 200L);
+    }
+
+    /**
+     * Give kits to players
+     */
+    private void giveKits()
+    {
+        // TODO
+        this.getInGamePlayers().values().forEach(plagiatPlayer -> plagiatPlayer.getPlayerIfOnline().getInventory().clear());
     }
 
     /**

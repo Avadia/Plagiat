@@ -36,7 +36,7 @@ public class UltraLuckyModule extends AbstractModule
      *
      * @param plugin Plagiat's plugin instance
      */
-    protected UltraLuckyModule(Plagiat plugin)
+    public UltraLuckyModule(Plagiat plugin)
     {
         super(plugin, "ultralucky", MCServer.UHCGAMES);
 
