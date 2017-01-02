@@ -1,5 +1,6 @@
 package net.samagames.plagiat.modules;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.samagames.api.games.Game;
 import net.samagames.api.games.IGameManager;
@@ -65,7 +66,8 @@ public abstract class AbstractModule implements Listener
     {
         IGameProperties iGameProperties = this.plugin.getSamaGamesAPI().getGameManager().getGameProperties();
         JsonObject modulesRoot = iGameProperties.getConfig("modules", new JsonObject()).getAsJsonObject();
-        JsonObject root = modulesRoot.get(this.name).getAsJsonObject();
+        JsonElement rootElement = modulesRoot.get(this.name);
+        JsonObject root = rootElement == null ? null : rootElement.getAsJsonObject();
         return root == null ? new JsonObject() : root;
     }
 

@@ -119,7 +119,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.teleport();
         this.destroyLobby();
         this.modules.forEach(AbstractModule::handleGameStart);
-        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable() {
+        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
+        {
             int n = 5;
             @Override
             public void run()
@@ -127,6 +128,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                 String msg = ChatColor.YELLOW + "Début dans " + this.n + "seconde" + (this.n > 1 ? "s" : "");
                 PlagiatGame.this.getCoherenceMachine().getMessageManager().writeCustomMessage(msg, true);
                 PlagiatGame.this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 1, 18, 1, msg, ""));
+                this.n--;
             }
         }, 100L, 20L);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
