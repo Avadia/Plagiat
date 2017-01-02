@@ -17,6 +17,7 @@ import net.samagames.plagiat.modules.splegg.SpleggModule;
 import net.samagames.plagiat.modules.ultralucky.UltraLuckyModule;
 import net.samagames.tools.Area;
 import net.samagames.tools.LocationUtils;
+import net.samagames.tools.Titles;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -118,6 +119,16 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.teleport();
         this.destroyLobby();
         this.modules.forEach(AbstractModule::handleGameStart);
+        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable() {
+            int n = 5;
+            @Override
+            public void run()
+            {
+                String msg = ChatColor.YELLOW + "Début dans " + this.n + "seconde" + (this.n > 1 ? "s" : "");
+                PlagiatGame.this.getCoherenceMachine().getMessageManager().writeCustomMessage(msg, true);
+                PlagiatGame.this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 1, 18, 1, msg, ""));
+            }
+        }, 100L, 20L);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
         {
             this.destroyCages();
