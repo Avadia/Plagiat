@@ -1,0 +1,8 @@
+name: Plagiat
+main: net.samagames.plagiat.Plagiat
+version: BlindDevNoTest
+
+depend: [SamaGamesAPI]
+
+authors: [Rigner]
+website: https://fr.wikipedia.org/wiki/Plagiat
