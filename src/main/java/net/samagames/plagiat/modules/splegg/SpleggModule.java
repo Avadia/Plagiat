@@ -6,6 +6,7 @@ import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
 import net.samagames.plagiat.modules.dimensions.InternalBlockBreakEvent;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Egg;
@@ -15,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.BlockIterator;
 
 /**
  * Splegg module class
@@ -87,7 +89,18 @@ public class SpleggModule extends AbstractModule
     @EventHandler
     public void onEggLand(PlayerEggThrowEvent event)
     {
-        event.getEgg().getLocation().add(event.getEgg().getVelocity()).getBlock().setType(Material.AIR);
+        BlockIterator blockIterator = new BlockIterator(event.getEgg().getWorld(), event.getEgg().getLocation().toVector(), event.getEgg().getVelocity().normalize(), 0.0D, 4);
+        Block hitBlock = null;
+        while (blockIterator.hasNext())
+        {
+            hitBlock = blockIterator.next();
+            if (hitBlock.getType() != Material.AIR)
+                break ;
+        }
+
+        if (hitBlock != null)
+            hitBlock.setType(Material.AIR);
+
         event.setHatching(false);
         event.setNumHatches((byte)0);
         this.plugin.getServer().getPluginManager().callEvent(new InternalBlockBreakEvent(event.getEgg().getLocation().getBlock()));
