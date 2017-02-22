@@ -54,6 +54,7 @@ public class QuakeModule extends AbstractModule
         itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         itemMeta.spigot().setUnbreakable(true);
+        this.hoe.setItemMeta(itemMeta);
     }
 
     /**
@@ -145,6 +146,11 @@ public class QuakeModule extends AbstractModule
             return ;
         this.cooldown.add(player.getUniqueId());
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(player.getUniqueId()), 200L);
+        for (int i = 0; i < 20; ++i)
+        {
+            final int j = i;
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setDurability((short) (itemStack.getType().getMaxDurability() - itemStack.getType().getMaxDurability() * j / 20)), j * 20L);
+        }
         List<Player> players = this.getTargetV3(player, 100, 1.5D);
         if (!players.isEmpty())
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);

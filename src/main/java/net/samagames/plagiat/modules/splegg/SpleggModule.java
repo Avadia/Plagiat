@@ -33,7 +33,7 @@ public class SpleggModule extends AbstractModule
     {
         super(plugin, "quake", MCServer.HIVEMC);
 
-        this.egg = new ItemStack(Material.EGG);
+        this.egg = new ItemStack(Material.EGG, 64);
         ItemMeta itemMeta = this.egg.getItemMeta();
         itemMeta.setDisplayName("Oeuf " + this.getServerSuffix());
         itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
