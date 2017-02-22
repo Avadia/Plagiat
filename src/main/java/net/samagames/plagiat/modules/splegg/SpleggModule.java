@@ -5,11 +5,10 @@ import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
 import net.samagames.plagiat.modules.dimensions.InternalBlockBreakEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Egg;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -39,6 +38,19 @@ public class SpleggModule extends AbstractModule
         itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
         itemMeta.spigot().setUnbreakable(true);
+    }
+
+    /**
+     * Start the egg trail on start
+     */
+    @Override
+    public void handleGameStart()
+    {
+        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
+        {
+            World world = this.plugin.getServer().getWorlds().get(0);
+            world.getEntitiesByClass(Egg.class).forEach(e -> world.spawnParticle(Particle.REDSTONE, e.getLocation(), 2));
+        }, 2L, 2L);
     }
 
     /**
