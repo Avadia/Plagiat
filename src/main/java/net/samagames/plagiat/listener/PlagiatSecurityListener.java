@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 /**
  * Plagiat main Listener
@@ -57,6 +58,18 @@ public class PlagiatSecurityListener implements Listener
     public void onBlockBreak(BlockPlaceEvent event)
     {
         if (!this.plugin.getGame().isBuildActivated())
+            event.setCancelled(true);
+    }
+
+    /**
+     * Cancel rain and other weather changes
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onWeatherChange(WeatherChangeEvent event)
+    {
+        if (event.toWeatherState())
             event.setCancelled(true);
     }
 }
