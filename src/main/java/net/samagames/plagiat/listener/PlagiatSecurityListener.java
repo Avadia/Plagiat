@@ -1,11 +1,13 @@
 package net.samagames.plagiat.listener;
 
 import net.samagames.plagiat.Plagiat;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 /**
@@ -71,5 +73,21 @@ public class PlagiatSecurityListener implements Listener
     {
         if (event.toWeatherState())
             event.setCancelled(true);
+    }
+
+    /**
+     * Cancel food loss if game not started
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onFoodLevelChange(FoodLevelChangeEvent event)
+    {
+        if (!this.plugin.getGame().areDamagesActivated())
+        {
+            event.setCancelled(true);
+            if (event.getEntity() instanceof Player)
+                ((Player)event.getEntity()).setFoodLevel(20);
+        }
     }
 }

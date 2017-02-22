@@ -134,6 +134,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
         {
             this.destroyCages();
+            this.buildActivated = true;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.damagesActivated = true, 40L);
             this.getInGamePlayers().forEach((uuid, plagiatPlayer) ->
             {
