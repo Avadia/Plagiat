@@ -66,6 +66,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.lobbyArea = Area.str2area(this.gameManager.getGameProperties().getConfig("lobbyArea", new JsonPrimitive("world, -10, 120, -10, 10, 128, 10")).getAsString());
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.chests.forEach(plagiatChest -> plagiatChest.generate(this.insane)), 10L);
+
+        this.plugin.getServer().getWorlds().get(0).setStorm(false);
     }
 
     /**
