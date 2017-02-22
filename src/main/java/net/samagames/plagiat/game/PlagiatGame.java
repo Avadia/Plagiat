@@ -78,7 +78,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.registerModule(SheepWarsModule.class);
         this.registerModule(QuakeModule.class);
         this.registerModule(GravityModule.class);
-        this.registerModule(DimensionsModule.class);
+        //TODO this.registerModule(DimensionsModule.class);
         this.registerModule(SpleggModule.class);
         this.registerModule(RushModule.class);
         this.registerModule(UltraLuckyModule.class);
