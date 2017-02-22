@@ -52,8 +52,7 @@ public class QuakeModule extends AbstractModule
         ItemMeta itemMeta = this.hoe.getItemMeta();
         itemMeta.setDisplayName("Bling bling Thing " + this.getServerSuffix());
         itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_UNBREAKABLE);
-        itemMeta.spigot().setUnbreakable(true);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         this.hoe.setItemMeta(itemMeta);
     }
 
