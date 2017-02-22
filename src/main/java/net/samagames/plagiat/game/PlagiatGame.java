@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -50,7 +51,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      */
     public PlagiatGame(Plagiat plugin, boolean insane)
     {
-        super("plagiat", "Plagiat " + (insane ? ChatColor.RED + "" + ChatColor.BOLD + "INSANE" : ""), "CTRL-C -> CTRL-V", PlagiatPlayer.class);
+        super("plagiat", "Plagiat" + (insane ? ChatColor.RED + " " + ChatColor.BOLD + "INSANE" : ""), "CTRL-C -> CTRL-V", PlagiatPlayer.class);
         this.plugin = plugin;
         this.modules = new ArrayList<>();
         this.spawns = new ArrayList<>();
@@ -119,18 +120,20 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.teleport();
         this.destroyLobby();
         this.modules.forEach(AbstractModule::handleGameStart);
-        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
+        new BukkitRunnable()
         {
             int n = 5;
             @Override
             public void run()
             {
-                String msg = ChatColor.YELLOW + "Début dans " + this.n + "seconde" + (this.n > 1 ? "s" : "");
+                String msg = ChatColor.YELLOW + ChatColor.BOLD.toString() + this.n;
                 PlagiatGame.this.getCoherenceMachine().getMessageManager().writeCustomMessage(msg, true);
                 PlagiatGame.this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 1, 18, 1, msg, ""));
                 this.n--;
+                if (this.n == 0)
+                    this.cancel();
             }
-        }, 100L, 20L);
+        }.runTaskTimer(this.plugin, 100L, 20L);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
         {
             this.destroyCages();
