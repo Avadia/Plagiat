@@ -49,8 +49,8 @@ public class SpleggModule extends AbstractModule
         this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
             World world = this.plugin.getServer().getWorlds().get(0);
-            world.getEntitiesByClass(Egg.class).forEach(e -> world.spawnParticle(Particle.REDSTONE, e.getLocation(), 2));
-        }, 2L, 2L);
+            world.getEntitiesByClass(Egg.class).forEach(e -> world.spawnParticle(Particle.REDSTONE, e.getLocation(), 2, 0D, 0D, 0D));
+        }, 1L, 1L);
     }
 
     /**
