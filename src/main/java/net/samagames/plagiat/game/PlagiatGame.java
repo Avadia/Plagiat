@@ -8,7 +8,6 @@ import net.samagames.api.games.IGameProperties;
 import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.AbstractModule;
-import net.samagames.plagiat.modules.dimensions.DimensionsModule;
 import net.samagames.plagiat.modules.gravity.GravityModule;
 import net.samagames.plagiat.modules.quake.QuakeModule;
 import net.samagames.plagiat.modules.rush.RushModule;
@@ -128,8 +127,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             @Override
             public void run()
             {
-                String msg = ChatColor.YELLOW + ChatColor.BOLD.toString() + this.n;
-                PlagiatGame.this.getCoherenceMachine().getMessageManager().writeCustomMessage(msg, true);
+                String msg = ChatColor.GOLD + ChatColor.BOLD.toString() + this.n;
+                PlagiatGame.this.getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Début dans " + this.n + " seconde" + (this.n == 1 ? "" : "s"), true);
                 PlagiatGame.this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 1, 18, 1, msg, ""));
                 this.n--;
                 if (this.n == 0)
