@@ -228,7 +228,7 @@ public class SheepWarsModule extends AbstractModule
                 event.getPlayer().getInventory().setItemInOffHand(new ItemStack(Material.AIR));
             else
                 event.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            woolType.launchSheep(event.getPlayer(), event.getPlayer().getLocation().getDirection());
+            woolType.launchSheep(event.getPlayer(), event.getPlayer().getLocation().getDirection().multiply(5D));
         }
     }
 
