@@ -324,7 +324,53 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         player.setVelocity(new Vector().zero());
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1F, 1F);
 
-        //TODO Death Message
+        String deathMessage;
+        if (logout)
+            deathMessage = " s'est déconnecté.";
+        else
+            switch (player.getLastDamageCause().getCause())
+            {
+                case ENTITY_ATTACK:
+                case PROJECTILE:
+                    deathMessage = " a été tué par ";
+                    // TODO
+                    break;
+                case SUFFOCATION:
+                    deathMessage = " a suffoqué.";
+                    break;
+                case FALL:
+                    deathMessage = " est mort de chute.";
+                    break;
+                case FIRE:
+                case FIRE_TICK:
+                    deathMessage = " est mort dans les flammes.";
+                    break;
+                case LAVA:
+                    deathMessage = " s'est noyé dans la lave.";
+                    break;
+                case DROWNING:
+                    deathMessage = " s'est noyé.";
+                    break;
+                case BLOCK_EXPLOSION:
+                case ENTITY_EXPLOSION:
+                    deathMessage = " a explosé.";
+                    break;
+                case VOID:
+                    deathMessage = " est mort dans le vide.";
+                    break;
+                case POISON:
+                    deathMessage = " a été empoisonné.";
+                    break;
+                case MAGIC:
+                    deathMessage = " a été tué par magie.";
+                    break;
+
+                default:
+                    deathMessage = " est mort.";
+            }
+        this.getCoherenceMachine().getMessageManager().writeCustomMessage(player.getDisplayName() + ChatColor.YELLOW + deathMessage, true);
+
+
         if (player.getKiller() != null)
             player.getKiller().playSound(player.getKiller().getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
         if (logout) //Do not give spectator inventory to disconnected player, to reduce CPU usage
