@@ -1,5 +1,6 @@
 package net.samagames.plagiat.modules.gravity;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.samagames.api.games.Status;
@@ -18,13 +19,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Gravity module class
  */
 public class GravityModule extends AbstractModule
 {
-    private Location parkourSpawn;
+    private List<Location> parkourSpawns;
     private Area parkourLandingArea;
+    private final SecureRandom random;
 
     /**
      * Gravity module's constructor
@@ -34,6 +40,7 @@ public class GravityModule extends AbstractModule
     public GravityModule(Plagiat plugin)
     {
         super(plugin, "gravity", MCServer.HIVEMC);
+        this.random = new SecureRandom();
     }
 
     /**
@@ -44,9 +51,10 @@ public class GravityModule extends AbstractModule
     public void handleGameStart()
     {
         JsonObject jsonObject = this.getConfigRoot();
-        JsonElement element = jsonObject.get("spawn");
-        this.parkourSpawn = element == null ? null : LocationUtils.str2loc(element.getAsString());
-        element = jsonObject.get("landingArea");
+        JsonArray array = jsonObject.get("spawns").getAsJsonArray();
+        this.parkourSpawns = new ArrayList<>();
+        array.forEach(jsonElement -> this.parkourSpawns.add(LocationUtils.str2loc(jsonElement.getAsString())));
+        JsonElement element = jsonObject.get("landingArea");
         this.parkourLandingArea = element == null ? null : Area.str2area(element.getAsString());
     }
 
@@ -58,15 +66,26 @@ public class GravityModule extends AbstractModule
     @EventHandler
     public void onDamage(EntityDamageEvent event)
     {
-        if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawn == null)
+        if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
             return ;
         if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.VOID)
         {
             event.setCancelled(true);
             event.setDamage(0D);
             Player player = (Player)event.getEntity();
-            player.teleport(this.parkourSpawn);
+            player.teleport(this.parkourSpawns.get(this.random.nextInt(this.parkourSpawns.size())));
             Titles.sendTitle(player, 0, 40, 0, "", ChatColor.GOLD + "Tombez dans l'eau !");
+
+            player.setAllowFlight(true);
+            player.setFlying(true);
+            float old = player.getFlySpeed();
+            player.setFlySpeed(0F);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+            {
+                player.setFlySpeed(old);
+                player.setFlying(false);
+                player.setAllowFlight(false);
+            }, 80L);
         }
     }
 
@@ -78,7 +97,7 @@ public class GravityModule extends AbstractModule
     @EventHandler
     public void onMove(PlayerMoveEvent event)
     {
-        if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawn == null)
+        if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
             return ;
         if (event.getTo().getBlock().getType() == Material.WATER && this.parkourLandingArea.isInArea(event.getTo()))
         {
