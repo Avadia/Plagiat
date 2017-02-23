@@ -63,7 +63,7 @@ public class PlagiatSpectatorListener implements Listener
     public void onDamage(EntityDamageByEntityEvent event)
     {
         if (event.getDamager() instanceof Player)
-            this.cancelIfSpectator(event.getEntity().getUniqueId(), event);
+            this.cancelIfSpectator(event.getDamager().getUniqueId(), event);
     }
 
     /**

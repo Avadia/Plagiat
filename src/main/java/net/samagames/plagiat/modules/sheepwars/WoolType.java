@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * Abstract class for Sheepwars's sheeps
  */
-@SuppressWarnings("UnusedParameters")
 public abstract class WoolType
 {
     protected Plagiat plugin;
