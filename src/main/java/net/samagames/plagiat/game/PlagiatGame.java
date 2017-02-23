@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.games.Game;
+import net.samagames.api.games.GamePlayer;
 import net.samagames.api.games.IGameProperties;
 import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
@@ -367,6 +368,35 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             itemStack.setItemMeta(itemMeta);
             player.getInventory().setItem(0, itemStack);
         }
+
+        this.checkEnd(false);
+    }
+
+    /**
+     * Check if game should end
+     *
+     * @param forceEnd If game should end anyway
+     */
+    void checkEnd(boolean forceEnd)
+    {
+        Map<UUID, PlagiatPlayer> playerMap = this.getInGamePlayers();
+        if (playerMap.size() > 1 && !forceEnd)
+            return;
+
+        this.damagesActivated = false;
+        this.buildActivated = false;
+
+        GamePlayer gamePlayer = playerMap.size() != 1 ? null : playerMap.entrySet().iterator().next().getValue();
+        Player player = gamePlayer == null ? null : gamePlayer.getPlayerIfOnline();
+        this.getCoherenceMachine().getMessageManager().writeCustomMessage(gamePlayer == null ? ChatColor.YELLOW + "Personne ne remporte la partie." : (player == null ? gamePlayer.getOfflinePlayer().getName() : player.getDisplayName()) + ChatColor.YELLOW + " remporte la partie !", true);
+
+        if (gamePlayer != null)
+            this.handleWinner(gamePlayer.getUUID());
+
+        if (player != null)
+            this.effectsOnWinner(player);
+
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::handleGameEnd, 100L);
     }
 
     /**

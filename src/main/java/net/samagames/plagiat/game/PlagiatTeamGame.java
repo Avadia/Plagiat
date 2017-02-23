@@ -50,4 +50,15 @@ public class PlagiatTeamGame extends PlagiatGame
             }
         });
     }
+
+    /**
+     * Check if game should end
+     *
+     * @param forceEnd If game should end anyway
+     */
+    @Override
+    void checkEnd(boolean forceEnd)
+    {
+        // TODO
+    }
 }
