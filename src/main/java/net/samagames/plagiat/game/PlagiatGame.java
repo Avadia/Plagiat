@@ -369,6 +369,11 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         }
     }
 
+    /**
+     * Handle player logout
+     *
+     * @param player Bukkit player instance
+     */
     @Override
     public void handleLogout(Player player)
     {
