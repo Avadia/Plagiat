@@ -1,6 +1,10 @@
 package net.samagames.plagiat.modules.quake;
 
-import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_10_R1.AxisAlignedBB;
+import net.minecraft.server.v1_10_R1.BlockPosition;
+import net.minecraft.server.v1_10_R1.IBlockAccess;
+import net.minecraft.server.v1_10_R1.IBlockData;
+import net.minecraft.server.v1_10_R1.Vec3D;
 import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.game.PlagiatPlayer;
