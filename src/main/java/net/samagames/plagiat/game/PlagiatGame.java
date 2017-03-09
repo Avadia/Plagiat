@@ -70,7 +70,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.insane = insane;
 
         this.gameManager.getGameProperties().getConfig("spawns", new JsonArray()).getAsJsonArray().forEach(element -> this.spawns.add(LocationUtils.str2loc(element.getAsString())));
-        this.gameManager.getGameProperties().getConfig("chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(this.plugin, element.getAsString())));
+        this.gameManager.getGameProperties().getConfig("chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), false)));
+        this.gameManager.getGameProperties().getConfig("middle_chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), false)));
         this.lobby = LocationUtils.str2loc(this.gameManager.getGameProperties().getConfig("lobby", new JsonPrimitive("world, 0, 128, 0")).getAsString());
         this.lobbyArea = Area.str2area(this.gameManager.getGameProperties().getConfig("lobbyArea", new JsonPrimitive("world, -10, 120, -10, 10, 128, 10")).getAsString());
 

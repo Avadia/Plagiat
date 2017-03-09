@@ -83,7 +83,9 @@ public class UltraLuckyModule extends AbstractModule
     {
         if (event.getEntity().getItemStack().getType() != Material.SPONGE)
             return ;
-        Map<ItemStack, Integer> stuff = this.insane ? PlagiatChest.ITEMS_MIDDLE_INSANE : PlagiatChest.ITEMS_MIDDLE_NORMAL;
+
+        Map<Map<ItemStack, Integer>, Integer> list = this.insane ? PlagiatChest.ITEMS_MIDDLE_INSANE : PlagiatChest.ITEMS_MIDDLE_NORMAL;
+        Map<ItemStack, Integer> stuff = new ArrayList<>(list.keySet()).get(this.random.nextInt(list.size()));
         int rand = this.random.nextInt(stuff.size());
         int i = 0;
         for (Map.Entry<ItemStack, Integer> entry : stuff.entrySet())
