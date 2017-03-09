@@ -91,7 +91,7 @@ public class PlagiatChest
                                 slot = secureRandom.nextInt(27);
                                 current = inventory.getItem(slot);
                             } while (current != null && current.getType() != Material.AIR);
-                            inventory.setItem(slot, new ItemStack(Material.ARROW));
+                            inventory.setItem(slot, new ItemStack(Material.ARROW, 10));
                         }
                         break;
                     }
