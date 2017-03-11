@@ -1,6 +1,6 @@
 name: Plagiat
 main: net.samagames.plagiat.Plagiat
-version: BlindDevNoTest
+version: 1.0-SNAPSHOT
 
 depend: [SamaGamesAPI]
 
