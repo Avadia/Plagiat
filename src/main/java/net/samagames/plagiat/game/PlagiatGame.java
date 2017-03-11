@@ -468,4 +468,14 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         if (plagiatPlayer != null && this.status == Status.IN_GAME)
             this.stumpPlayer(plagiatPlayer, player, true);
     }
+
+    /**
+     * Get the lobby location
+     *
+     * @return Lobby as Bukkit Location instance
+     */
+    public Location getLobby()
+    {
+        return this.lobby;
+    }
 }

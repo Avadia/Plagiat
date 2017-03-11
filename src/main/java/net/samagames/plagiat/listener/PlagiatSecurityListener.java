@@ -37,6 +37,8 @@ public class PlagiatSecurityListener implements Listener
     {
         if (!this.plugin.getGame().areDamagesActivated())
             event.setCancelled(true);
+        if (event.getCause() == EntityDamageEvent.DamageCause.VOID && !this.plugin.getGame().isGameStarted())
+            event.getEntity().teleport(this.plugin.getGame().getLobby());
     }
 
     /**
