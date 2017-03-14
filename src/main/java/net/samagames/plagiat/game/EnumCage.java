@@ -3,6 +3,9 @@ package net.samagames.plagiat.game;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 /**
  * List of all cages
  */
@@ -10,8 +13,13 @@ enum EnumCage
 {
     GLASS(Material.GLASS, (byte)0, 0),
     VOID(Material.GLASS, (byte)15, 1),
-    NICOLAS(Material.MOB_SPAWNER, (byte)0, 2);
+    NICOLAS(Material.MOB_SPAWNER, (byte)0, 2),
+    SLIME(Material.SLIME_BLOCK, (byte)0, 3),
+    SHEEP(Material.WOOL, (byte)-1, 4),
+    OBSIDIAN(Material.OBSIDIAN, (byte)0, 5),
+    RAINBOW(Material.STAINED_GLASS, (byte)-1, 6);
 
+    private static Random random = new SecureRandom();
     private Material material;
     private byte data;
     private int dbId;
@@ -39,7 +47,7 @@ enum EnumCage
     public void set(Block block)
     {
         block.setType(this.material);
-        block.setData(this.data);
+        block.setData(this.data == -1 ? (byte)EnumCage.random.nextInt(16) : this.data);
     }
 
     /**
