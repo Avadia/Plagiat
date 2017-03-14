@@ -60,7 +60,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      */
     public PlagiatGame(Plagiat plugin, boolean insane)
     {
-        super("plagiat", "Plagiat" + (insane ? ChatColor.RED + " " + ChatColor.BOLD + "INSANE" : ""), "CTRL-C -> CTRL-V", PlagiatPlayer.class);
+        super("plagiat", "Plagiat" + (insane ? ChatColor.RED + " " + ChatColor.BOLD + "INSANE" : ""), "Copié ? Collé", PlagiatPlayer.class);
         this.plugin = plugin;
         this.modules = new ArrayList<>();
         this.spawns = new ArrayList<>();
