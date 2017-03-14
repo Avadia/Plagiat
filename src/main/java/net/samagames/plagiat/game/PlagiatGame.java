@@ -157,6 +157,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                 if (player != null)
                     player.setGameMode(GameMode.SURVIVAL);
             });
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::refillChests, 6000);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::refillChests, 9600);
         }, 200L);
     }
 
@@ -188,6 +190,18 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                 plagiatPlayer.getPlayerIfOnline().teleport(location);
             }
         });
+    }
+
+    /**
+     * Refill all chests
+     */
+    private void refillChests()
+    {
+        if (this.isGameStarted())
+            return ;
+
+        this.chests.forEach(chest -> chest.generate(this.insane));
+        this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 5, 50, 5, "", ChatColor.YELLOW + "Coffres remplis !"));
     }
 
     /**
@@ -342,7 +356,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             {
                 case ENTITY_ATTACK:
                 case PROJECTILE:
-                    deathMessage = " a été tué par ";
+                    deathMessage = " a été tué par " + (player.getKiller() == null ? "un inconnu." : player.getDisplayName() + ".");
                     // TODO
                     break;
                 case SUFFOCATION:

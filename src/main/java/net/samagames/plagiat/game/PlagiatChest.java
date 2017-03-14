@@ -196,13 +196,16 @@ public class PlagiatChest
             PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 10000, food);
 
             // Swords
-            Map<ItemStack, Integer> swords = new HashMap<>();
-            swords.put(new ItemStack(Material.STONE_SWORD), 5000);
-            swords.put(new ItemStack(Material.IRON_SWORD), 2000);
-            ItemStack goldSword = new ItemStack(Material.GOLD_SWORD);
-            goldSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-            swords.put(goldSword, 3000);
-            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 10000, swords);
+            for (int i = 0; i < 2; i++)
+            {
+                Map<ItemStack, Integer> swords = new HashMap<>();
+                swords.put(new ItemStack(Material.STONE_SWORD), 5000);
+                swords.put(new ItemStack(Material.IRON_SWORD), 2000);
+                ItemStack goldSword = new ItemStack(Material.GOLD_SWORD);
+                goldSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                swords.put(goldSword, 3000);
+                PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 10000, swords);
+            }
 
             // Bow
             Map<ItemStack, Integer> bow = new HashMap<>();
