@@ -382,7 +382,13 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> this.getPlayer(player.getUniqueId()).loadCage());
         player.teleport(this.lobby);
         player.getInventory().clear();
-        player.getInventory().setItem(0, this.buildRules());
+
+        ItemStack bow = new ItemStack(Material.BOW);
+        ItemMeta itemMeta = bow.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.GREEN + "Sélecteur de kit");
+        bow.setItemMeta(itemMeta);
+        player.getInventory().setItem(0, bow);
+        player.getInventory().setItem(1, this.buildRules());
         player.getInventory().setItem(8, this.coherenceMachine.getLeaveItem());
     }
 
