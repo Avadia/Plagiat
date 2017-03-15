@@ -380,13 +380,14 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     public void handleLogin(Player player)
     {
         super.handleLogin(player);
+        player.setGameMode(GameMode.SURVIVAL);
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> this.getPlayer(player.getUniqueId()).loadCage());
         player.teleport(this.lobby);
         player.getInventory().clear();
 
         ItemStack bow = new ItemStack(Material.BOW);
         ItemMeta itemMeta = bow.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GREEN + "Sélecteur de kit");
+        itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Sélecteur de kit");
         bow.setItemMeta(itemMeta);
         player.getInventory().setItem(0, bow);
         player.getInventory().setItem(1, this.buildRules());
