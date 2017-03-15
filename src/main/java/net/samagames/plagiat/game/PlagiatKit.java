@@ -122,7 +122,7 @@ class PlagiatKit
     static
     {
         // Register all kits
-        PlagiatKit defaultKit = new PlagiatKit("Défaut", 0, new ItemStack(Material.STONE_PICKAXE), new String[] { "Kit par défaut", "", "Pioche en pierre", "Hache en pierre", "Pelle en pierre" });
+        PlagiatKit defaultKit = new PlagiatKit("Défaut", -1, new ItemStack(Material.STONE_PICKAXE), new String[] { "Kit par défaut", "", "Pioche en pierre", "Hache en pierre", "Pelle en pierre" });
         defaultKit.addItem(new ItemStack(Material.STONE_PICKAXE));
         defaultKit.addItem(new ItemStack(Material.STONE_AXE));
         defaultKit.addItem(new ItemStack(Material.STONE_SPADE));

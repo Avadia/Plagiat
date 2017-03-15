@@ -200,47 +200,48 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             {
                 player.getInventory().clear();
                 PlagiatKit selectedKit = this.getKitForPlayer(player.getUniqueId());
-                selectedKit.getItems().forEach(item ->
-                {
-                    switch (item.getType())
+                if (selectedKit != null)
+                    selectedKit.getItems().forEach(item ->
                     {
-                        case LEATHER_HELMET:
-                        case CHAINMAIL_HELMET:
-                        case GOLD_HELMET:
-                        case IRON_HELMET:
-                        case DIAMOND_HELMET:
-                            player.getInventory().setHelmet(item);
-                            break ;
+                        switch (item.getType())
+                        {
+                            case LEATHER_HELMET:
+                            case CHAINMAIL_HELMET:
+                            case GOLD_HELMET:
+                            case IRON_HELMET:
+                            case DIAMOND_HELMET:
+                                player.getInventory().setHelmet(item);
+                                break ;
 
-                        case LEATHER_CHESTPLATE:
-                        case CHAINMAIL_CHESTPLATE:
-                        case GOLD_CHESTPLATE:
-                        case IRON_CHESTPLATE:
-                        case DIAMOND_CHESTPLATE:
-                            player.getInventory().setHelmet(item);
-                            break ;
+                            case LEATHER_CHESTPLATE:
+                            case CHAINMAIL_CHESTPLATE:
+                            case GOLD_CHESTPLATE:
+                            case IRON_CHESTPLATE:
+                            case DIAMOND_CHESTPLATE:
+                                player.getInventory().setHelmet(item);
+                                break ;
 
-                        case LEATHER_LEGGINGS:
-                        case CHAINMAIL_LEGGINGS:
-                        case GOLD_LEGGINGS:
-                        case IRON_LEGGINGS:
-                        case DIAMOND_LEGGINGS:
-                            player.getInventory().setHelmet(item);
-                            break ;
+                            case LEATHER_LEGGINGS:
+                            case CHAINMAIL_LEGGINGS:
+                            case GOLD_LEGGINGS:
+                            case IRON_LEGGINGS:
+                            case DIAMOND_LEGGINGS:
+                                player.getInventory().setHelmet(item);
+                                break ;
 
-                        case LEATHER_BOOTS:
-                        case CHAINMAIL_BOOTS:
-                        case GOLD_BOOTS:
-                        case IRON_BOOTS:
-                        case DIAMOND_BOOTS:
-                            player.getInventory().setHelmet(item);
-                            break ;
+                            case LEATHER_BOOTS:
+                            case CHAINMAIL_BOOTS:
+                            case GOLD_BOOTS:
+                            case IRON_BOOTS:
+                            case DIAMOND_BOOTS:
+                                player.getInventory().setHelmet(item);
+                                break ;
 
-                        default:
-                            if (player.getInventory().firstEmpty() != -1)
-                                player.getInventory().addItem(item);
-                    }
-                });
+                            default:
+                                if (player.getInventory().firstEmpty() != -1)
+                                    player.getInventory().addItem(item);
+                        }
+                    });
             }
         });
     }
