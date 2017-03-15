@@ -76,8 +76,38 @@ public abstract class AbstractModule implements Listener
      *
      * @return Suffix as String
      */
-    protected String getServerSuffix()
+    public String getServerSuffix()
     {
         return ChatColor.GOLD + "[" + this.server.toString().charAt(0) + "]";
+    }
+
+    /**
+     * Get this module name
+     *
+     * @return Name as String
+     */
+    public String getName()
+    {
+        return this.name;
+    }
+
+    /**
+     * Get this module rules
+     *
+     * @return Rules as String array
+     */
+    public String[] getRules()
+    {
+        return new String[0];
+    }
+
+    /**
+     * Get this game developers
+     *
+     * @return Developers user names as String array
+     */
+    public String[] getDevelopers()
+    {
+        return new String[0];
     }
 }

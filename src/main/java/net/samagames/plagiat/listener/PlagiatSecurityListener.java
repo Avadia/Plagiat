@@ -1,6 +1,8 @@
 package net.samagames.plagiat.listener;
 
 import net.samagames.plagiat.Plagiat;
+import net.samagames.plagiat.game.PlagiatKitSelectorGui;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 /**
@@ -90,6 +93,28 @@ public class PlagiatSecurityListener implements Listener
             event.setCancelled(true);
             if (event.getEntity() instanceof Player)
                 ((Player)event.getEntity()).setFoodLevel(20);
+        }
+    }
+
+    /**
+     * Cancel interact before start
+     * Handles leave item and kit item
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onInteract(PlayerInteractEvent event)
+    {
+        if (event.getItem() != null && event.getItem().equals(this.plugin.getGame().getCoherenceMachine().getLeaveItem()))
+            event.getPlayer().kickPlayer("");
+
+        else if (!this.plugin.getGame().isBuildActivated() && (event.getItem() == null || event.getItem().getType() != Material.WRITTEN_BOOK ))
+            event.setCancelled(true);
+
+        if (!this.plugin.getGame().isBuildActivated() && event.getItem() != null && event.getItem().getType() == Material.BOW)
+        {
+            event.setCancelled(true);
+            this.plugin.getSamaGamesAPI().getGuiManager().openGui(event.getPlayer(), new PlagiatKitSelectorGui(this.plugin));
         }
     }
 }

@@ -7,6 +7,7 @@ import net.samagames.api.games.Game;
 import net.samagames.api.games.GamePlayer;
 import net.samagames.api.games.IGameProperties;
 import net.samagames.api.games.Status;
+import net.samagames.api.shops.IPlayerShop;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.gravity.GravityModule;
@@ -17,6 +18,7 @@ import net.samagames.plagiat.modules.splegg.SpleggModule;
 import net.samagames.plagiat.modules.ultralucky.UltraLuckyModule;
 import net.samagames.tools.Area;
 import net.samagames.tools.LocationUtils;
+import net.samagames.tools.RulesBook;
 import net.samagames.tools.Titles;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -98,6 +100,30 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     }
 
     /**
+     * Build rules from modules
+     *
+     * @return Rules book as Bukkit ItemStack
+     */
+    private ItemStack buildRules()
+    {
+        RulesBook rulesBook = new RulesBook("Plagiat");
+
+        rulesBook.addOwner("Rigner");
+
+        this.modules.forEach(abstractModule ->
+        {
+            for (String dev : abstractModule.getDevelopers())
+                rulesBook.addContributor(dev);
+
+            String[] rules = abstractModule.getRules();
+            for (int i = 0; i < rules.length; ++i)
+                rulesBook.addPage(abstractModule.getName() + " " + abstractModule.getServerSuffix(), rules[i], i == 0);
+        });
+
+        return rulesBook.toItemStack();
+    }
+
+    /**
      * Register a module in the game, checking if disabled in configuration
      *
      * @param moduleClass Module class
@@ -167,8 +193,82 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      */
     private void giveKits()
     {
-        // TODO
-        this.getInGamePlayers().values().forEach(plagiatPlayer -> plagiatPlayer.getPlayerIfOnline().getInventory().clear());
+        this.getInGamePlayers().values().forEach(plagiatPlayer ->
+        {
+            Player player = plagiatPlayer.getPlayerIfOnline();
+            if (player != null)
+            {
+                player.getInventory().clear();
+                PlagiatKit selectedKit = this.getKitForPlayer(player.getUniqueId());
+                selectedKit.getItems().forEach(item ->
+                {
+                    switch (item.getType())
+                    {
+                        case LEATHER_HELMET:
+                        case CHAINMAIL_HELMET:
+                        case GOLD_HELMET:
+                        case IRON_HELMET:
+                        case DIAMOND_HELMET:
+                            player.getInventory().setHelmet(item);
+                            break ;
+
+                        case LEATHER_CHESTPLATE:
+                        case CHAINMAIL_CHESTPLATE:
+                        case GOLD_CHESTPLATE:
+                        case IRON_CHESTPLATE:
+                        case DIAMOND_CHESTPLATE:
+                            player.getInventory().setHelmet(item);
+                            break ;
+
+                        case LEATHER_LEGGINGS:
+                        case CHAINMAIL_LEGGINGS:
+                        case GOLD_LEGGINGS:
+                        case IRON_LEGGINGS:
+                        case DIAMOND_LEGGINGS:
+                            player.getInventory().setHelmet(item);
+                            break ;
+
+                        case LEATHER_BOOTS:
+                        case CHAINMAIL_BOOTS:
+                        case GOLD_BOOTS:
+                        case IRON_BOOTS:
+                        case DIAMOND_BOOTS:
+                            player.getInventory().setHelmet(item);
+                            break ;
+
+                        default:
+                            if (player.getInventory().firstEmpty() != -1)
+                                player.getInventory().addItem(item);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Get the selected kit for that player
+     *
+     * @param uuid Player UUID
+     * @return Selected kit, default free kit if not found, or null if edge case
+     */
+    PlagiatKit getKitForPlayer(UUID uuid)
+    {
+        IPlayerShop playerShop = this.plugin.getSamaGamesAPI().getShopsManager().getPlayer(uuid);
+        if (playerShop == null)
+            return PlagiatKit.getKits().stream().filter(kit -> kit.getDbId() == -1).findFirst().orElse(null);
+
+        int[] ids = new int[PlagiatKit.getKits().size()];
+        final int[] i = {0};
+        PlagiatKit.getKits().forEach(kit -> ids[i[0]++] = kit.getDbId());
+        try
+        {
+            int selected = playerShop.getSelectedItemFromList(ids);
+            return PlagiatKit.getKits().stream().filter(kit -> kit.getDbId() == selected).findFirst().orElse(null);
+        }
+        catch (Exception ignored)
+        {
+            return PlagiatKit.getKits().stream().filter(kit -> kit.getDbId() == -1).findFirst().orElse(null);
+        }
     }
 
     /**
@@ -282,6 +382,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> this.getPlayer(player.getUniqueId()).loadCage());
         player.teleport(this.lobby);
         player.getInventory().clear();
+        player.getInventory().setItem(0, this.buildRules());
+        player.getInventory().setItem(8, this.coherenceMachine.getLeaveItem());
     }
 
     /**
