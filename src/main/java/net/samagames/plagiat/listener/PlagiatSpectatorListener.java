@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
@@ -73,6 +74,17 @@ public class PlagiatSpectatorListener implements Listener
      */
     @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent event)
+    {
+        this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
+    }
+
+    /**
+     * Cancel interact
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onInteract(PlayerInteractEvent event)
     {
         this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
     }

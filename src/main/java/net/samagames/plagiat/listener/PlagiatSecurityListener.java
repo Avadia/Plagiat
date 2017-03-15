@@ -108,13 +108,10 @@ public class PlagiatSecurityListener implements Listener
         if (event.getItem() != null && event.getItem().equals(this.plugin.getGame().getCoherenceMachine().getLeaveItem()))
             event.getPlayer().kickPlayer("");
 
-        else if (!this.plugin.getGame().isBuildActivated() && (event.getItem() == null || event.getItem().getType() != Material.WRITTEN_BOOK ))
+        else if (!this.plugin.getGame().isBuildActivated() && (event.getItem() == null || event.getItem().getType() != Material.WRITTEN_BOOK))
             event.setCancelled(true);
 
         if (!this.plugin.getGame().isBuildActivated() && event.getItem() != null && event.getItem().getType() == Material.BOW)
-        {
-            event.setCancelled(true);
             this.plugin.getSamaGamesAPI().getGuiManager().openGui(event.getPlayer(), new PlagiatKitSelectorGui(this.plugin));
-        }
     }
 }
