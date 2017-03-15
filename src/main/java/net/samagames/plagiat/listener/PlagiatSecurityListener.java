@@ -10,8 +10,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Plagiat main Listener
@@ -102,7 +105,7 @@ public class PlagiatSecurityListener implements Listener
      *
      * @param event Bukkit event instance
      */
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onInteract(PlayerInteractEvent event)
     {
         if (event.getItem() != null && event.getItem().equals(this.plugin.getGame().getCoherenceMachine().getLeaveItem()))
@@ -112,6 +115,27 @@ public class PlagiatSecurityListener implements Listener
             event.setCancelled(true);
 
         if (!this.plugin.getGame().isBuildActivated() && event.getItem() != null && event.getItem().getType() == Material.BOW)
+            this.plugin.getSamaGamesAPI().getGuiManager().openGui(event.getPlayer(), new PlagiatKitSelectorGui(this.plugin));
+    }
+
+    /**
+     * Cancel interact before start
+     * Handles leave item and kit item
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityInteract(PlayerInteractEntityEvent event)
+    {
+        ItemStack itemStack;
+        itemStack = event.getHand() == EquipmentSlot.OFF_HAND ? event.getPlayer().getInventory().getItemInOffHand() : event.getPlayer().getInventory().getItemInMainHand();
+        if (itemStack != null && itemStack.equals(this.plugin.getGame().getCoherenceMachine().getLeaveItem()))
+            event.getPlayer().kickPlayer("");
+
+        else if (!this.plugin.getGame().isBuildActivated() && (itemStack == null || itemStack.getType() != Material.WRITTEN_BOOK))
+            event.setCancelled(true);
+
+        if (!this.plugin.getGame().isBuildActivated() && itemStack != null && itemStack.getType() == Material.BOW)
             this.plugin.getSamaGamesAPI().getGuiManager().openGui(event.getPlayer(), new PlagiatKitSelectorGui(this.plugin));
     }
 }
