@@ -74,6 +74,8 @@ public class PlagiatKitSelectorGui extends AbstractGui
 
             ++i[0];
         });
+
+        player.openInventory(this.inventory);
     }
 
     /**
