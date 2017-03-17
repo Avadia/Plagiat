@@ -77,6 +77,6 @@ public class RushModule extends AbstractModule
         if (event.getRightClicked() instanceof ArmorStand
                 && ((ArmorStand)event.getRightClicked()).getItemInHand() != null
                 && ((ArmorStand)event.getRightClicked()).getItemInHand().getType() == Material.EMERALD)
-            event.getPlayer().openInventory(this.ghostNPC.getInventory());
+            event.getPlayer().openMerchant(this.ghostNPC, true);
     }
 }
