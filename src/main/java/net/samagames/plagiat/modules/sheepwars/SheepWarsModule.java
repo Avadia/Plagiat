@@ -13,6 +13,7 @@ import net.samagames.tools.Reflection;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,6 +47,7 @@ public class SheepWarsModule extends AbstractModule
     private List<Location> woolLocations;
     private BukkitTask respawnTask;
     private BukkitTask updateTask;
+    private BukkitTask particleTask;
     private Random random;
 
     /**
@@ -61,6 +63,7 @@ public class SheepWarsModule extends AbstractModule
         this.woolLocations = new ArrayList<>();
         this.respawnTask = null;
         this.updateTask = null;
+        this.particleTask = null;
         this.random = new Random();
     }
 
@@ -79,6 +82,7 @@ public class SheepWarsModule extends AbstractModule
         long respawnDelay = element == null ? 2400 : element.getAsLong();
         this.respawnTask = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, this::respawnWools, 1L, respawnDelay);
         this.updateTask = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, this::changeColors, 10L, 10L);
+        this.particleTask = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, this::spawnParticles, 2L, 2L);
 
         this.woolTypes.add(new HealingSheep(this.plugin));
         this.woolTypes.add(new BlindnessSheep(this.plugin));
@@ -93,6 +97,14 @@ public class SheepWarsModule extends AbstractModule
         //TODO this.woolTypes.add(new EatingSheep(this.plugin));
         //TODO this.woolTypes.add(new GalacticSheep(this.plugin));
         //TODO this.woolTypes.add(new DistortionSheep(this.plugin));
+    }
+
+    /**
+     * Spawn particles around wools
+     */
+    private void spawnParticles()
+    {
+        this.woolLocations.forEach(location -> location.getWorld().spawnParticle(Particle.PORTAL, location.clone().add(0.5D, 0.5D, 0.5D), 1, 0.5F, 0.5D, 0.5D, 0.5D));
     }
 
     /**
@@ -137,6 +149,8 @@ public class SheepWarsModule extends AbstractModule
             this.respawnTask.cancel();
         if (this.updateTask != null)
             this.updateTask.cancel();
+        if (this.particleTask != null)
+            this.particleTask.cancel();
         this.woolTypes.forEach(WoolType::killSheeps);
     }
 
