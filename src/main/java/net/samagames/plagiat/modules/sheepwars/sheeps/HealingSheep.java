@@ -67,4 +67,15 @@ public class HealingSheep extends WoolType
         if (bukkitTask != null)
             bukkitTask.cancel();
     }
+
+    /**
+     * Heal sheep should spawn near the player
+     *
+     * @return false to disable launch
+     */
+    @Override
+    protected boolean shouldLaunch()
+    {
+        return false;
+    }
 }

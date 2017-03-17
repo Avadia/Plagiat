@@ -7,6 +7,7 @@ import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -51,16 +52,30 @@ public abstract class WoolType
         Sheep sheep = player.getWorld().spawn(player.getLocation(), Sheep.class);
         sheep.setSheared(false);
         sheep.setColor(this.dyeColor);
-        sheep.setVelocity(vector);
+
+        if (this.shouldLaunch())
+            sheep.setVelocity(vector);
+
         sheep.setMetadata("sg-owner", new FixedMetadataValue(this.plugin, player.getUniqueId()));
         sheep.setMetadata("sg-type", new FixedMetadataValue(this.plugin, this));
+
         this.onLaunch(sheep, player);
+
         this.sheeps.add(sheep);
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+
+        BukkitTask task = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
-            if (!sheep.isDead())
+            if (!sheep.isDead() && sheep.isOnGround())
+            {
                 this.onLand(sheep);
-        }, 70L);
+                ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
+                this.onLand(sheep);
+            }
+            else if (sheep.isDead())
+                ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
+        }, 50L, 2);
+
+        sheep.setMetadata("sg-land", new FixedMetadataValue(this.plugin, task));
     }
 
     /**
@@ -102,6 +117,16 @@ public abstract class WoolType
      */
     protected void onDeath(Sheep sheep, @Nullable Player killer)
     {
+    }
+
+    /**
+     * If the sheep must be launched, or spawned near the player
+     *
+     * @return If should be launched
+     */
+    protected boolean shouldLaunch()
+    {
+        return true;
     }
 
     /**

@@ -240,7 +240,7 @@ public class SheepWarsModule extends AbstractModule
                 event.getPlayer().getInventory().setItemInOffHand(itemStack.getAmount() == 1 ? new ItemStack(Material.AIR) : new ItemStack(Material.WOOL, itemStack.getAmount() - 1, itemStack.getDurability()));
             else
                 event.getPlayer().getInventory().setItemInMainHand(itemStack.getAmount() == 1 ? new ItemStack(Material.AIR) : new ItemStack(Material.WOOL, itemStack.getAmount() - 1, itemStack.getDurability()));
-            woolType.launchSheep(event.getPlayer(), event.getPlayer().getLocation().getDirection().multiply(5D));
+            woolType.launchSheep(event.getPlayer(), event.getPlayer().getLocation().getDirection().multiply(3D));
         }
     }
 
