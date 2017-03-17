@@ -28,6 +28,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.BlockIterator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,8 +179,19 @@ public class SheepWarsModule extends AbstractModule
     {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || event.getEntity().getShooter() == null || !(event.getEntity().getShooter() instanceof Player))
             return ;
-        Block block = event.getEntity().getWorld().getBlockAt(event.getEntity().getLocation().add(event.getEntity().getVelocity()));
-        if (this.woolLocations.contains(block.getLocation()) && block.getType() == Material.WOOL)
+        BlockIterator blockIterator = new BlockIterator(event.getEntity().getWorld(), event.getEntity().getLocation().toVector(), event.getEntity().getVelocity().normalize(), 0.0D, 4);
+
+        Block hitBlock = null;
+        while (blockIterator.hasNext())
+        {
+            hitBlock = blockIterator.next();
+            if (hitBlock.getType() != Material.AIR)
+                break ;
+        }
+
+        final Block block = hitBlock;
+
+        if (block != null && this.woolLocations.contains(block.getLocation()) && block.getType() == Material.WOOL)
         {
             WoolType woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == block.getData()).findFirst().orElse(null);
             event.getEntity().remove();

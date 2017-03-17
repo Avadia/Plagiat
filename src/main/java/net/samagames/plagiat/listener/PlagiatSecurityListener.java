@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -137,5 +138,16 @@ public class PlagiatSecurityListener implements Listener
 
         if (!this.plugin.getGame().isBuildActivated() && itemStack != null && itemStack.getType() == Material.BOW)
             this.plugin.getSamaGamesAPI().getGuiManager().openGui(event.getPlayer(), new PlagiatKitSelectorGui(this.plugin));
+    }
+
+    /**
+     * Cancel villager to have new MC recipes, only mine
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler
+    public void onMerchantModify(VillagerAcquireTradeEvent event)
+    {
+        event.setCancelled(true);
     }
 }

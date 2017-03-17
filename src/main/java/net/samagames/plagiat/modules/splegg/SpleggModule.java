@@ -108,6 +108,6 @@ public class SpleggModule extends AbstractModule
 
         event.setHatching(false);
         event.setNumHatches((byte)0);
-        this.plugin.getServer().getPluginManager().callEvent(new InternalBlockBreakEvent(event.getEgg().getLocation().getBlock()));
+        this.plugin.getServer().getPluginManager().callEvent(new InternalBlockBreakEvent(hitBlock));
     }
 }
