@@ -33,4 +33,15 @@ public class BoardingSheep extends WoolType
     {
         sheep.setPassenger(player);
     }
+
+    /**
+     * Remove player from sheep
+     *
+     * @param sheep The sheep entity
+     */
+    @Override
+    protected void onLand(Sheep sheep)
+    {
+        sheep.eject();
+    }
 }
