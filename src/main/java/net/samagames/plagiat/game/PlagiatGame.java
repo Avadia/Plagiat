@@ -576,7 +576,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         if (player != null)
             this.effectsOnWinner(player);
 
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::handleGameEnd, 100L);
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::handleGameEnd, 80L);
     }
 
     /**
