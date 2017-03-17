@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -232,7 +233,7 @@ public class SheepWarsModule extends AbstractModule
             itemStack = event.getPlayer().getInventory().getItemInOffHand();
         else
             itemStack = event.getPlayer().getInventory().getItemInMainHand();
-        if (itemStack != null && itemStack.getType() == Material.WOOL &&
+        if (itemStack != null && itemStack.getType() == Material.WOOL && itemStack.getItemMeta().getDisplayName().contains("Mouton") &&
                 (woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == itemStack.getDurability()).findFirst().orElse(null)) != null)
         {
             event.setCancelled(true);
@@ -284,5 +285,17 @@ public class SheepWarsModule extends AbstractModule
             event.setResult(Event.Result.DENY);
             event.setCancelled(true);
         }
+    }
+
+    /**
+     * Security to disable creating fake sheep wools
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler
+    public void onRename(PrepareAnvilEvent event)
+    {
+        if (event.getResult().getItemMeta().getDisplayName().contains("Mouton"))
+            event.setResult(new ItemStack(Material.AIR));
     }
 }
