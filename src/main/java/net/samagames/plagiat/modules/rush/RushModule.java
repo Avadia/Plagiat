@@ -45,6 +45,7 @@ public class RushModule extends AbstractModule
         this.ghostNPC = this.plugin.getServer().getWorlds().get(0).spawn(new Location(this.plugin.getServer().getWorlds().get(0), 0D, 255D, 0D), Villager.class);
         this.ghostNPC.addPotionEffect(PotionEffectType.LEVITATION.createEffect(Integer.MAX_VALUE, 1));
         this.ghostNPC.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 1));
+        this.ghostNPC.setInvulnerable(true);
 
         List<MerchantRecipe> recipeList = new ArrayList<>();
 
