@@ -51,9 +51,12 @@ public abstract class AbstractModule implements Listener
      * Event method, called on game end, should be overridden
      * Use it to clean all tasks, etc
      * {@link Game#handleGameEnd()}
+     *
+     * @return If end should be cancelled
      */
-    public void handleGameEnd()
+    public boolean handleGameEnd()
     {
+        return false;
     }
 
     /**

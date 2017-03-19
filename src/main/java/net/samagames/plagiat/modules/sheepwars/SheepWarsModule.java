@@ -141,9 +141,11 @@ public class SheepWarsModule extends AbstractModule
     /**
      * Event method, overridden to cancel all tasks
      * {@link AbstractModule#handleGameEnd()}
+     *
+     * @return false, to avoid disabling end
      */
     @Override
-    public void handleGameEnd()
+    public boolean handleGameEnd()
     {
         if (this.respawnTask != null)
             this.respawnTask.cancel();
@@ -152,6 +154,8 @@ public class SheepWarsModule extends AbstractModule
         if (this.particleTask != null)
             this.particleTask.cancel();
         this.woolTypes.forEach(WoolType::killSheeps);
+
+        return false;
     }
 
     /**

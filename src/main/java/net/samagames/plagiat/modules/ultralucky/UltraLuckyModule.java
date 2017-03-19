@@ -65,12 +65,16 @@ public class UltraLuckyModule extends AbstractModule
     /**
      * Cancel effect task
      * {@link AbstractModule#handleGameEnd()}
+     *
+     * @return false, to avoid disabling end
      */
     @Override
-    public void handleGameEnd()
+    public boolean handleGameEnd()
     {
         if (this.effectTask != null)
             this.effectTask.cancel();
+
+        return false;
     }
 
     /**

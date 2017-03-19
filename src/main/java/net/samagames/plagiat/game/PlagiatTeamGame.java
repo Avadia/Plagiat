@@ -57,7 +57,7 @@ public class PlagiatTeamGame extends PlagiatGame
      * @param forceEnd If game should end anyway
      */
     @Override
-    void checkEnd(boolean forceEnd)
+    public void checkEnd(boolean forceEnd)
     {
         // TODO
     }

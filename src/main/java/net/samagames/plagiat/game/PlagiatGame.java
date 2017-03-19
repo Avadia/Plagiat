@@ -16,6 +16,7 @@ import net.samagames.plagiat.modules.rush.RushModule;
 import net.samagames.plagiat.modules.sheepwars.SheepWarsModule;
 import net.samagames.plagiat.modules.splegg.SpleggModule;
 import net.samagames.plagiat.modules.ultralucky.UltraLuckyModule;
+import net.samagames.plagiat.modules.walls.WallsModule;
 import net.samagames.tools.Area;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.RulesBook;
@@ -96,7 +97,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.registerModule(UltraLuckyModule.class);
         //TODO this.registerModule(DragonEscapeModule.class);
         //TODO this.registerModule(SplatoonModule.class);
-        //TODO this.registerModule(WallsModule.class);
+        this.registerModule(WallsModule.class);
     }
 
     /**
@@ -298,7 +299,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      */
     private void refillChests()
     {
-        if (this.isGameStarted())
+        if (this.status == Status.FINISHED)
             return ;
 
         this.chests.forEach(chest -> chest.generate(this.insane));
@@ -557,12 +558,23 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @param forceEnd If game should end anyway
      */
-    void checkEnd(boolean forceEnd)
+    public void checkEnd(boolean forceEnd)
     {
+        if (this.status == Status.FINISHED)
+            return ;
+
         Map<UUID, PlagiatPlayer> playerMap = this.getInGamePlayers();
         if (playerMap.size() > 1 && !forceEnd)
             return;
 
+        boolean shouldEnd = false;
+        for (AbstractModule module : this.modules)
+            shouldEnd |= module.handleGameEnd();
+
+        if (!shouldEnd)
+            return ;
+
+        this.status = Status.FINISHED;
         this.damagesActivated = false;
         this.buildActivated = false;
 
