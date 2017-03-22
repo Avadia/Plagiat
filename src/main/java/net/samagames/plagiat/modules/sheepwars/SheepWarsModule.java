@@ -92,7 +92,7 @@ public class SheepWarsModule extends AbstractModule
         //TODO this.woolTypes.add(new SeekerSheep(this.plugin));
         //TODO this.woolTypes.add(new EarthQuakeSheep(this.plugin));
         //TODO this.woolTypes.add(new FiringSheep(this.plugin));
-        //TODO this.woolTypes.add(new IceSheep(this.plugin));
+        this.woolTypes.add(new IceSheep(this.plugin));
         //TODO this.woolTypes.add(new FragmentationSheep(this.plugin));
         //TODO this.woolTypes.add(new EatingSheep(this.plugin));
         //TODO this.woolTypes.add(new GalacticSheep(this.plugin));
