@@ -4,12 +4,10 @@ import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.sheepwars.WoolType;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
-import org.bukkit.craftbukkit.v1_10_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.potion.PotionEffectType;
@@ -17,11 +15,13 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Ice Sheep Class
+ */
 public class IceSheep extends WoolType
 {
     private final Map<Integer, BukkitTask> tasks;
@@ -100,26 +100,5 @@ public class IceSheep extends WoolType
                 this.blocks.put(sheep.getEntityId(), blocks);
 
         }, 1L, 20L));
-    }
-
-    /**
-     * Get all blocks in a given radius, upon X, Y and Z axis
-     *
-     * @param origin Center location of the sphere to scan
-     * @param radius Radius
-     * @return List as a set, to avoid duplicates {@link CraftBlock#hashCode()}
-     */
-    private Set<Block> getAllBlocksInSphere(Location origin, double radius)
-    {
-        double radiusSquared = radius * radius;
-        Set<Block> blocks = new HashSet<>();
-
-        for (double x = origin.getX() - radius; x <= origin.getX() + radius; x += 0.5D)
-            for (double y = origin.getY() - radius; y <= origin.getY() + radius; y += 0.5D)
-                for (double z = origin.getZ() - radius; z <= origin.getZ() + radius; z += 0.5D)
-                    if ((x - origin.getX()) * (x - origin.getX()) + (z - origin.getZ()) * (z - origin.getZ()) + (y - origin.getY()) * (y - origin.getY()) <= radiusSquared)
-                        blocks.add(new Location(origin.getWorld(), x, y, z).getBlock());
-
-        return blocks;
     }
 }

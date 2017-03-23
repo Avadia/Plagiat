@@ -9,6 +9,7 @@ import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
 import net.samagames.plagiat.modules.sheepwars.sheeps.BlindnessSheep;
 import net.samagames.plagiat.modules.sheepwars.sheeps.BoardingSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.EarthQuakeSheep;
 import net.samagames.plagiat.modules.sheepwars.sheeps.ExplosiveSheep;
 import net.samagames.plagiat.modules.sheepwars.sheeps.HealingSheep;
 import net.samagames.plagiat.modules.sheepwars.sheeps.IceSheep;
@@ -95,7 +96,7 @@ public class SheepWarsModule extends AbstractModule
         this.woolTypes.add(new BoardingSheep(this.plugin));
         this.woolTypes.add(new IceSheep(this.plugin));
         this.woolTypes.add(new ThunderSheep(this.plugin));
-        //TODO this.woolTypes.add(new EarthQuakeSheep(this.plugin));
+        this.woolTypes.add(new EarthQuakeSheep(this.plugin));
         //TODO this.woolTypes.add(new FragmentationSheep(this.plugin));
         //TODO this.woolTypes.add(new FiringSheep(this.plugin));
         //TODO this.woolTypes.add(new SeekerSheep(this.plugin));
