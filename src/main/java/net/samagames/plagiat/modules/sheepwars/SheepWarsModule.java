@@ -7,7 +7,12 @@ import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
-import net.samagames.plagiat.modules.sheepwars.sheeps.*;
+import net.samagames.plagiat.modules.sheepwars.sheeps.BlindnessSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.BoardingSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.ExplosiveSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.HealingSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.IceSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.ThunderSheep;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Reflection;
 import org.bukkit.ChatColor;
@@ -88,15 +93,15 @@ public class SheepWarsModule extends AbstractModule
         this.woolTypes.add(new BlindnessSheep(this.plugin));
         this.woolTypes.add(new ExplosiveSheep(this.plugin));
         this.woolTypes.add(new BoardingSheep(this.plugin));
-        //TODO this.woolTypes.add(new ThunderSheep(this.plugin));
-        //TODO this.woolTypes.add(new SeekerSheep(this.plugin));
-        //TODO this.woolTypes.add(new EarthQuakeSheep(this.plugin));
-        //TODO this.woolTypes.add(new FiringSheep(this.plugin));
         this.woolTypes.add(new IceSheep(this.plugin));
+        this.woolTypes.add(new ThunderSheep(this.plugin));
+        //TODO this.woolTypes.add(new EarthQuakeSheep(this.plugin));
         //TODO this.woolTypes.add(new FragmentationSheep(this.plugin));
+        //TODO this.woolTypes.add(new FiringSheep(this.plugin));
+        //TODO this.woolTypes.add(new SeekerSheep(this.plugin));
         //TODO this.woolTypes.add(new EatingSheep(this.plugin));
-        //TODO this.woolTypes.add(new GalacticSheep(this.plugin));
         //TODO this.woolTypes.add(new DistortionSheep(this.plugin));
+        //TODO this.woolTypes.add(new GalacticSheep(this.plugin));
     }
 
     /**
