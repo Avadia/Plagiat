@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -97,8 +98,8 @@ public class SheepWarsModule extends AbstractModule
         this.woolTypes.add(new IceSheep(this.plugin));
         this.woolTypes.add(new ThunderSheep(this.plugin));
         this.woolTypes.add(new EarthQuakeSheep(this.plugin));
-        //TODO this.woolTypes.add(new FragmentationSheep(this.plugin));
         //TODO this.woolTypes.add(new FiringSheep(this.plugin));
+        //TODO this.woolTypes.add(new FragmentationSheep(this.plugin));
         //TODO this.woolTypes.add(new SeekerSheep(this.plugin));
         //TODO this.woolTypes.add(new EatingSheep(this.plugin));
         //TODO this.woolTypes.add(new DistortionSheep(this.plugin));
@@ -321,5 +322,17 @@ public class SheepWarsModule extends AbstractModule
     {
         if (event.getResult().getItemMeta().getDisplayName().contains("Mouton"))
             event.setResult(new ItemStack(Material.AIR));
+    }
+
+    /**
+     * Disable breeding sheeps
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler
+    public void onBreed(EntityBreedEvent event)
+    {
+        if (event.getEntity() instanceof Sheep)
+            event.setCancelled(true);
     }
 }
