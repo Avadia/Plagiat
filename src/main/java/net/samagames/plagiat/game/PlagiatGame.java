@@ -54,6 +54,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     private boolean buildActivated;
     private List<PlagiatChest> chests;
     private boolean insane;
+    private int time;
     List<Location> spawns;
 
     /**
@@ -71,6 +72,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.damagesActivated = false;
         this.buildActivated = false;
         this.insane = insane;
+        this.time = 0;
 
         this.gameManager.getGameProperties().getConfig("spawns", new JsonArray()).getAsJsonArray().forEach(element -> this.spawns.add(LocationUtils.str2loc(element.getAsString())));
         this.gameManager.getGameProperties().getConfig("chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), false)));
@@ -91,13 +93,13 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.registerModule(SheepWarsModule.class);
         this.registerModule(QuakeModule.class);
         this.registerModule(GravityModule.class);
-        //TODO this.registerModule(DimensionsModule.class);
         this.registerModule(SpleggModule.class);
         this.registerModule(RushModule.class);
         this.registerModule(UltraLuckyModule.class);
+        this.registerModule(WallsModule.class);
         //TODO this.registerModule(DragonEscapeModule.class);
         //TODO this.registerModule(SplatoonModule.class);
-        this.registerModule(WallsModule.class);
+        //TODO this.registerModule(DimensionsModule.class);
     }
 
     /**
@@ -158,7 +160,9 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.giveKits();
         this.teleport();
         this.destroyLobby();
+
         this.modules.forEach(AbstractModule::handleGameStart);
+
         new BukkitRunnable()
         {
             int n = 5;
@@ -173,6 +177,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                     this.cancel();
             }
         }.runTaskTimer(this.plugin, 100L, 20L);
+
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
         {
             this.destroyCages();
@@ -187,6 +192,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::refillChests, 6000);
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::refillChests, 9600);
         }, 200L);
+
+        this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, this::updateScoreboard, 1L, 20L);
     }
 
     /**
@@ -613,5 +620,24 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     public Location getLobby()
     {
         return this.lobby;
+    }
+
+    /**
+     * Update player scoreboards
+     */
+    private void updateScoreboard()
+    {
+        this.getRegisteredGamePlayers().values().forEach(player ->
+        {
+            if (this.time == 0)
+                player.getObjectiveSign().addReceiver(player.getOfflinePlayer());
+
+            player.getObjectiveSign().setLine(3, "");
+            player.getObjectiveSign().setLine(6, " N/A");
+            player.getObjectiveSign().setLine(9, " N/A");
+            player.getObjectiveSign().updateLines();
+        });
+
+        this.time++;
     }
 }

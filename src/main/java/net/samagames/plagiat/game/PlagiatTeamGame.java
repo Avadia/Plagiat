@@ -14,7 +14,7 @@ import java.util.List;
 public class PlagiatTeamGame extends PlagiatGame
 {
     private List<PlagiatTeam> teams;
-    private int playersPerTeam;
+    private int playersPerTeam; // TODO: Teams
 
     /**
      * Plagiat Team Game constructor

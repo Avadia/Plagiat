@@ -4,6 +4,8 @@ import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamePlayer;
 import net.samagames.api.shops.IPlayerShop;
 import net.samagames.api.shops.ITransaction;
+import net.samagames.tools.scoreboards.ObjectiveSign;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -14,6 +16,7 @@ import java.util.logging.Level;
 public class PlagiatPlayer extends GamePlayer
 {
     private EnumCage cage;
+    private final ObjectiveSign objectiveSign;
 
     /**
      * PlagiatPlayer constructor
@@ -23,7 +26,17 @@ public class PlagiatPlayer extends GamePlayer
     public PlagiatPlayer(Player player)
     {
         super(player);
+
         this.cage = EnumCage.GLASS;
+
+        this.objectiveSign = new ObjectiveSign("plagiat", ChatColor.GOLD + "Plagiat");
+        this.objectiveSign.setLine(1, "");
+        this.objectiveSign.setLine(2, ChatColor.GRAY + "Temps :");
+        this.objectiveSign.setLine(4, " ");
+        this.objectiveSign.setLine(5, ChatColor.GRAY + "Kills :");
+        this.objectiveSign.setLine(7, "  ");
+        this.objectiveSign.setLine(8, ChatColor.GRAY + "Morts :");
+        this.objectiveSign.setLine(10, "   ");
     }
 
     /**
@@ -59,5 +72,15 @@ public class PlagiatPlayer extends GamePlayer
     EnumCage getCage()
     {
         return this.cage;
+    }
+
+    /**
+     * Get the scoreboard for this player
+     *
+     * @return SamaGamesAPI's scoreboard instance
+     */
+    ObjectiveSign getObjectiveSign()
+    {
+        return this.objectiveSign;
     }
 }
