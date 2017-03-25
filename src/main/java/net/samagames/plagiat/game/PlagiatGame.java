@@ -311,6 +311,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
 
         this.chests.forEach(chest -> chest.generate(this.insane));
         this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 5, 50, 5, "", ChatColor.YELLOW + "Coffres remplis !"));
+        this.plugin.getServer().getOnlinePlayers().forEach(player -> player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1f, 1f));
     }
 
     /**
