@@ -31,7 +31,7 @@ public class ThunderSheep extends WoolType
      */
     public ThunderSheep(Plagiat plugin)
     {
-        super(plugin, DyeColor.YELLOW, ChatColor.YELLOW, "de foudre");
+        super(plugin, DyeColor.YELLOW, ChatColor.YELLOW, "invocateur de foudre");
 
         this.tasks = new HashMap<>();
         this.random = new SecureRandom();
@@ -54,7 +54,8 @@ public class ThunderSheep extends WoolType
             int y = location.getWorld().getHighestBlockYAt(location);
             location.setY(y);
             location.getWorld().strikeLightning(location);
-        }, 1L, 100L));
+            location.getWorld().strikeLightning(location);
+        }, 1L, 30L));
     }
 
     /**

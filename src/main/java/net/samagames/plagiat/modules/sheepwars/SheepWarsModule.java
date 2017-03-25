@@ -27,6 +27,7 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -40,6 +41,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BlockIterator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -341,5 +343,18 @@ public class SheepWarsModule extends AbstractModule
     {
         if (event.getEntity() instanceof Sheep)
             event.setCancelled(true);
+    }
+
+    /**
+     * Cancel lightning and fire damage on thunder sheep
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler
+    public void onSheepDamage(EntityDamageEvent event)
+    {
+        if (event.getEntity() instanceof Sheep && event.getEntity().hasMetadata("sg-type") && event.getEntity().getMetadata("sg-type").get(0).value() instanceof ThunderSheep
+                && Arrays.asList(EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.LIGHTNING).contains(event.getCause()))
+                event.setCancelled(true);
     }
 }
