@@ -49,7 +49,7 @@ public class EarthQuakeSheep extends WoolType
                 if (entity instanceof Player && entity.isOnGround())
                 {
                     Vector vector = entity.getVelocity();
-                    vector.setY(0.6D);
+                    vector.setY(0.8D);
                     entity.setVelocity(vector);
                 }
             });
