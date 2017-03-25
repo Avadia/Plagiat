@@ -62,8 +62,9 @@ public class WallsModule extends AbstractModule
 
     /**
      * Run death match if needed
+     * {@link AbstractModule#handleGameEnd()}
      *
-     * @return false, to avoid disabling end
+     * @return false if deathmatch should start
      */
     @Override
     public boolean handleGameEnd()
@@ -88,13 +89,9 @@ public class WallsModule extends AbstractModule
 
             return true;
         }
-        else if (players.size() > 4 && !this.run)
-        {
+        if (players.size() > 4 && !this.run)
             this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.RED + "Il y a trop de joueurs en vie pour commencer un deathmatch. Match nul.", true);
-            return false;
-        }
-        else
-            return false;
+        return false;
     }
 
     /**

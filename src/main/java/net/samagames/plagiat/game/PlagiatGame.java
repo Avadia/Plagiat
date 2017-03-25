@@ -579,11 +579,11 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         if (playerMap.size() > 1 && !forceEnd)
             return;
 
-        boolean shouldEnd = false;
+        boolean shouldNotEnd = false;
         for (AbstractModule module : this.modules)
-            shouldEnd |= module.handleGameEnd();
+            shouldNotEnd |= module.handleGameEnd();
 
-        if (!shouldEnd)
+        if (shouldNotEnd)
             return ;
 
         this.status = Status.FINISHED;
