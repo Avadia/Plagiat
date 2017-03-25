@@ -103,12 +103,14 @@ public class GravityModule extends AbstractModule
     {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
             return ;
+
         if (event.getTo().getBlock().getType() == Material.WATER && this.parkourLandingArea.isInArea(event.getTo()))
         {
             PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId());
             if (plagiatPlayer == null || plagiatPlayer.isSpectator())
                 return ;
-            this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a réussi son saut de dé à coudre. Il revient donc en jeu.", true);
+
+            this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a réussi son saut de dropper. Il revient donc en jeu.", true);
             event.getPlayer().setFallDistance(0F);
             event.getPlayer().setHealth(event.getPlayer().getMaxHealth());
             event.getPlayer().setFoodLevel(30);
