@@ -263,10 +263,16 @@ public class SheepWarsModule extends AbstractModule
                 (woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == itemStack.getDurability()).findFirst().orElse(null)) != null)
         {
             event.setCancelled(true);
+
+            ItemStack newItemStack = new ItemStack(Material.WOOL, itemStack.getAmount() - 1, itemStack.getDurability());
+            ItemMeta itemMeta = newItemStack.getItemMeta();
+            itemMeta.setDisplayName(woolType.getChatColor() + "Mouton " + woolType.getName());
+            newItemStack.setItemMeta(itemMeta);
+
             if (event.getHand() == EquipmentSlot.OFF_HAND)
-                event.getPlayer().getInventory().setItemInOffHand(itemStack.getAmount() == 1 ? new ItemStack(Material.AIR) : new ItemStack(Material.WOOL, itemStack.getAmount() - 1, itemStack.getDurability()));
+                event.getPlayer().getInventory().setItemInOffHand(itemStack.getAmount() == 1 ? new ItemStack(Material.AIR) : newItemStack);
             else
-                event.getPlayer().getInventory().setItemInMainHand(itemStack.getAmount() == 1 ? new ItemStack(Material.AIR) : new ItemStack(Material.WOOL, itemStack.getAmount() - 1, itemStack.getDurability()));
+                event.getPlayer().getInventory().setItemInMainHand(itemStack.getAmount() == 1 ? new ItemStack(Material.AIR) : newItemStack);
             woolType.launchSheep(event.getPlayer(), event.getPlayer().getLocation().getDirection().multiply(3D));
         }
     }
