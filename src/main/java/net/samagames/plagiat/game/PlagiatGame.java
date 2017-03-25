@@ -639,7 +639,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
 
             int minutes = this.time / 60;
             int seconds = this.time % 60;
-            String time = " " + (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? "" : "0" + seconds);
+            String time = " " + (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
             player.getObjectiveSign().setLine(2, time);
             player.getObjectiveSign().setLine(5, " N/A "); // TODO
             player.getObjectiveSign().setLine(8, " N/A"); // TODO
