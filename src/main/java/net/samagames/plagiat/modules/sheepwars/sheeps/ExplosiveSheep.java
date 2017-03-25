@@ -47,7 +47,7 @@ public class ExplosiveSheep extends WoolType
             public void run()
             {
                 this.time++;
-                if (this.time == 12)
+                if (this.time == 20)
                 {
                     sheep.remove();
                     BukkitTask bukkitTask = ExplosiveSheep.this.explodeTask.get(sheep.getEntityId());
@@ -58,7 +58,7 @@ public class ExplosiveSheep extends WoolType
                 }
                 sheep.setColor(this.time % 2 == 0 ? DyeColor.RED : DyeColor.WHITE);
             }
-        }, 60L, 5));
+        }, 30L, 5));
     }
 
     /**
