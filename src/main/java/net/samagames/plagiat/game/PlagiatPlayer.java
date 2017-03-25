@@ -31,7 +31,7 @@ public class PlagiatPlayer extends GamePlayer
 
         this.objectiveSign = new ObjectiveSign("plagiat", ChatColor.GOLD + "Plagiat");
         this.objectiveSign.setLine(0, "");
-        this.objectiveSign.setLine(1, ChatColor.GRAY + "Temps :");
+        this.objectiveSign.setLine(1, ChatColor.GRAY + "Temps de jeu :");
         this.objectiveSign.setLine(3, " ");
         this.objectiveSign.setLine(4, ChatColor.GRAY + "Kills :");
         this.objectiveSign.setLine(6, "  ");
