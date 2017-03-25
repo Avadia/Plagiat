@@ -78,7 +78,7 @@ public abstract class WoolType
             }
             else if (sheep.isDead())
                 ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
-        }, 50L, 2);
+        }, 40L, 2);
 
         sheep.setMetadata("sg-land", new FixedMetadataValue(this.plugin, task));
     }
