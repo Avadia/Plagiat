@@ -12,11 +12,14 @@ import net.samagames.tools.Titles;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -99,11 +102,16 @@ public class WallsModule extends AbstractModule
      */
     private void breakWalls()
     {
+        List<Material> blacklist = Arrays.asList(Material.GRASS, Material.DIRT);
         for (Area wall : this.walls)
             for (int i = 0; i <= wall.getSizeX(); i++)
                 for (int j = 0; j <= wall.getSizeY(); j++)
                     for (int k = 0; k <= wall.getSizeZ(); k++)
-                        wall.getMin().getWorld().getBlockAt(wall.getMin().getBlockX() + i, wall.getMin().getBlockY() + j, wall.getMin().getBlockZ() + k).setType(Material.AIR);
+                    {
+                        Block block = wall.getMin().getWorld().getBlockAt(wall.getMin().getBlockX() + i, wall.getMin().getBlockY() + j, wall.getMin().getBlockZ() + k);
+                        if (!blacklist.contains(block.getType()))
+                            block.setType(Material.AIR);
+                    }
     }
 
     /**
