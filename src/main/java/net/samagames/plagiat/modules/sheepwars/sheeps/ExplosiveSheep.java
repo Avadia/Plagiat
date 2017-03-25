@@ -47,18 +47,18 @@ public class ExplosiveSheep extends WoolType
             public void run()
             {
                 this.time++;
-                if (this.time == 6)
+                if (this.time == 12)
                 {
                     sheep.remove();
                     BukkitTask bukkitTask = ExplosiveSheep.this.explodeTask.get(sheep.getEntityId());
                     if (bukkitTask != null)
                         bukkitTask.cancel();
-                    sheep.getWorld().createExplosion(sheep.getLocation(), 3F);
+                    sheep.getWorld().createExplosion(sheep.getLocation(), 2F);
                     return ;
                 }
                 sheep.setColor(this.time % 2 == 0 ? DyeColor.RED : DyeColor.WHITE);
             }
-        }, 60L, 10L));
+        }, 60L, 5));
     }
 
     /**
