@@ -57,8 +57,8 @@ public class BlindnessSheep extends WoolType
     @Override
     protected void onDeath(Sheep sheep, @Nullable Player killer)
     {
-        BukkitTask bukkitTask = this.blindnessTask.remove(sheep.getEntityId());
         this.blindnessTask.forEach((id, task) -> this.plugin.getServer().broadcastMessage("Task " + task.getTaskId() + " for sheep " + sheep.getEntityId()));
+        BukkitTask bukkitTask = this.blindnessTask.remove(sheep.getEntityId());
         this.plugin.getServer().broadcastMessage("Task value : " + bukkitTask);
         if (bukkitTask != null)
             bukkitTask.cancel();

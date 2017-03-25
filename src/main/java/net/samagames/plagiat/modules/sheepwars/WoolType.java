@@ -72,7 +72,6 @@ public abstract class WoolType
         {
             if (!sheep.isDead() && sheep.isOnGround())
             {
-                this.onLand(sheep);
                 ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
                 this.onLand(sheep);
             }
