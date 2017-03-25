@@ -4,12 +4,14 @@ import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.sheepwars.WoolType;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -57,7 +59,7 @@ public class EarthQuakeSheep extends WoolType
             blocks.forEach(block ->
             {
                 if (!block.getType().isSolid() && block.getRelative(BlockFace.DOWN).getType().isSolid())
-                    block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5D, 0.2D, 0.5D), 6, 0D, 1D, 1D, 1D, 3);
+                    block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5D, 0.2D, 0.5D), 6, 0D, 1D, 1D, 1D, new MaterialData(Material.DIRT));
             });
         }, 1L, 40L));
     }
