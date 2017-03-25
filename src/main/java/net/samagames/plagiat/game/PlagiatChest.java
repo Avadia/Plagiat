@@ -228,7 +228,7 @@ public class PlagiatChest
             PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 1000, potions);
         }
 
-        // Insane
+        // Normal Middle
         {
 
         }

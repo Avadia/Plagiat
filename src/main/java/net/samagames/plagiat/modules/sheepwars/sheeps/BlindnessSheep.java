@@ -43,7 +43,7 @@ public class BlindnessSheep extends WoolType
         this.blindnessTask.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () -> sheep.getWorld().getNearbyEntities(sheep.getLocation(), 6D, 6D, 6D).forEach(entity ->
         {
             if (entity instanceof Player)
-                ((Player)entity).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(40, 1));
+                ((Player)entity).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(50, 1));
         }), 20L, 20L));
         this.plugin.getServer().broadcastMessage("New task " + this.blindnessTask.get(sheep.getEntityId()).getTaskId() + " added for sheep " + sheep.getEntityId());
     }

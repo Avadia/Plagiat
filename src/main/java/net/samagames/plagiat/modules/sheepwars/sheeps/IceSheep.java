@@ -77,7 +77,7 @@ public class IceSheep extends WoolType
             sheep.getWorld().getNearbyEntities(sheep.getLocation(), radius, radius, radius).forEach(entity ->
             {
                 if (entity instanceof Player)
-                    ((Player)entity).addPotionEffect(PotionEffectType.SLOW.createEffect(30, 1));
+                    ((Player)entity).addPotionEffect(PotionEffectType.SLOW.createEffect(40, 1));
             });
 
             Set<Block> blocks = this.getAllBlocksInSphere(sheep.getLocation(), radius);
