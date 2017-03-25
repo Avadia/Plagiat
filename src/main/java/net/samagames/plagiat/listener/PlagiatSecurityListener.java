@@ -11,8 +11,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -145,9 +148,45 @@ public class PlagiatSecurityListener implements Listener
      *
      * @param event Bukkit event instance
      */
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onMerchantModify(VillagerAcquireTradeEvent event)
     {
         event.setCancelled(true);
+    }
+
+    /**
+     * Cancel inventory click before game
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryClick(InventoryClickEvent event)
+    {
+        if (!this.plugin.getGame().isGameStarted())
+            event.setCancelled(true);
+    }
+
+    /**
+     * Cancel drop before game
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onDrop(PlayerDropItemEvent event)
+    {
+        if (!this.plugin.getGame().isGameStarted())
+            event.setCancelled(true);
+    }
+
+    /**
+     * Cancel hand switching before game
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onSwitch(PlayerSwapHandItemsEvent event)
+    {
+        if (!this.plugin.getGame().isGameStarted())
+            event.setCancelled(true);
     }
 }
