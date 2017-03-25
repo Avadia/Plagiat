@@ -34,7 +34,7 @@ public class WallsModule extends AbstractModule
      *
      * @param plugin Plagiat's plugin instance
      */
-    protected WallsModule(Plagiat plugin)
+    public WallsModule(Plagiat plugin)
     {
         super(plugin, "walls", MCServer.HYPIXEL);
         this.run = false;
