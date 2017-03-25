@@ -2,10 +2,13 @@ package net.samagames.plagiat.listener;
 
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.game.PlagiatPlayer;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -80,11 +83,40 @@ public class PlagiatSpectatorListener implements Listener
 
     /**
      * Cancel interact
+     * Kick spectator if clicking the leave bed
      *
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event)
+    {
+        PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId());
+        if (plagiatPlayer != null && plagiatPlayer.isSpectator())
+        {
+            event.setCancelled(true);
+            if (event.getItem() != null && event.getItem().getType() == Material.BED)
+                this.plugin.getSamaGamesAPI().getGameManager().kickPlayer(event.getPlayer(), null);
+        }
+    }
+
+    /**
+     * Cancel block breaking
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler
+    public void onBlockBread(BlockBreakEvent event)
+    {
+        this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
+    }
+
+    /**
+     * Cancel block placing
+     *
+     * @param event Bukkit event instance
+     */
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event)
     {
         this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
     }

@@ -532,25 +532,25 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             player.getInventory().setItem(0, itemStack);
         }
 
-        {
+        /*{
             ItemStack itemStack = new ItemStack(Material.REDSTONE_COMPARATOR);
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Paramètres" + ChatColor.GRAY + " (Clic droit)");
             itemMeta.setLore(Collections.singletonList("Clic droit pour régler vos paramètres"));
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemStack.setItemMeta(itemMeta);
-            player.getInventory().setItem(0, itemStack);
-        }
+            player.getInventory().setItem(4, itemStack);
+        }*/
 
-        {
+        /*{
             ItemStack itemStack = new ItemStack(Material.PAPER);
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Rejouer" + ChatColor.GRAY + " (Clic droit)");
             itemMeta.setLore(Collections.singletonList("Clic droit pour rejouer"));
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemStack.setItemMeta(itemMeta);
-            player.getInventory().setItem(0, itemStack);
-        }
+            player.getInventory().setItem(7, itemStack);
+        }*/
 
         {
             ItemStack itemStack = new ItemStack(Material.BED);
@@ -559,7 +559,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             itemMeta.setLore(Collections.singletonList("Clic droit pour revenir au hub"));
             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             itemStack.setItemMeta(itemMeta);
-            player.getInventory().setItem(0, itemStack);
+            player.getInventory().setItem(8, itemStack);
         }
 
         this.checkEnd(false);
