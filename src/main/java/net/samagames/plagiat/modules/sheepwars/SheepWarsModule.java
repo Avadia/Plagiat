@@ -183,7 +183,7 @@ public class SheepWarsModule extends AbstractModule
             woolType.killSheep((Sheep)event.getEntity(), event.getEntity().getKiller());
             if (event.getEntity().getKiller() != null)
             {
-                ItemStack itemStack = new ItemStack(Material.WOOL, woolType.getDyeColor().getWoolData());
+                ItemStack itemStack = new ItemStack(Material.WOOL, 1, woolType.getDyeColor().getWoolData());
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 itemMeta.setDisplayName(woolType.getChatColor() + "Mouton " + woolType.getName());
                 itemStack.setItemMeta(itemMeta);
@@ -258,7 +258,8 @@ public class SheepWarsModule extends AbstractModule
             itemStack = event.getPlayer().getInventory().getItemInOffHand();
         else
             itemStack = event.getPlayer().getInventory().getItemInMainHand();
-        if (itemStack != null && itemStack.getType() == Material.WOOL && itemStack.getItemMeta().getDisplayName().contains("Mouton") &&
+        ItemMeta meta;
+        if (itemStack != null && itemStack.getType() == Material.WOOL && (meta = itemStack.getItemMeta()) != null && meta.getDisplayName() != null && meta.getDisplayName().contains("Mouton") &&
                 (woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == itemStack.getDurability()).findFirst().orElse(null)) != null)
         {
             event.setCancelled(true);

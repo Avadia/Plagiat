@@ -43,5 +43,6 @@ public class BoardingSheep extends WoolType
     protected void onLand(Sheep sheep)
     {
         sheep.eject();
+        sheep.remove();
     }
 }
