@@ -70,7 +70,7 @@ public class ExplosiveSheep extends WoolType
     @Override
     protected void onDeath(Sheep sheep, @Nullable Player killer)
     {
-        BukkitTask bukkitTask = this.explodeTask.get(sheep.getEntityId());
+        BukkitTask bukkitTask = this.explodeTask.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();
     }
