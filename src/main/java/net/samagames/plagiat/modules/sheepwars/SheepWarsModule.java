@@ -111,7 +111,7 @@ public class SheepWarsModule extends AbstractModule
      */
     private void spawnParticles()
     {
-        this.woolLocations.forEach(location -> location.getWorld().spawnParticle(Particle.PORTAL, location.clone().add(0.5D, 0.5D, 0.5D), 1, 0.5F, 0.5D, 0.5D, 0.5D));
+        this.woolLocations.forEach(location -> location.getWorld().spawnParticle(Particle.PORTAL, location.clone().add(0.5D, 0.5D, 0.5D), 3, 0.5F, 0.5D, 0.5D, 0.5D));
     }
 
     /**
