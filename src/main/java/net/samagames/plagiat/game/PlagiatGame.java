@@ -157,7 +157,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     public void startGame()
     {
         super.startGame();
-        this.giveKits();
+
         this.teleport();
         this.destroyLobby();
 
@@ -180,6 +180,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
         {
+            this.giveKits();
             this.destroyCages();
             this.buildActivated = true;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.damagesActivated = true, 40L);
