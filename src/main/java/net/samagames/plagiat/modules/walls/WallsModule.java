@@ -45,15 +45,16 @@ public class WallsModule extends AbstractModule
     public void handleGameStart()
     {
         JsonObject jsonObject = this.getConfigRoot();
-        this.locations = new Location[4];
-        this.walls = new Area[4];
         JsonArray spawnsArray = jsonObject.get("spawns").getAsJsonArray();
         JsonArray wallsArray = jsonObject.get("walls").getAsJsonArray();
-        for (int i = 0; i < 4; ++i)
-        {
+
+        this.locations = new Location[spawnsArray.size()];
+        for (int i = 0; i < spawnsArray.size(); ++i)
             this.locations[i] = LocationUtils.str2loc(spawnsArray.get(i).getAsString());
+
+        this.walls = new Area[wallsArray.size()];
+        for (int i = 0; i < wallsArray.size(); ++i)
             this.walls[i] = Area.str2area(wallsArray.get(i).getAsString());
-        }
     }
 
     /**
