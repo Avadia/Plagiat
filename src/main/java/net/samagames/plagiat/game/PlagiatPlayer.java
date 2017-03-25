@@ -30,13 +30,13 @@ public class PlagiatPlayer extends GamePlayer
         this.cage = EnumCage.GLASS;
 
         this.objectiveSign = new ObjectiveSign("plagiat", ChatColor.GOLD + "Plagiat");
-        this.objectiveSign.setLine(1, "");
-        this.objectiveSign.setLine(2, ChatColor.GRAY + "Temps :");
-        this.objectiveSign.setLine(4, " ");
-        this.objectiveSign.setLine(5, ChatColor.GRAY + "Kills :");
-        this.objectiveSign.setLine(7, "  ");
-        this.objectiveSign.setLine(8, ChatColor.GRAY + "Morts :");
-        this.objectiveSign.setLine(10, "   ");
+        this.objectiveSign.setLine(0, "");
+        this.objectiveSign.setLine(1, ChatColor.GRAY + "Temps :");
+        this.objectiveSign.setLine(3, " ");
+        this.objectiveSign.setLine(4, ChatColor.GRAY + "Kills :");
+        this.objectiveSign.setLine(6, "  ");
+        this.objectiveSign.setLine(7, ChatColor.GRAY + "Morts :");
+        this.objectiveSign.setLine(9, "   ");
     }
 
     /**

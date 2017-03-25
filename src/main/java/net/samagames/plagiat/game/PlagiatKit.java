@@ -37,6 +37,9 @@ class PlagiatKit
         this.icon = icon;
         this.items = new ArrayList<>();
 
+        for (int i = 0; i < lore.length; ++i)
+            lore[i] = ChatColor.GRAY + " " + lore[i];
+
         ItemMeta itemMeta = this.icon.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GREEN + this.name);
         itemMeta.setLore(Arrays.asList(lore));

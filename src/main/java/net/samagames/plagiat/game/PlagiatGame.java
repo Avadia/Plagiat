@@ -637,9 +637,12 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             if (this.time == 0)
                 player.getObjectiveSign().addReceiver(player.getOfflinePlayer());
 
-            player.getObjectiveSign().setLine(3, "");
-            player.getObjectiveSign().setLine(6, " N/A"); // TODO
-            player.getObjectiveSign().setLine(9, " N/A"); // TODO
+            int minutes = this.time / 60;
+            int seconds = this.time % 60;
+            String time = " " + (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? "" : "0" + seconds);
+            player.getObjectiveSign().setLine(2, time);
+            player.getObjectiveSign().setLine(5, " N/A "); // TODO
+            player.getObjectiveSign().setLine(8, " N/A"); // TODO
             player.getObjectiveSign().updateLines();
         });
 
