@@ -14,10 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Ice Sheep Class
@@ -55,6 +52,7 @@ public class IceSheep extends WoolType
         BukkitTask bukkitTask = this.tasks.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();
+
         Set<Block> blocks = this.blocks.remove(sheep.getEntityId());
         if (blocks != null)
             blocks.forEach(block -> block.setType(Material.AIR));
@@ -75,29 +73,34 @@ public class IceSheep extends WoolType
             sheep.getWorld().getNearbyEntities(sheep.getLocation(), radius, radius, radius).forEach(entity ->
             {
                 if (entity instanceof Player)
-                    ((Player)entity).addPotionEffect(PotionEffectType.SLOW.createEffect(20, 1));
+                    ((Player)entity).addPotionEffect(PotionEffectType.SLOW.createEffect(30, 1));
             });
 
             Set<Block> blocks = this.getAllBlocksInSphere(sheep.getLocation(), radius);
+            Set<Block> modifiedBlocks = new HashSet<>();
             blocks.forEach(block ->
             {
                Material material = block.getType();
                if (material == Material.SNOW)
                {
-                   if (block.getData() < 8 && this.random.nextInt(10) < 6)
-                       block.setData((byte)(block.getData() + 1));
+                   if (block.getData() < 3 && this.random.nextInt(20) < 6)
+                   {
+                       block.setData((byte) (block.getData() + 1));
+                       modifiedBlocks.add(block);
+                   }
                }
                else if (!material.isSolid() && block.getRelative(BlockFace.DOWN).getType().isSolid())
                {
                    block.setType(Material.SNOW);
                    block.setData((byte)0);
+                   modifiedBlocks.add(block);
                }
             });
 
             if (this.blocks.containsKey(sheep.getEntityId()))
-                this.blocks.get(sheep.getEntityId()).addAll(blocks);
+                this.blocks.get(sheep.getEntityId()).addAll(modifiedBlocks);
             else
-                this.blocks.put(sheep.getEntityId(), blocks);
+                this.blocks.put(sheep.getEntityId(), modifiedBlocks);
 
         }, 1L, 20L));
     }
