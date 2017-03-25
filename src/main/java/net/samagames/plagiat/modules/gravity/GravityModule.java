@@ -68,6 +68,7 @@ public class GravityModule extends AbstractModule
     {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
             return ;
+
         if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.VOID)
         {
             event.setCancelled(true);
@@ -80,12 +81,15 @@ public class GravityModule extends AbstractModule
             player.setFlying(true);
             float old = player.getFlySpeed();
             player.setFlySpeed(0F);
+
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
             {
                 player.setFlySpeed(old);
                 player.setFlying(false);
                 player.setAllowFlight(false);
             }, 80L);
+
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> Titles.sendTitle(player, 0, 60, 0, ChatColor.GOLD + "Tombez dans l'eau", "Si vous souhaitez revivre !"), 10L);
         }
     }
 
