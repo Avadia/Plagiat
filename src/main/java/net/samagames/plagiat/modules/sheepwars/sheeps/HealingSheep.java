@@ -48,7 +48,7 @@ public class HealingSheep extends WoolType
             sheep.getWorld().getNearbyEntities(sheep.getLocation(), 6D, 6D, 6D).forEach(entity ->
             {
                 if (entity instanceof Player)
-                    ((Player)entity).setHealth(((Player)entity).getHealth() > ((Player)entity).getMaxHealth() ? ((Player)entity).getHealth() : ((Player)entity).getHealth() + 1);
+                    ((Player)entity).setHealth(((Player)entity).getHealth() >= ((Player)entity).getMaxHealth() ? ((Player)entity).getHealth() : ((Player)entity).getHealth() + 1);
             });
             sheep.getWorld().spawnParticle(Particle.HEART, sheep.getLocation(), 8, this.random.nextDouble() % 1D, this.random.nextDouble() % 1D, this.random.nextDouble() % 1D);
         }, 20L, 20L));
