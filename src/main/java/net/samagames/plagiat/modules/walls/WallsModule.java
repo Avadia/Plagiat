@@ -89,8 +89,10 @@ public class WallsModule extends AbstractModule
 
             return true;
         }
+
         if (players.size() > 4 && !this.run)
             this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.RED + "Il y a trop de joueurs en vie pour commencer un deathmatch. Match nul.", true);
+
         return false;
     }
 
