@@ -33,7 +33,7 @@ public class WallsModule extends AbstractModule
      */
     protected WallsModule(Plagiat plugin)
     {
-        super(plugin, "The Walls", MCServer.HYPIXEL);
+        super(plugin, "walls", MCServer.HYPIXEL);
         this.run = false;
     }
 
