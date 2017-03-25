@@ -515,8 +515,13 @@ public class PlagiatGame extends Game<PlagiatPlayer>
 
         if (player.getKiller() != null)
             player.getKiller().playSound(player.getKiller().getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
+
         if (logout) //Do not give spectator inventory to disconnected player, to reduce CPU usage
+        {
+            this.checkEnd(false);
             return ;
+        }
+
         {
             ItemStack itemStack = new ItemStack(Material.COMPASS);
             ItemMeta itemMeta = itemStack.getItemMeta();
@@ -633,8 +638,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                 player.getObjectiveSign().addReceiver(player.getOfflinePlayer());
 
             player.getObjectiveSign().setLine(3, "");
-            player.getObjectiveSign().setLine(6, " N/A");
-            player.getObjectiveSign().setLine(9, " N/A");
+            player.getObjectiveSign().setLine(6, " N/A"); // TODO
+            player.getObjectiveSign().setLine(9, " N/A"); // TODO
             player.getObjectiveSign().updateLines();
         });
 
