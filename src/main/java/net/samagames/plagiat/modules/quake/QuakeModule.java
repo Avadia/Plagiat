@@ -158,7 +158,7 @@ public class QuakeModule extends AbstractModule
         List<Player> players = this.getTargetV3(player, 100, 1.5D);
         if (!players.isEmpty())
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
-        players.forEach(victim -> victim.setVelocity(player.getLocation().getDirection().multiply(0.3D)));
+        players.forEach(victim -> victim.setVelocity(player.getLocation().getDirection()));
         // FIXME itemStack.setAmount(0);
         // FIXME this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setAmount(1), 80L);
     }
