@@ -105,7 +105,7 @@ public class PlagiatKitSelectorGui extends AbstractGui
             if (selected != null)
             {
                 IPlayerShop playerShop = this.plugin.getSamaGamesAPI().getShopsManager().getPlayer(player.getUniqueId());
-                if (playerShop.getTransactionsByID(id) != null)
+                if (id == -1 || playerShop.getTransactionsByID(id) != null)
                 {
                     // Unselect all other kits
                     PlagiatKit.getKits().forEach(kit ->
