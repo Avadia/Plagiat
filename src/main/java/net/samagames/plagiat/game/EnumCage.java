@@ -17,7 +17,9 @@ enum EnumCage
     SLIME(Material.SLIME_BLOCK, (byte)0, 3),
     SHEEP(Material.WOOL, (byte)-1, 4),
     OBSIDIAN(Material.OBSIDIAN, (byte)0, 5),
-    RAINBOW(Material.STAINED_GLASS, (byte)-1, 6);
+    RAINBOW(Material.STAINED_GLASS, (byte)-1, 6),
+    MOSCOU(Material.STAINED_GLASS, (byte)14, 7),
+    ARITCHE(Material.IRON_FENCE, (byte)0, 8);
 
     private static Random random = new SecureRandom();
     private Material material;
