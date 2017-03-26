@@ -78,7 +78,7 @@ public class QuakeModule extends AbstractModule
         if (itemStack != null && itemStack.equals(this.hoe))
         {
             event.setCancelled(true);
-            this.shoot(event.getPlayer(), itemStack);
+            this.shoot(event.getPlayer());
         }
         else if (event.getRightClicked() instanceof ArmorStand
                 && ((ArmorStand)event.getRightClicked()).getItemInHand() != null
@@ -114,7 +114,7 @@ public class QuakeModule extends AbstractModule
         if (itemStack != null && itemStack.equals(this.hoe))
         {
             event.setCancelled(true);
-            this.shoot(event.getPlayer(), itemStack);
+            this.shoot(event.getPlayer());
         }
     }
 
@@ -132,7 +132,7 @@ public class QuakeModule extends AbstractModule
         if (itemStack != null && itemStack.equals(this.hoe))
         {
             event.setCancelled(true);
-            this.shoot((Player)event.getDamager(), itemStack);
+            this.shoot((Player)event.getDamager());
             this.plugin.getServer().getScheduler().runTask(this.plugin, () -> itemStack.setDurability((short)0));
         }
     }
@@ -141,25 +141,26 @@ public class QuakeModule extends AbstractModule
      * Player shoot with ray-gun
      *
      * @param player The shooting player
-     * @param itemStack The hoe item
      */
-    private void shoot(Player player, ItemStack itemStack)
+    private void shoot(Player player)
     {
         if (this.cooldown.contains(player.getUniqueId()))
             return ;
+
         this.cooldown.add(player.getUniqueId());
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(player.getUniqueId()), 200L);
+        /* FIXME
         for (int i = 0; i < 20; ++i)
         {
             final int j = i;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setDurability((short) (itemStack.getType().getMaxDurability() - itemStack.getType().getMaxDurability() * j / 20)), j * 20L);
-        }
+        }*/
         List<Player> players = this.getTargetV3(player, 100, 1.5D);
         if (!players.isEmpty())
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
         players.forEach(victim -> victim.setVelocity(player.getLocation().getDirection().multiply(0.3D)));
-        itemStack.setAmount(0);
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setAmount(1), 80L);
+        // FIXME itemStack.setAmount(0);
+        // FIXME this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setAmount(1), 80L);
     }
 
     /**
