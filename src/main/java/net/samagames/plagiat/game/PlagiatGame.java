@@ -299,7 +299,9 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             {
                 Location location = iterator.next();
                 this.createCage(plagiatPlayer.getCage(), location);
-                plagiatPlayer.getPlayerIfOnline().teleport(location);
+                Player player = plagiatPlayer.getPlayerIfOnline();
+                if (player != null)
+                    this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.teleport(location), 1L);
             }
         });
     }
