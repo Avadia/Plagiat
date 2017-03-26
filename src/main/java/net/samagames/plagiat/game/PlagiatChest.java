@@ -210,7 +210,7 @@ public class PlagiatChest
             // Bow
             Map<ItemStack, Integer> bow = new HashMap<>();
             bow.put(new ItemStack(Material.BOW), 10000);
-            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 1500, bow);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 3000, bow);
 
             // Pickaxes
             Map<ItemStack, Integer> pickaxes = new HashMap<>();
