@@ -230,7 +230,109 @@ public class PlagiatChest
 
         // Normal Middle
         {
+            // P4 iron helmet
+            Map<ItemStack, Integer> helmets = new HashMap<>();
+            ItemStack ironHelmet = new ItemStack(Material.IRON_HELMET);
+            ironHelmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            helmets.put(ironHelmet, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 1000, helmets);
 
+            // P4 iron chest
+            Map<ItemStack, Integer> chestPlates = new HashMap<>();
+            ItemStack ironChest = new ItemStack(Material.IRON_CHESTPLATE);
+            ironChest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            chestPlates.put(ironChest, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 1000, chestPlates);
+
+            // P4 iron legs
+            Map<ItemStack, Integer> legs = new HashMap<>();
+            ItemStack ironLegs = new ItemStack(Material.IRON_LEGGINGS);
+            ironLegs.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            legs.put(ironLegs, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 1000, legs);
+
+            // P4 iron boots
+            Map<ItemStack, Integer> boots = new HashMap<>();
+            ItemStack ironBoots = new ItemStack(Material.IRON_BOOTS);
+            ironBoots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 4);
+            boots.put(ironBoots, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 1000, boots);
+
+            // S1 iron sword
+            Map<ItemStack, Integer> swords = new HashMap<>();
+            ItemStack ironSword = new ItemStack(Material.IRON_CHESTPLATE);
+            ironSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+            swords.put(ironBoots, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 3000, swords);
+
+            // P1 diamond helmet
+            Map<ItemStack, Integer> diamondHelmets = new HashMap<>();
+            ItemStack diamondHelmet = new ItemStack(Material.DIAMOND_HELMET);
+            diamondHelmet.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            diamondHelmets.put(diamondHelmet, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 200, diamondHelmets);
+
+            // P1 diamond chest
+            Map<ItemStack, Integer> diamondChests = new HashMap<>();
+            ItemStack diamondChest = new ItemStack(Material.DIAMOND_CHESTPLATE);
+            diamondChest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            diamondChests.put(diamondChest, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 200, diamondChests);
+
+            // P1 diamond legs
+            Map<ItemStack, Integer> diamondLegs = new HashMap<>();
+            ItemStack diamondLeg = new ItemStack(Material.DIAMOND_LEGGINGS);
+            diamondLeg.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            diamondLegs.put(diamondLeg, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 200, diamondLegs);
+
+            // P1 diamond boots
+            Map<ItemStack, Integer> diamondBoots = new HashMap<>();
+            ItemStack diamondBoot = new ItemStack(Material.DIAMOND_BOOTS);
+            diamondBoot.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+            diamondBoots.put(diamondBoot, 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 200, diamondBoots);
+
+            // Diamond sword
+            Map<ItemStack, Integer> diamondSwords = new HashMap<>();
+            diamondSwords.put(new ItemStack(Material.DIAMOND_SWORD), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 800, diamondSwords);
+
+            // Experience bottles
+            Map<ItemStack, Integer> bottles = new HashMap<>();
+            bottles.put(new ItemStack(Material.EXP_BOTTLE, 24), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 5000, bottles);
+
+            // Splash heal potion
+            Map<ItemStack, Integer> healPotions = new HashMap<>();
+            //noinspection deprecation
+            healPotions.put(new Potion(PotionType.INSTANT_HEAL).splash().toItemStack(1), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 3000, healPotions);
+
+            // Bow
+            Map<ItemStack, Integer> bow = new HashMap<>();
+            bow.put(new ItemStack(Material.BOW), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 3000, bow);
+
+            // Water bucket
+            Map<ItemStack, Integer> buckets = new HashMap<>();
+            buckets.put(new ItemStack(Material.WATER_BUCKET), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 1000, buckets);
+
+            // TNT
+            Map<ItemStack, Integer> tnt = new HashMap<>();
+            tnt.put(new ItemStack(Material.TNT), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 1000, tnt);
+
+            // Golden apple
+            Map<ItemStack, Integer> goldenApple = new HashMap<>();
+            goldenApple.put(new ItemStack(Material.GOLDEN_APPLE), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 3000, goldenApple);
+
+            // Ender pearls
+            Map<ItemStack, Integer> pearls = new HashMap<>();
+            pearls.put(new ItemStack(Material.ENDER_PEARL, 2), 10000);
+            PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 1000, pearls);
         }
     }
 }
