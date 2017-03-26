@@ -480,7 +480,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             {
                 case ENTITY_ATTACK:
                 case PROJECTILE:
-                    deathMessage = " a été tué par " + (player.getKiller() == null ? "un inconnu." : player.getDisplayName() + ".");
+                    deathMessage = " a été tué par " + (player.getKiller() == null ? "un inconnu." : player.getKiller().getDisplayName() + ".");
                     // TODO
                     break;
                 case SUFFOCATION:
