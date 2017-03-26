@@ -43,9 +43,8 @@ public class BlindnessSheep extends WoolType
         this.blindnessTask.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () -> sheep.getWorld().getNearbyEntities(sheep.getLocation(), 6D, 6D, 6D).forEach(entity ->
         {
             if (entity instanceof Player)
-                ((Player)entity).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(50, 1));
+                ((Player)entity).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(80, 1));
         }), 20L, 20L));
-        this.plugin.getServer().broadcastMessage("New task " + this.blindnessTask.get(sheep.getEntityId()).getTaskId() + " added for sheep " + sheep.getEntityId());
     }
 
     /**
@@ -57,9 +56,7 @@ public class BlindnessSheep extends WoolType
     @Override
     protected void onDeath(Sheep sheep, @Nullable Player killer)
     {
-        this.blindnessTask.forEach((id, task) -> this.plugin.getServer().broadcastMessage("Task " + task.getTaskId() + " for sheep " + sheep.getEntityId()));
         BukkitTask bukkitTask = this.blindnessTask.remove(sheep.getEntityId());
-        this.plugin.getServer().broadcastMessage("Task value : " + bukkitTask);
         if (bukkitTask != null)
             bukkitTask.cancel();
     }
