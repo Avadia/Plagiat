@@ -83,6 +83,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.chests.forEach(plagiatChest -> plagiatChest.generate(this.insane)), 10L);
 
         this.plugin.getServer().getWorlds().get(0).setStorm(false);
+
+        Collections.shuffle(this.spawns);
     }
 
     /**
