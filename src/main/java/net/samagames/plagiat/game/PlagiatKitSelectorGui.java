@@ -2,6 +2,7 @@ package net.samagames.plagiat.game;
 
 import net.samagames.api.gui.AbstractGui;
 import net.samagames.api.shops.IPlayerShop;
+import net.samagames.api.shops.ITransaction;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.tools.GlowEffect;
 import org.bukkit.ChatColor;
@@ -92,9 +93,38 @@ public class PlagiatKitSelectorGui extends AbstractGui
         if (action.equals("back"))
         {
             player.closeInventory();
-            //return ;
+            return ;
         }
 
-        // TODO Select kit
+        String[] data = action.split(":");
+        try
+        {
+            String name = data[1];
+            int id = Integer.parseInt(data[2]);
+            PlagiatKit selected = PlagiatKit.getKits().stream().filter(kit -> name.equals(kit.getName()) && id == kit.getDbId()).findFirst().orElse(null);
+            if (selected != null)
+            {
+                IPlayerShop playerShop = this.plugin.getSamaGamesAPI().getShopsManager().getPlayer(player.getUniqueId());
+                if (playerShop.getTransactionsByID(id) != null)
+                {
+                    // Unselect all other kits
+                    PlagiatKit.getKits().forEach(kit ->
+                    {
+                        ITransaction transaction = playerShop.getTransactionsByID(id);
+                        if (transaction != null)
+                            transaction.setSelected(false);
+                    });
+
+                    // Select current kit
+                    playerShop.setSelectedItem(id, true);
+                    player.sendMessage(this.plugin.getGame().getCoherenceMachine().getGameTag() + ChatColor.GREEN + " Kit sélectionné");
+                }
+                else
+                    player.sendMessage(this.plugin.getGame().getCoherenceMachine().getGameTag() + ChatColor.RED + " Vous ne possédez pas ce kit !");
+            }
+        }
+        catch (Exception ignored)
+        {
+        }
     }
 }
