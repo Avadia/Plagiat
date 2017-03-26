@@ -104,7 +104,7 @@ public class GravityModule extends AbstractModule
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
             return ;
 
-        if (event.getTo().getBlock().getType() == Material.WATER && this.parkourLandingArea.isInArea(event.getTo()))
+        if (event.getTo().getBlock().getType() == Material.STATIONARY_WATER && this.parkourLandingArea.isInArea(event.getTo()))
         {
             PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId());
             if (plagiatPlayer == null || plagiatPlayer.isSpectator())
