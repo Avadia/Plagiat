@@ -1,9 +1,14 @@
 package net.samagames.plagiat.game;
 
+import net.samagames.tools.ItemUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -130,6 +135,33 @@ class PlagiatKit
         defaultKit.addItem(new ItemStack(Material.STONE_AXE));
         defaultKit.addItem(new ItemStack(Material.STONE_SPADE));
         PlagiatKit.kits.add(defaultKit);
+
+        ItemStack frogHead = ItemUtils.getCustomHead("eyJ0aW1lc3RhbXAiOjE0OTA1MzMyMzE0NjMsInByb2ZpbGVJZCI6Ijc5ZmI4NDEwNWQ2ZDQ2YmY5MGFmOTA1NzE5YjliMzAzIiwicHJvZmlsZU5hbWUiOiJGcm9nXyIsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9mYTcyZDdkMjE5NWE1MWZiZTU0NmU3MzQ4YTZiNzVkZTExOTdiY2UyMWVhMWRlYzYyMjdkZjFmMmVkOGI3MyJ9fX0=");
+        PlagiatKit frogKit = new PlagiatKit("Grenouille", -1, frogHead, new String[] { "Kit Grenouille", "", "Tête de grenouille", "Plastron en cuir", "Jambes en cuir", "Bottes en cuir", "Potion de grenouille" });
+        frogKit.addItem(frogHead);
+        ItemStack greenChest = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta greenChestMeta = (LeatherArmorMeta)greenChest.getItemMeta();
+        greenChestMeta.setColor(Color.GREEN);
+        greenChest.setItemMeta(greenChestMeta);
+        frogKit.addItem(greenChest);
+        ItemStack greenLegs = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta greenLegsMeta = (LeatherArmorMeta)greenLegs.getItemMeta();
+        greenLegsMeta.setColor(Color.GREEN);
+        greenLegs.setItemMeta(greenLegsMeta);
+        frogKit.addItem(greenLegs);
+        ItemStack greenBoots = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta greenBootsMeta = (LeatherArmorMeta)greenBoots.getItemMeta();
+        greenBootsMeta.setColor(Color.GREEN);
+        greenBoots.setItemMeta(greenBootsMeta);
+        frogKit.addItem(greenBoots);
+        ItemStack frogPotion = new ItemStack(Material.SPLASH_POTION);
+        PotionMeta frogPotionMeta = (PotionMeta)frogPotion.getItemMeta();
+        frogPotionMeta.setDisplayName(ChatColor.GREEN + "Potion de grenouille");
+        frogPotionMeta.addCustomEffect(PotionEffectType.JUMP.createEffect(200, 2), true);
+        frogPotionMeta.addCustomEffect(PotionEffectType.SPEED.createEffect(200, 2), true);
+        frogPotion.setItemMeta(frogPotionMeta);
+        frogKit.addItem(frogPotion);
+        PlagiatKit.kits.add(frogKit);
 
         // TODO
     }
