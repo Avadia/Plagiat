@@ -59,7 +59,7 @@ public class EarthQuakeSheep extends WoolType
             blocks.forEach(block ->
             {
                 if (!block.getType().isSolid() && block.getRelative(BlockFace.DOWN).getType().isSolid())
-                    block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5D, 0.2D, 0.5D), 6, 1D, 1D, 1D, 0D, new MaterialData(Material.DIRT));
+                    block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5D, 0.2D, 0.5D), 5, 0.3D, 0.1D, 0.3D, 0D, new MaterialData(Material.DIRT));
             });
         }, 1L, 40L));
     }
