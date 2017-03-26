@@ -78,4 +78,15 @@ public class HealingSheep extends WoolType
     {
         return false;
     }
+
+    /**
+     * Makes Healing sheep alive forever
+     *
+     * @return -1 to disable automatic despawn
+     */
+    @Override
+    public int getSpawnTime()
+    {
+        return -1;
+    }
 }

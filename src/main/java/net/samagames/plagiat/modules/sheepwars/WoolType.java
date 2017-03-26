@@ -79,6 +79,8 @@ public abstract class WoolType
                 ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
         }, 20L, 2);
 
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, sheep::remove, this.getSpawnTime());
+
         sheep.setMetadata("sg-land", new FixedMetadataValue(this.plugin, task));
     }
 
@@ -191,5 +193,16 @@ public abstract class WoolType
                         blocks.add(new Location(origin.getWorld(), x, y, z).getBlock());
 
         return blocks;
+    }
+
+    /**
+     * Number of ticks this sheep should stay alive
+     * 12 seconds by default
+     *
+     * @return -1 if infinite, tick count otherwise
+     */
+    public int getSpawnTime()
+    {
+        return 240;
     }
 }

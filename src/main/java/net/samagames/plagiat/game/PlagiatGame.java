@@ -97,9 +97,9 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.registerModule(RushModule.class);
         this.registerModule(UltraLuckyModule.class);
         this.registerModule(WallsModule.class);
-        //TODO this.registerModule(DragonEscapeModule.class);
-        //TODO this.registerModule(SplatoonModule.class);
-        //TODO this.registerModule(DimensionsModule.class);
+        //TODO this.registerModule(DragonEscapeModule.class); NOTE: Not implemented yet
+        //TODO this.registerModule(SplatoonModule.class);     NOTE: Not implemented yet
+        //TODO this.registerModule(DimensionsModule.class);   NOTE: Dimensions is done but disabled
     }
 
     /**

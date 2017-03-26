@@ -59,6 +59,6 @@ public class PlagiatTeamGame extends PlagiatGame
     @Override
     public void checkEnd(boolean forceEnd)
     {
-        // TODO
+        // TODO: Teams
     }
 }
