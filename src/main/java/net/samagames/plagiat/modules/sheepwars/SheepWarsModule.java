@@ -353,8 +353,9 @@ public class SheepWarsModule extends AbstractModule
     @EventHandler
     public void onSheepDamage(EntityDamageEvent event)
     {
-        if (event.getEntity() instanceof Sheep && event.getEntity().hasMetadata("sg-type") && event.getEntity().getMetadata("sg-type").get(0).value() instanceof ThunderSheep
-                && Arrays.asList(EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.LIGHTNING).contains(event.getCause()))
+        if (event.getEntity() instanceof Sheep && event.getEntity().hasMetadata("sg-type") && (event.getCause() == EntityDamageEvent.DamageCause.FALL
+                || (event.getEntity().getMetadata("sg-type").get(0).value() instanceof ThunderSheep
+                && Arrays.asList(EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.LIGHTNING).contains(event.getCause()))))
                 event.setCancelled(true);
     }
 }
