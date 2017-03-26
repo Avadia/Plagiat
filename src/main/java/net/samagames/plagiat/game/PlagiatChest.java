@@ -260,7 +260,7 @@ public class PlagiatChest
 
             // S1 iron sword
             Map<ItemStack, Integer> swords = new HashMap<>();
-            ItemStack ironSword = new ItemStack(Material.IRON_CHESTPLATE);
+            ItemStack ironSword = new ItemStack(Material.IRON_SWORD);
             ironSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
             swords.put(ironBoots, 10000);
             PlagiatChest.registerItems(PlagiatChest.ITEMS_MIDDLE_NORMAL, 3000, swords);
