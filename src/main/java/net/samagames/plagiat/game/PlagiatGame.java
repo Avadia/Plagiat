@@ -604,7 +604,10 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             this.handleWinner(gamePlayer.getUUID());
 
         if (player != null)
+        {
             this.effectsOnWinner(player);
+            this.getCoherenceMachine().getTemplateManager().getPlayerWinTemplate().execute(player);
+        }
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, this::handleGameEnd, 80L);
     }
