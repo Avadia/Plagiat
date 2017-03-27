@@ -1,10 +1,6 @@
 package net.samagames.plagiat.modules.quake;
 
-import net.minecraft.server.v1_10_R1.AxisAlignedBB;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.IBlockAccess;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.Vec3D;
+import net.minecraft.server.v1_10_R1.*;
 import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.game.PlagiatPlayer;
@@ -17,6 +13,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_10_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -148,19 +146,52 @@ public class QuakeModule extends AbstractModule
             return ;
 
         this.cooldown.add(player.getUniqueId());
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(player.getUniqueId()), 200L);
-        /* FIXME
-        for (int i = 0; i < 20; ++i)
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(player.getUniqueId()), 180L);
+
+        for (int i = 0; i < 8; ++i)
         {
             final int j = i;
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setDurability((short) (itemStack.getType().getMaxDurability() - itemStack.getType().getMaxDurability() * j / 20)), j * 20L);
-        }*/
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+            {
+                String msg = ChatColor.RED + "Rechargement : " + ChatColor.GRAY + "[" + ChatColor.RED;
+
+                for (int k = 0; k < j; ++k)
+                    msg += "□";
+
+                for (int k = 0; k < (8 - j); k++)
+                    msg += " ";
+
+                msg += ChatColor.GRAY + "]";
+
+                this.sendActionBarMessage(player, msg);
+            }, j * 20L);
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.sendActionBarMessage(player, ""), 179L);
+        }
+
         List<Player> players = this.getTargetV3(player, 100, 1.5D);
         if (!players.isEmpty())
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
         players.forEach(victim -> victim.setVelocity(player.getLocation().getDirection()));
-        // FIXME itemStack.setAmount(0);
-        // FIXME this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> itemStack.setAmount(1), 80L);
+    }
+
+    /**
+     * Send an action bar message to a player
+     *
+     * @param player Bukkit Player instance
+     * @param message Message to send
+     */
+    private void sendActionBarMessage(Player player, String message)
+    {
+        if (!(player instanceof CraftPlayer))
+            return ;
+
+        IChatBaseComponent[] components = CraftChatMessage.fromString(message);
+
+        for (IChatBaseComponent component : components)
+        {
+            PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(component, (byte) 2);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
+        }
     }
 
     /**
