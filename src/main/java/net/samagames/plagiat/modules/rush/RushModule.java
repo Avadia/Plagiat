@@ -16,6 +16,7 @@ import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,18 +50,60 @@ public class RushModule extends AbstractModule
 
         List<MerchantRecipe> recipeList = new ArrayList<>();
 
-        ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
-        itemStack.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        ItemStack itemStack;
+
+        itemStack = new ItemStack(Material.SANDSTONE, 8);
         MerchantRecipe recipe1 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
-        recipe1.addIngredient(new ItemStack(Material.DIAMOND, 3));
+        recipe1.addIngredient(new ItemStack(Material.COAL, 1));
+
+        itemStack = new ItemStack(Material.IRON_SWORD);
+        itemStack.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        MerchantRecipe recipe2 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe2.addIngredient(new ItemStack(Material.IRON_INGOT, 3));
+
+        itemStack = new ItemStack(Material.DIAMOND_SWORD);
+        itemStack.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+        MerchantRecipe recipe3 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe3.addIngredient(new ItemStack(Material.DIAMOND, 3));
 
         itemStack = new ItemStack(Material.GOLD_CHESTPLATE);
-        itemStack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
-        MerchantRecipe recipe2 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
-        recipe2.addIngredient(new ItemStack(Material.GOLD_INGOT, 12));
+        itemStack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+        MerchantRecipe recipe4 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe4.addIngredient(new ItemStack(Material.GOLD_INGOT, 12));
+
+        itemStack = new ItemStack(Material.IRON_PICKAXE);
+        itemStack.addEnchantment(Enchantment.DIG_SPEED, 1);
+        MerchantRecipe recipe5 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe5.addIngredient(new ItemStack(Material.IRON_INGOT, 9));
+
+        itemStack = new ItemStack(Material.TNT, 2);
+        MerchantRecipe recipe6 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe6.addIngredient(new ItemStack(Material.IRON_INGOT, 6));
+
+        itemStack = new ItemStack(Material.FLINT_AND_STEEL);
+        MerchantRecipe recipe7 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe7.addIngredient(new ItemStack(Material.IRON_INGOT, 3));
+
+        itemStack = new ItemStack(Material.COOKED_BEEF, 2);
+        MerchantRecipe recipe8 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe8.addIngredient(new ItemStack(Material.COAL, 2));
+
+        itemStack = new ItemStack(Material.GOLDEN_APPLE);
+        MerchantRecipe recipe9 = new MerchantRecipe(itemStack, Integer.MAX_VALUE);
+        recipe9.addIngredient(new ItemStack(Material.IRON_INGOT, 10));
 
         recipeList.add(recipe1);
         recipeList.add(recipe2);
+        recipeList.add(recipe3);
+        recipeList.add(recipe4);
+        recipeList.add(recipe5);
+        recipeList.add(recipe6);
+        recipeList.add(recipe7);
+        recipeList.add(recipe8);
+        recipeList.add(recipe9);
+
+        Collections.shuffle(recipeList);
+
         this.ghostNPC.setRecipes(recipeList);
     }
 
