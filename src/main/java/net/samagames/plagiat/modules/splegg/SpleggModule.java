@@ -79,7 +79,7 @@ public class SpleggModule extends AbstractModule
                 event.getPlayer().sendMessage(ChatColor.RED + "Votre inventaire est plein.");
                 return ;
             }
-            ((ArmorStand)event.getRightClicked()).setItemInHand(new ItemStack(Material.AIR));
+            event.getRightClicked().remove();
             event.getPlayer().getInventory().addItem(this.egg);
             event.getPlayer().sendMessage(ChatColor.GOLD + "Vous avez maintenant l'" + ChatColor.AQUA + "Oeuf" + ChatColor.GOLD + ". Tirez sur des blocs pour les casser.");
             event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);

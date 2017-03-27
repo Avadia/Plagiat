@@ -87,7 +87,7 @@ public class QuakeModule extends AbstractModule
                 event.getPlayer().sendMessage(ChatColor.RED + "Votre inventaire est plein.");
                 return ;
             }
-            ((ArmorStand)event.getRightClicked()).setItemInHand(new ItemStack(Material.AIR));
+            event.getRightClicked().remove();
             event.getPlayer().getInventory().addItem(this.hoe);
             event.getPlayer().sendMessage(ChatColor.GOLD + "Vous avez maintenant le " + ChatColor.AQUA + "Bling bling Thing" + ChatColor.GOLD + ". Tirez sur votre ennemis pour les pousser dans le vide.");
             event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
