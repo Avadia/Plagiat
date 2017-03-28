@@ -79,7 +79,7 @@ public abstract class WoolType
                 ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
         }, 20L, 2);
 
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, sheep::remove, this.getSpawnTime());
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> sheep.damage(100D), this.getSpawnTime());
 
         sheep.setMetadata("sg-land", new FixedMetadataValue(this.plugin, task));
     }
