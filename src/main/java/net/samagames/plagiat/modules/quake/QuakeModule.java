@@ -1,6 +1,12 @@
 package net.samagames.plagiat.modules.quake;
 
-import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_10_R1.AxisAlignedBB;
+import net.minecraft.server.v1_10_R1.BlockPosition;
+import net.minecraft.server.v1_10_R1.IBlockAccess;
+import net.minecraft.server.v1_10_R1.IBlockData;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_10_R1.Vec3D;
 import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.game.PlagiatPlayer;
@@ -14,7 +20,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_10_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -88,6 +93,7 @@ public class QuakeModule extends AbstractModule
                 return ;
             }
             event.getRightClicked().remove();
+            event.setCancelled(true);
             event.getPlayer().getInventory().addItem(this.hoe);
             event.getPlayer().sendMessage(ChatColor.GOLD + "Vous avez maintenant le " + ChatColor.AQUA + "Bling bling Thing" + ChatColor.GOLD + ". Tirez sur votre ennemis pour les pousser dans le vide.");
             event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
@@ -148,7 +154,7 @@ public class QuakeModule extends AbstractModule
         this.cooldown.add(player.getUniqueId());
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(player.getUniqueId()), 180L);
 
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < 9; ++i)
         {
             final int j = i;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
@@ -185,13 +191,8 @@ public class QuakeModule extends AbstractModule
         if (!(player instanceof CraftPlayer))
             return ;
 
-        IChatBaseComponent[] components = CraftChatMessage.fromString(message);
-
-        for (IChatBaseComponent component : components)
-        {
-            PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(component, (byte) 2);
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
-        }
+        PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + message.replaceAll("\"", "\\\"") + "\"}"), (byte) 2);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
     }
 
     /**

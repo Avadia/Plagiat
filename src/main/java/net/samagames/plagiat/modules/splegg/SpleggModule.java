@@ -80,6 +80,7 @@ public class SpleggModule extends AbstractModule
                 return ;
             }
             event.getRightClicked().remove();
+            event.setCancelled(true);
             event.getPlayer().getInventory().addItem(this.egg);
             event.getPlayer().sendMessage(ChatColor.GOLD + "Vous avez maintenant l'" + ChatColor.AQUA + "Oeuf" + ChatColor.GOLD + ". Tirez sur des blocs pour les casser.");
             event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);

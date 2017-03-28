@@ -120,6 +120,9 @@ public class RushModule extends AbstractModule
         if (event.getRightClicked() instanceof ArmorStand
                 && ((ArmorStand)event.getRightClicked()).getItemInHand() != null
                 && ((ArmorStand)event.getRightClicked()).getItemInHand().getType() == Material.EMERALD)
+        {
             event.getPlayer().openMerchant(this.ghostNPC, true);
+            event.setCancelled(true);
+        }
     }
 }
