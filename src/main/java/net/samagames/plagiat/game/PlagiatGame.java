@@ -473,54 +473,67 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1F, 1F);
 
         String deathMessage;
+        boolean addKiller = player.getKiller() != null;
         if (logout)
-            deathMessage = " s'est déconnecté.";
+            deathMessage = " s'est déconnecté";
         else
             switch (player.getLastDamageCause().getCause())
             {
                 case ENTITY_ATTACK:
                 case PROJECTILE:
-                    deathMessage = " a été tué par " + (player.getKiller() == null ? "un inconnu." : player.getKiller().getDisplayName() + ".");
-                    // TODO
+                    deathMessage = " a été tué par " + (player.getKiller() == null ? "un inconnu" : player.getKiller().getDisplayName());
+                    addKiller = false;
                     break;
                 case SUFFOCATION:
-                    deathMessage = " a suffoqué.";
+                    deathMessage = " a suffoqué";
                     break;
                 case FALL:
-                    deathMessage = " est mort de chute.";
+                    deathMessage = " est mort de chute";
                     break;
                 case FIRE:
                 case FIRE_TICK:
-                    deathMessage = " est mort dans les flammes.";
+                    deathMessage = " est mort dans les flammes";
                     break;
                 case LAVA:
-                    deathMessage = " s'est noyé dans la lave.";
+                    deathMessage = " s'est noyé dans la lave";
                     break;
                 case DROWNING:
-                    deathMessage = " s'est noyé.";
+                    deathMessage = " s'est noyé";
                     break;
                 case BLOCK_EXPLOSION:
                 case ENTITY_EXPLOSION:
-                    deathMessage = " a explosé.";
+                    deathMessage = " a explosé";
                     break;
                 case VOID:
-                    deathMessage = " est mort dans le vide.";
+                    deathMessage = " est mort dans le vide";
                     break;
                 case POISON:
-                    deathMessage = " a été empoisonné.";
+                    deathMessage = " a été empoisonné";
                     break;
                 case MAGIC:
-                    deathMessage = " a été tué par magie.";
+                    deathMessage = " a été tué par magie";
                     break;
 
                 default:
-                    deathMessage = " est mort.";
+                    deathMessage = " est mort";
             }
+
+        if (addKiller)
+            deathMessage += " en combattant " + player.getKiller().getDisplayName() + ChatColor.YELLOW + ".";
+
         this.getCoherenceMachine().getMessageManager().writeCustomMessage(player.getDisplayName() + ChatColor.YELLOW + deathMessage, true);
 
 
         if (player.getKiller() != null)
+        {
             player.getKiller().playSound(player.getKiller().getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
+
+            this.addCoins(player.getKiller(), 8, "Meurtre");
+
+            PlagiatPlayer killer = this.getPlayer(player.getKiller().getUniqueId());
+            if (killer != null)
+                killer.addKill();
+        }
 
         if (logout) //Do not give spectator inventory to disconnected player, to reduce CPU usage
         {
@@ -650,8 +663,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             int seconds = this.time % 60;
             String time = " " + (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
             player.getObjectiveSign().setLine(2, time);
-            player.getObjectiveSign().setLine(5, " N/A "); // TODO
-            player.getObjectiveSign().setLine(8, " N/A"); // TODO
+            player.getObjectiveSign().setLine(5, " " + player.getKills());
             player.getObjectiveSign().updateLines();
         });
 

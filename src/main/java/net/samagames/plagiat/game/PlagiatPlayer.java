@@ -15,6 +15,7 @@ public class PlagiatPlayer extends GamePlayer
 {
     private EnumCage cage;
     private final ObjectiveSign objectiveSign;
+    private int kills;
 
     /**
      * PlagiatPlayer constructor
@@ -26,6 +27,7 @@ public class PlagiatPlayer extends GamePlayer
         super(player);
 
         this.cage = EnumCage.GLASS;
+        this.kills = 0;
 
         this.objectiveSign = new ObjectiveSign("plagiat", ChatColor.GOLD + "Plagiat");
         this.objectiveSign.setLine(0, "");
@@ -33,8 +35,6 @@ public class PlagiatPlayer extends GamePlayer
         this.objectiveSign.setLine(3, " ");
         this.objectiveSign.setLine(4, ChatColor.GRAY + "Kills :");
         this.objectiveSign.setLine(6, "  ");
-        this.objectiveSign.setLine(7, ChatColor.GRAY + "Morts :");
-        this.objectiveSign.setLine(9, "   ");
     }
 
     /**
@@ -95,5 +95,23 @@ public class PlagiatPlayer extends GamePlayer
     ObjectiveSign getObjectiveSign()
     {
         return this.objectiveSign;
+    }
+
+    /**
+     * Get kills count for this player
+     *
+     * @return Kill count
+     */
+    int getKills()
+    {
+        return this.kills;
+    }
+
+    /**
+     * Increase kill count for this player
+     */
+    void addKill()
+    {
+        ++this.kills;
     }
 }
