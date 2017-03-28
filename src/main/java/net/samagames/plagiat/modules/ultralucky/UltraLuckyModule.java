@@ -62,7 +62,7 @@ public class UltraLuckyModule extends AbstractModule
             jsonArray.forEach(element -> this.blocks.add(LocationUtils.str2loc(element.getAsString())));
         this.blocks.forEach(location -> location.getBlock().setType(Material.SPONGE));
 
-        this.effectTask = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () -> this.blocks.stream().filter(location -> location.getBlock().getType() == Material.SPONGE).forEach(location -> location.getWorld().spawnParticle(Particle.PORTAL, location, 5, 0.1D, 0.1D, 0.1D, 0.5D)), 2L, 2L);
+        this.effectTask = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () -> this.blocks.stream().filter(location -> location.getBlock().getType() == Material.SPONGE).forEach(location -> location.getWorld().spawnParticle(Particle.PORTAL, location.clone().add(0.5D, 0.5D, 0.5D), 5, 0.1D, 0.1D, 0.1D, 0.5D)), 2L, 2L);
     }
 
     /**
