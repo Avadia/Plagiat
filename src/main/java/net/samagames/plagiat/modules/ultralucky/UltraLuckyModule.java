@@ -17,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,8 @@ public class UltraLuckyModule extends AbstractModule
         Map<Map<ItemStack, Integer>, Integer> list = this.insane ? PlagiatChest.ITEMS_MIDDLE_INSANE : PlagiatChest.ITEMS_MIDDLE_NORMAL;
         Map<ItemStack, Integer> stuff = new ArrayList<>(list.keySet()).get(this.random.nextInt(list.size()));
         event.getEntity().setItemStack(new ArrayList<>(stuff.keySet()).get(this.random.nextInt(stuff.size())));
+        event.getEntity().setVelocity(new Vector(0, 0, 0));
 
-        event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 3D, 3D, 3D).stream().filter(entity -> entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("UltraLucky")).forEach(Entity::remove);
+        event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 5D, 5D, 5D).stream().filter(entity -> entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("UltraLucky")).forEach(Entity::remove);
     }
 }
