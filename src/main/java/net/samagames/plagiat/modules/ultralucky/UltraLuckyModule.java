@@ -96,6 +96,6 @@ public class UltraLuckyModule extends AbstractModule
         event.getEntity().setItemStack(new ArrayList<>(stuff.keySet()).get(this.random.nextInt(stuff.size())));
         event.getEntity().setVelocity(new Vector(0, 0, 0));
 
-        event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 5D, 5D, 5D).stream().filter(entity -> entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("UltraLucky")).forEach(Entity::remove);
+        event.getEntity().getWorld().getNearbyEntities(event.getEntity().getLocation(), 5D, 5D, 5D).stream().filter(entity -> entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("LuckyBlock")).forEach(Entity::remove);
     }
 }
