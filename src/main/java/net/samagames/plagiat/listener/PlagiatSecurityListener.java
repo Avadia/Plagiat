@@ -5,7 +5,6 @@ import net.samagames.plagiat.game.PlagiatKitSelectorGui;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -189,11 +188,5 @@ public class PlagiatSecurityListener implements Listener
     {
         if (!this.plugin.getGame().isGameStarted())
             event.setCancelled(true);
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPostInteract(PlayerInteractEvent event)
-    {
-        this.plugin.getServer().broadcastMessage(event.isCancelled() + " " + (event.getItem() == null ? "NULL" : event.getItem().getType()));
     }
 }
