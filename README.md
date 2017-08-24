@@ -17,4 +17,4 @@ Pour plus de détails, référez-vous au texte de licence disponible [ici](LICEN
 
 
 ## Description
-Plagiat est un projet reprenant les concepts de plusieurs serveurs connus afin dd'en créer un jeu unique.
+Plagiat est un projet reprenant les concepts de plusieurs serveurs connus afin d'en créer un jeu unique.
