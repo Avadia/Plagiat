@@ -42,21 +42,19 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DimensionsModule extends AbstractModule
-{
-    private List<UUID> cooldown;
+public class DimensionsModule extends AbstractModule {
+    private final List<UUID> cooldown;
     private Integer offset;
     private Area firstArea;
     private Area secondArea;
-    private ItemStack eye;
+    private final ItemStack eye;
 
     /**
      * Dimensions module constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public DimensionsModule(Plagiat plugin)
-    {
+    public DimensionsModule(Plagiat plugin) {
         super(plugin, "dimensions", MCServer.SAMAGAMES);
         this.cooldown = new ArrayList<>();
 
@@ -71,8 +69,7 @@ public class DimensionsModule extends AbstractModule
      * {@link AbstractModule#handleGameStart()}
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         JsonObject jsonObject = this.getConfigRoot();
         JsonElement element = jsonObject.get("offset");
         this.offset = element == null ? null : element.getAsInt();
@@ -87,10 +84,9 @@ public class DimensionsModule extends AbstractModule
      *
      * @param block Origin block
      */
-    private void breakBlock(Block block)
-    {
+    private void breakBlock(Block block) {
         if (this.offset == null || this.firstArea == null || this.secondArea == null)
-            return ;
+            return;
         (this.firstArea.isInLimit(block.getLocation(), 200) ? block.getLocation().add(this.offset, 0D, 0D) : block.getLocation().subtract(this.offset, 0D, 0D)).getBlock().setType(Material.AIR);
     }
 
@@ -100,10 +96,9 @@ public class DimensionsModule extends AbstractModule
      * @param block Origin block
      */
     @SuppressWarnings("deprecation")
-    private void placeBlock(Block block)
-    {
+    private void placeBlock(Block block) {
         if (this.offset == null || this.firstArea == null || this.secondArea == null)
-            return ;
+            return;
         Block block2 = (this.firstArea.isInLimit(block.getLocation(), 200) ? block.getLocation().add(this.offset, 0D, 0D) : block.getLocation().subtract(this.offset, 0D, 0D)).getBlock();
         block2.setType(block.getType());
         block2.setData(block.getData());
@@ -115,10 +110,9 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onBlockBreak(BlockBreakEvent event)
-    {
+    public void onBlockBreak(BlockBreakEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         this.breakBlock(event.getBlock());
     }
 
@@ -128,10 +122,9 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onBlockPlace(BlockPlaceEvent event)
-    {
+    public void onBlockPlace(BlockPlaceEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         this.placeBlock(event.getBlockPlaced());
     }
 
@@ -141,8 +134,7 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onBlockExplosion(BlockExplodeEvent event)
-    {
+    public void onBlockExplosion(BlockExplodeEvent event) {
         event.blockList().forEach(this::breakBlock);
     }
 
@@ -152,10 +144,9 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onEntityExplosion(EntityExplodeEvent event)
-    {
+    public void onEntityExplosion(EntityExplodeEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         event.blockList().forEach(this::breakBlock);
     }
 
@@ -165,8 +156,7 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onAnvilUse(PrepareAnvilEvent event)
-    {
+    public void onAnvilUse(PrepareAnvilEvent event) {
         if (event.getResult().getType() == Material.EYE_OF_ENDER)
             event.getResult().setType(Material.AIR);
     }
@@ -177,19 +167,17 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onInteract(PlayerInteractEvent event)
-    {
+    public void onInteract(PlayerInteractEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         ItemStack itemStack;
         if (event.getHand() == EquipmentSlot.OFF_HAND)
             itemStack = event.getPlayer().getInventory().getItemInOffHand();
         else
             itemStack = event.getPlayer().getInventory().getItemInMainHand();
-        if (itemStack != null && itemStack.isSimilar(this.eye))
-        {
+        if (itemStack != null && itemStack.isSimilar(this.eye)) {
             if (this.cooldown.contains(event.getPlayer().getUniqueId()))
-                return ;
+                return;
             this.cooldown.add(event.getPlayer().getUniqueId());
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(event.getPlayer().getUniqueId()), 200L);
             event.getPlayer().teleport(this.firstArea.isInLimit(event.getPlayer().getLocation(), 200) ? event.getPlayer().getLocation().add(this.offset, 0D, 0D) : event.getPlayer().getLocation().subtract(this.offset, 0D, 0D));
@@ -203,10 +191,9 @@ public class DimensionsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onInternalBlockBreak(InternalBlockBreakEvent event)
-    {
+    public void onInternalBlockBreak(InternalBlockBreakEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         this.breakBlock(event.getBlock());
     }
 }

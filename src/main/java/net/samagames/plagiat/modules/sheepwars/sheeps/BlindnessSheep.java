@@ -29,17 +29,15 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BlindnessSheep extends WoolType
-{
-    private Map<Integer, BukkitTask> blindnessTask;
+public class BlindnessSheep extends WoolType {
+    private final Map<Integer, BukkitTask> blindnessTask;
 
     /**
      * Blindness Sheep constructor
      *
      * @param plagiat Plagiat plugin's instance
      */
-    public BlindnessSheep(Plagiat plagiat)
-    {
+    public BlindnessSheep(Plagiat plagiat) {
         super(plagiat, DyeColor.BLACK, ChatColor.BLACK, "ténébreux");
         this.blindnessTask = new HashMap<>();
     }
@@ -51,24 +49,22 @@ public class BlindnessSheep extends WoolType
      * @param sheep The sheep entity
      */
     @Override
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
         this.blindnessTask.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () -> sheep.getWorld().getNearbyEntities(sheep.getLocation(), 6D, 6D, 6D).forEach(entity ->
         {
             if (entity instanceof Player)
-                ((Player)entity).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(80, 1));
+                ((Player) entity).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(80, 1));
         }), 20L, 20L));
     }
 
     /**
      * Event method on sheep death
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
     @Override
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
         BukkitTask bukkitTask = this.blindnessTask.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();

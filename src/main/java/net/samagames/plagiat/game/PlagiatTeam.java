@@ -21,20 +21,18 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-class PlagiatTeam
-{
-    private ChatColor chatColor;
-    private String name;
-    private List<PlagiatPlayer> players;
+class PlagiatTeam {
+    private final ChatColor chatColor;
+    private final String name;
+    private final List<PlagiatPlayer> players;
 
     /**
      * Plagiat Team constructor
      *
      * @param chatColor Team color
-     * @param name Team name
+     * @param name      Team name
      */
-    public PlagiatTeam(ChatColor chatColor, String name)
-    {
+    public PlagiatTeam(ChatColor chatColor, String name) {
         this.chatColor = chatColor;
         this.name = name;
         this.players = new ArrayList<>();
@@ -45,8 +43,7 @@ class PlagiatTeam
      *
      * @return Color as ChatColor
      */
-    ChatColor getChatColor()
-    {
+    ChatColor getChatColor() {
         return this.chatColor;
     }
 
@@ -55,8 +52,7 @@ class PlagiatTeam
      *
      * @return Name as String
      */
-    String getName()
-    {
+    String getName() {
         return this.name;
     }
 
@@ -65,8 +61,7 @@ class PlagiatTeam
      *
      * @return Members as List
      */
-    List<PlagiatPlayer> getPlayers()
-    {
+    List<PlagiatPlayer> getPlayers() {
         return this.players;
     }
 }

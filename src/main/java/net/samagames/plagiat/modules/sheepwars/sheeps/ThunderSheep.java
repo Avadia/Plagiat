@@ -31,19 +31,17 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ThunderSheep extends WoolType
-{
+public class ThunderSheep extends WoolType {
     private static final int RADIUS = 5;
-    private Map<Integer, BukkitTask> tasks;
-    private Random random;
+    private final Map<Integer, BukkitTask> tasks;
+    private final Random random;
 
     /**
      * Abstract constructor
      *
-     * @param plugin    Plagiat's plugin
+     * @param plugin Plagiat's plugin
      */
-    public ThunderSheep(Plagiat plugin)
-    {
+    public ThunderSheep(Plagiat plugin) {
         super(plugin, DyeColor.YELLOW, ChatColor.YELLOW, "invocateur de foudre");
 
         this.tasks = new HashMap<>();
@@ -56,8 +54,7 @@ public class ThunderSheep extends WoolType
      * @param sheep The sheep entity
      */
     @Override
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
         this.tasks.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
             Location location = sheep.getLocation();
@@ -74,12 +71,11 @@ public class ThunderSheep extends WoolType
     /**
      * Stop lightning task
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
     @Override
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
         BukkitTask bukkitTask = this.tasks.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();

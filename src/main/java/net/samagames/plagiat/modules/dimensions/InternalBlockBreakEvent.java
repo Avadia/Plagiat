@@ -20,8 +20,7 @@ import org.bukkit.event.block.BlockEvent;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class InternalBlockBreakEvent extends BlockEvent
-{
+public class InternalBlockBreakEvent extends BlockEvent {
     private static final HandlerList handlerList = new HandlerList();
 
     /**
@@ -29,9 +28,18 @@ public class InternalBlockBreakEvent extends BlockEvent
      *
      * @param block Broken block
      */
-    public InternalBlockBreakEvent(Block block)
-    {
+    public InternalBlockBreakEvent(Block block) {
         super(block);
+    }
+
+    /**
+     * Get this event handler list
+     *
+     * @return HandlerList instance
+     */
+    @SuppressWarnings("unused")
+    public static HandlerList getHandlerList() {
+        return InternalBlockBreakEvent.handlerList;
     }
 
     /**
@@ -41,19 +49,7 @@ public class InternalBlockBreakEvent extends BlockEvent
      * @return HandlerList instance
      */
     @Override
-    public HandlerList getHandlers()
-    {
-        return InternalBlockBreakEvent.handlerList;
-    }
-
-    /**
-     * Get this event handler list
-     *
-     * @return HandlerList instance
-     */
-    @SuppressWarnings("unused")
-    public static HandlerList getHandlerList()
-    {
+    public HandlerList getHandlers() {
         return InternalBlockBreakEvent.handlerList;
     }
 }

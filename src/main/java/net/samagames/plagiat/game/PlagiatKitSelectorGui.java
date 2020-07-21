@@ -27,12 +27,10 @@ import org.bukkit.inventory.meta.ItemMeta;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatKitSelectorGui extends AbstractGui
-{
-    private Plagiat plugin;
+public class PlagiatKitSelectorGui extends AbstractGui {
+    private final Plagiat plugin;
 
-    public PlagiatKitSelectorGui(Plagiat plugin)
-    {
+    public PlagiatKitSelectorGui(Plagiat plugin) {
         this.plugin = plugin;
     }
 
@@ -43,8 +41,7 @@ public class PlagiatKitSelectorGui extends AbstractGui
      * @param player Bukkit Player instance
      */
     @Override
-    public void display(Player player)
-    {
+    public void display(Player player) {
         this.update(player);
     }
 
@@ -54,8 +51,7 @@ public class PlagiatKitSelectorGui extends AbstractGui
      * @param player Bukkit Player instance
      */
     @Override
-    public void update(Player player)
-    {
+    public void update(Player player) {
         this.inventory = this.plugin.getServer().createInventory(null, 27);
 
         ItemStack arrow = new ItemStack(Material.ARROW);
@@ -66,7 +62,7 @@ public class PlagiatKitSelectorGui extends AbstractGui
 
         IPlayerShop playerShop = this.plugin.getSamaGamesAPI().getShopsManager().getPlayer(player.getUniqueId());
         if (playerShop == null)
-            return ;
+            return;
 
         final int[] i = {0};
         PlagiatKit selectedKit = this.plugin.getGame().getKitForPlayer(player.getUniqueId());
@@ -97,29 +93,24 @@ public class PlagiatKitSelectorGui extends AbstractGui
      * Handle click on GUI
      *
      * @param player Bukkit Player instance
-     * @param stack Bukkit ItemStack instance
+     * @param stack  Bukkit ItemStack instance
      * @param action Action performed
      */
     @Override
-    public void onClick(Player player, ItemStack stack, String action)
-    {
-        if (action.equals("back"))
-        {
+    public void onClick(Player player, ItemStack stack, String action) {
+        if (action.equals("back")) {
             player.closeInventory();
-            return ;
+            return;
         }
 
         String[] data = action.split(":");
-        try
-        {
+        try {
             String name = data[1];
             int id = Integer.parseInt(data[2]);
             PlagiatKit selected = PlagiatKit.getKits().stream().filter(kit -> name.equals(kit.getName()) && id == kit.getDbId()).findFirst().orElse(null);
-            if (selected != null)
-            {
+            if (selected != null) {
                 IPlayerShop playerShop = this.plugin.getSamaGamesAPI().getShopsManager().getPlayer(player.getUniqueId());
-                if (id == -1 || playerShop.getTransactionsByID(id) != null)
-                {
+                if (id == -1 || playerShop.getTransactionsByID(id) != null) {
                     // Unselect all other kits
                     PlagiatKit.getKits().forEach(kit ->
                     {
@@ -131,13 +122,10 @@ public class PlagiatKitSelectorGui extends AbstractGui
                     // Select current kit
                     playerShop.setSelectedItem(id, true);
                     player.sendMessage(this.plugin.getGame().getCoherenceMachine().getGameTag() + ChatColor.GREEN + " Kit sélectionné");
-                }
-                else
+                } else
                     player.sendMessage(this.plugin.getGame().getCoherenceMachine().getGameTag() + ChatColor.RED + " Vous ne possédez pas ce kit !");
             }
-        }
-        catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
         }
     }
 }

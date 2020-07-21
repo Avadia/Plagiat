@@ -28,17 +28,15 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ExplosiveSheep extends WoolType
-{
-    private Map<Integer, BukkitTask> explodeTask;
+public class ExplosiveSheep extends WoolType {
+    private final Map<Integer, BukkitTask> explodeTask;
 
     /**
      * Explosive Sheep constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public ExplosiveSheep(Plagiat plugin)
-    {
+    public ExplosiveSheep(Plagiat plugin) {
         super(plugin, DyeColor.RED, ChatColor.RED, "explosif");
 
         this.explodeTask = new HashMap<>();
@@ -50,24 +48,20 @@ public class ExplosiveSheep extends WoolType
      * @param sheep The sheep entity
      */
     @Override
-    protected void onLand(Sheep sheep)
-    {
-        this.explodeTask.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable()
-        {
+    protected void onLand(Sheep sheep) {
+        this.explodeTask.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable() {
             private int time = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 this.time++;
-                if (this.time == 20)
-                {
+                if (this.time == 20) {
                     sheep.remove();
                     BukkitTask bukkitTask = ExplosiveSheep.this.explodeTask.get(sheep.getEntityId());
                     if (bukkitTask != null)
                         bukkitTask.cancel();
                     sheep.getWorld().createExplosion(sheep.getLocation(), 2F);
-                    return ;
+                    return;
                 }
                 sheep.setColor(this.time % 2 == 0 ? DyeColor.RED : DyeColor.WHITE);
             }
@@ -77,12 +71,11 @@ public class ExplosiveSheep extends WoolType
     /**
      * Cancel explosion task
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
     @Override
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
         BukkitTask bukkitTask = this.explodeTask.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();

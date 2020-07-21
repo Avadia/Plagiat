@@ -1,25 +1,19 @@
 package net.samagames.plagiat.modules.quake;
 
-import net.minecraft.server.v1_10_R1.AxisAlignedBB;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.IBlockAccess;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent;
-import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_10_R1.Vec3D;
+import net.minecraft.server.v1_12_R1.*;
 import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.game.PlagiatPlayer;
 import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
 import net.samagames.tools.ParticleEffect;
+import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -53,18 +47,16 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class QuakeModule extends AbstractModule
-{
-    private List<UUID> cooldown;
-    private ItemStack hoe;
+public class QuakeModule extends AbstractModule {
+    private final List<UUID> cooldown;
+    private final ItemStack hoe;
 
     /**
      * Quake module constructor
      *
      * @param plugin Plagiat's plugin instance
      */
-    public QuakeModule(Plagiat plugin)
-    {
+    public QuakeModule(Plagiat plugin) {
         super(plugin, "quake", MCServer.HYPIXEL);
         this.cooldown = new ArrayList<>();
 
@@ -82,28 +74,23 @@ public class QuakeModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onEntityInteract(PlayerInteractAtEntityEvent event)
-    {
+    public void onEntityInteract(PlayerInteractAtEntityEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         ItemStack itemStack;
         if (event.getHand() == EquipmentSlot.OFF_HAND)
             itemStack = event.getPlayer().getInventory().getItemInOffHand();
         else
             itemStack = event.getPlayer().getInventory().getItemInMainHand();
-        if (itemStack != null && itemStack.equals(this.hoe))
-        {
+        if (itemStack != null && itemStack.equals(this.hoe)) {
             event.setCancelled(true);
             this.shoot(event.getPlayer());
-        }
-        else if (event.getRightClicked() instanceof ArmorStand
-                && ((ArmorStand)event.getRightClicked()).getItemInHand() != null
-                && ((ArmorStand)event.getRightClicked()).getItemInHand().getType() == Material.DIAMOND_HOE)
-        {
-            if (event.getPlayer().getInventory().firstEmpty() == -1)
-            {
+        } else if (event.getRightClicked() instanceof ArmorStand
+                && ((ArmorStand) event.getRightClicked()).getItemInHand() != null
+                && ((ArmorStand) event.getRightClicked()).getItemInHand().getType() == Material.DIAMOND_HOE) {
+            if (event.getPlayer().getInventory().firstEmpty() == -1) {
                 event.getPlayer().sendMessage(ChatColor.RED + "Votre inventaire est plein.");
-                return ;
+                return;
             }
             event.getRightClicked().remove();
             event.setCancelled(true);
@@ -119,17 +106,15 @@ public class QuakeModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onInteract(PlayerInteractEvent event)
-    {
+    public void onInteract(PlayerInteractEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         ItemStack itemStack;
         if (event.getHand() == EquipmentSlot.OFF_HAND)
             itemStack = event.getPlayer().getInventory().getItemInOffHand();
         else
             itemStack = event.getPlayer().getInventory().getItemInMainHand();
-        if (itemStack != null && itemStack.equals(this.hoe))
-        {
+        if (itemStack != null && itemStack.equals(this.hoe)) {
             event.setCancelled(true);
             this.shoot(event.getPlayer());
         }
@@ -141,16 +126,14 @@ public class QuakeModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onEntityDamage(EntityDamageByEntityEvent event)
-    {
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || !(event.getDamager() instanceof Player))
-            return ;
-        ItemStack itemStack = ((Player)event.getDamager()).getInventory().getItemInMainHand();
-        if (itemStack != null && itemStack.equals(this.hoe))
-        {
+            return;
+        ItemStack itemStack = ((Player) event.getDamager()).getInventory().getItemInMainHand();
+        if (itemStack != null && itemStack.equals(this.hoe)) {
             event.setCancelled(true);
-            this.shoot((Player)event.getDamager());
-            this.plugin.getServer().getScheduler().runTask(this.plugin, () -> itemStack.setDurability((short)0));
+            this.shoot((Player) event.getDamager());
+            this.plugin.getServer().getScheduler().runTask(this.plugin, () -> itemStack.setDurability((short) 0));
         }
     }
 
@@ -159,30 +142,28 @@ public class QuakeModule extends AbstractModule
      *
      * @param player The shooting player
      */
-    private void shoot(Player player)
-    {
+    private void shoot(Player player) {
         if (this.cooldown.contains(player.getUniqueId()))
-            return ;
+            return;
 
         this.cooldown.add(player.getUniqueId());
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.cooldown.remove(player.getUniqueId()), 180L);
 
-        for (int i = 0; i < 9; ++i)
-        {
+        for (int i = 0; i < 9; ++i) {
             final int j = i;
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
             {
-                String msg = ChatColor.RED + "Rechargement : " + ChatColor.GRAY + "[" + ChatColor.RED;
+                StringBuilder msg = new StringBuilder(ChatColor.RED + "Rechargement : " + ChatColor.GRAY + "[" + ChatColor.RED);
 
                 for (int k = 0; k < j; ++k)
-                    msg += "□";
+                    msg.append("□");
 
                 for (int k = 0; k < (8 - j); k++)
-                    msg += " ";
+                    msg.append(" ");
 
-                msg += ChatColor.GRAY + "]";
+                msg.append(ChatColor.GRAY).append("]");
 
-                this.sendActionBarMessage(player, msg);
+                this.sendActionBarMessage(player, msg.toString());
             }, j * 20L);
             this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.sendActionBarMessage(player, ""), 179L);
         }
@@ -196,38 +177,30 @@ public class QuakeModule extends AbstractModule
     /**
      * Send an action bar message to a player
      *
-     * @param player Bukkit Player instance
+     * @param player  Bukkit Player instance
      * @param message Message to send
      */
-    private void sendActionBarMessage(Player player, String message)
-    {
-        if (!(player instanceof CraftPlayer))
-            return ;
-
-        PacketPlayOutChat packetPlayOutChat = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + message.replaceAll("\"", "\\\"") + "\"}"), (byte) 2);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutChat);
+    private void sendActionBarMessage(Player player, String message) {
+        ActionBarAPI.sendMessage(player, message);
     }
 
     /**
      * Calculates players that should be shot by ray
      * (almost copied from SamaGames's Quake, just some adaptation has been made)
      *
-     * @param player The shooting player
+     * @param player   The shooting player
      * @param maxRange Max distance in blocks
-     * @param aiming Hitbox multiplier
+     * @param aiming   Hitbox multiplier
      * @return Targets as list
      */
-    @SuppressWarnings("deprecation")
-    private List<Player> getTargetV3(Player player, int maxRange, double aiming)
-    {
+    private List<Player> getTargetV3(Player player, int maxRange, double aiming) {
         List<Player> target = new ArrayList<>();
         Location playerEyes = player.getEyeLocation();
 
         final Vector direction = playerEyes.getDirection().normalize();
 
         List<Player> targets = new ArrayList<>();
-        for (PlagiatPlayer app : this.plugin.getGame().getInGamePlayers().values())
-        {
+        for (PlagiatPlayer app : this.plugin.getGame().getInGamePlayers().values()) {
             Player online = app.getPlayerIfOnline();
             if (online != null && online != player && online.getLocation().distanceSquared(playerEyes) < maxRange * maxRange)
                 targets.add(online);
@@ -242,23 +215,20 @@ public class QuakeModule extends AbstractModule
         maxRange = (100 * maxRange / 70);
 
         int loop = 0;
-        while (loop < maxRange)
-        {
+        while (loop < maxRange) {
             loop++;
             loc.add(progress);
             block = loc.getBlock();
-            if (!block.getType().isTransparent())
-            {
-                net.minecraft.server.v1_10_R1.World w = ((CraftWorld)block.getWorld()).getHandle();
+            if (!block.getType().isTransparent()) {
+                net.minecraft.server.v1_12_R1.World w = ((CraftWorld) block.getWorld()).getHandle();
 
                 BlockPosition var21 = new BlockPosition(block.getX(), block.getY(), block.getZ());
                 IBlockData iblockdata = w.getType(var21);
-                net.minecraft.server.v1_10_R1.Block b = iblockdata.getBlock();
+                net.minecraft.server.v1_12_R1.Block b = iblockdata.getBlock();
 
                 b.h(w, var21);
-                AxisAlignedBB axis = b.a(iblockdata, (IBlockAccess)w, var21);
-                if (axis != null)
-                {
+                AxisAlignedBB axis = b.a(iblockdata, (IBlockAccess) w, var21);
+                if (axis != null) {
                     AxisAlignedBB vec3d = new AxisAlignedBB(axis.a + block.getX(), axis.b + block.getY(), axis.c + block.getZ(), axis.d + block.getX(), axis.e + block.getY(), axis.f + block.getZ());
                     vec3d = vec3d.grow(0.1F, 0.1F, 0.1F);
                     if (vec3d.a(new Vec3D(loc.getX(), loc.getY(), loc.getZ())))
@@ -271,15 +241,13 @@ public class QuakeModule extends AbstractModule
 
             ParticleEffect.FIREWORKS_SPARK.display(0.07F, 0.04F, 0.07F, 0.00005F, 1, loc, 75);
 
-            for (PlagiatPlayer app : this.plugin.getGame().getInGamePlayers().values())
-            {
+            for (PlagiatPlayer app : this.plugin.getGame().getInGamePlayers().values()) {
                 Player apa = app.getPlayerIfOnline();
                 if (apa != null && apa.getLocation().getWorld() == loc.getWorld() && apa.getLocation().distance(loc) < 30 && loop % 10 == 0)
                     apa.getWorld().playSound(apa.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 0.042F, 0.01F);
             }
 
-            for (Player possibleTarget : targets)
-            {
+            for (Player possibleTarget : targets) {
                 if (possibleTarget.getUniqueId() == player.getUniqueId())
                     continue;
                 testLoc = possibleTarget.getLocation().add(0, 0.85, 0);
@@ -292,7 +260,7 @@ public class QuakeModule extends AbstractModule
                 boolean dZ = Math.abs(lz - pz) < 0.70 * aiming;
 
                 if (dX && dY && dZ && !target.contains(possibleTarget))
-                        target.add(possibleTarget);
+                    target.add(possibleTarget);
             }
         }
 

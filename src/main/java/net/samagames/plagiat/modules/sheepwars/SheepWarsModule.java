@@ -7,13 +7,7 @@ import net.samagames.api.games.Status;
 import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
-import net.samagames.plagiat.modules.sheepwars.sheeps.BlindnessSheep;
-import net.samagames.plagiat.modules.sheepwars.sheeps.BoardingSheep;
-import net.samagames.plagiat.modules.sheepwars.sheeps.EarthQuakeSheep;
-import net.samagames.plagiat.modules.sheepwars.sheeps.ExplosiveSheep;
-import net.samagames.plagiat.modules.sheepwars.sheeps.HealingSheep;
-import net.samagames.plagiat.modules.sheepwars.sheeps.IceSheep;
-import net.samagames.plagiat.modules.sheepwars.sheeps.ThunderSheep;
+import net.samagames.plagiat.modules.sheepwars.sheeps.*;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Reflection;
 import org.bukkit.ChatColor;
@@ -62,14 +56,13 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SheepWarsModule extends AbstractModule
-{
-    private List<WoolType> woolTypes;
-    private List<Location> woolLocations;
+public class SheepWarsModule extends AbstractModule {
+    private final List<WoolType> woolTypes;
+    private final List<Location> woolLocations;
     private BukkitTask respawnTask;
     private BukkitTask updateTask;
     private BukkitTask particleTask;
-    private Random random;
+    private final Random random;
 
     /**
      * SheepWard Module constructor
@@ -77,8 +70,7 @@ public class SheepWarsModule extends AbstractModule
      *
      * @param plugin Plagiat's plugin instance
      */
-    public SheepWarsModule(Plagiat plugin)
-    {
+    public SheepWarsModule(Plagiat plugin) {
         super(plugin, "sheepwars", MCServer.EPICUBE);
         this.woolTypes = new ArrayList<>();
         this.woolLocations = new ArrayList<>();
@@ -93,8 +85,7 @@ public class SheepWarsModule extends AbstractModule
      * {@link AbstractModule#handleGameStart()}
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         JsonObject jsonObject = this.getConfigRoot();
         JsonArray wools = jsonObject.getAsJsonArray("wools");
         if (wools != null)
@@ -123,8 +114,7 @@ public class SheepWarsModule extends AbstractModule
     /**
      * Spawn particles around wools
      */
-    private void spawnParticles()
-    {
+    private void spawnParticles() {
         this.woolLocations.stream().filter(location -> location.getBlock().getType() != Material.AIR).forEach(location -> location.getWorld().spawnParticle(Particle.PORTAL, location.clone().add(0.5D, 0.5D, 0.5D), 3, 0.5F, 0.5D, 0.5D, 0.5D));
     }
 
@@ -132,13 +122,11 @@ public class SheepWarsModule extends AbstractModule
      * Respawn wools if they are broken
      */
     @SuppressWarnings("deprecation")
-    private void respawnWools()
-    {
+    private void respawnWools() {
         this.woolLocations.forEach(location ->
         {
             Block block = location.getBlock();
-            if (block.getType() != Material.WOOL)
-            {
+            if (block.getType() != Material.WOOL) {
                 block.setType(Material.WOOL);
                 block.setData(this.woolTypes.get(this.random.nextInt(this.woolTypes.size())).getDyeColor().getWoolData());
             }
@@ -149,8 +137,7 @@ public class SheepWarsModule extends AbstractModule
      * Change the wools colors randomly
      */
     @SuppressWarnings("deprecation")
-    private void changeColors()
-    {
+    private void changeColors() {
         this.woolLocations.forEach(location ->
         {
             Block block = location.getBlock();
@@ -166,8 +153,7 @@ public class SheepWarsModule extends AbstractModule
      * @return false, to avoid disabling end
      */
     @Override
-    public boolean handleGameEnd()
-    {
+    public boolean handleGameEnd() {
         if (this.respawnTask != null)
             this.respawnTask.cancel();
         if (this.updateTask != null)
@@ -186,17 +172,14 @@ public class SheepWarsModule extends AbstractModule
      */
     @SuppressWarnings("deprecation")
     @EventHandler
-    public void onSheepDeath(EntityDeathEvent event)
-    {
+    public void onSheepDeath(EntityDeathEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
-        if (event.getEntityType() == EntityType.SHEEP && event.getEntity().hasMetadata("sg-type"))
-        {
+            return;
+        if (event.getEntityType() == EntityType.SHEEP && event.getEntity().hasMetadata("sg-type")) {
             event.getDrops().clear();
-            WoolType woolType = (WoolType)event.getEntity().getMetadata("sg-type").get(0).value();
-            woolType.killSheep((Sheep)event.getEntity(), event.getEntity().getKiller());
-            if (event.getEntity().getKiller() != null)
-            {
+            WoolType woolType = (WoolType) event.getEntity().getMetadata("sg-type").get(0).value();
+            woolType.killSheep((Sheep) event.getEntity(), event.getEntity().getKiller());
+            if (event.getEntity().getKiller() != null) {
                 ItemStack itemStack = new ItemStack(Material.WOOL, 1, woolType.getDyeColor().getWoolData());
                 ItemMeta itemMeta = itemStack.getItemMeta();
                 itemMeta.setDisplayName(woolType.getChatColor() + "Mouton " + woolType.getName());
@@ -215,33 +198,29 @@ public class SheepWarsModule extends AbstractModule
      */
     @SuppressWarnings("deprecation")
     @EventHandler
-    public void onWoolShoot(ProjectileHitEvent event)
-    {
+    public void onWoolShoot(ProjectileHitEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || event.getEntity().getShooter() == null || !(event.getEntity().getShooter() instanceof Player))
-            return ;
+            return;
         BlockIterator blockIterator = new BlockIterator(event.getEntity().getWorld(), event.getEntity().getLocation().toVector(), event.getEntity().getVelocity().normalize(), 0.0D, 4);
 
         Block hitBlock = null;
-        while (blockIterator.hasNext())
-        {
+        while (blockIterator.hasNext()) {
             hitBlock = blockIterator.next();
             if (hitBlock.getType() != Material.AIR)
-                break ;
+                break;
         }
 
         final Block block = hitBlock;
 
-        if (block != null && this.woolLocations.contains(block.getLocation()) && block.getType() == Material.WOOL)
-        {
+        if (block != null && this.woolLocations.contains(block.getLocation()) && block.getType() == Material.WOOL) {
             WoolType woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == block.getData()).findFirst().orElse(null);
             event.getEntity().remove();
             if (woolType == null)
-                return ;
-            Player shooter = (Player)event.getEntity().getShooter();
-            if (shooter.getInventory().firstEmpty() == -1)
-            {
+                return;
+            Player shooter = (Player) event.getEntity().getShooter();
+            if (shooter.getInventory().firstEmpty() == -1) {
                 shooter.sendMessage(ChatColor.RED + "Votre inventaire est plein.");
-                return ;
+                return;
             }
 
             block.setType(Material.AIR);
@@ -262,10 +241,9 @@ public class SheepWarsModule extends AbstractModule
      */
     @SuppressWarnings("deprecation")
     @EventHandler
-    public void onWoolInteract(PlayerInteractEvent event)
-    {
+    public void onWoolInteract(PlayerInteractEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         ItemStack itemStack;
         WoolType woolType;
         if (event.getHand() == EquipmentSlot.OFF_HAND)
@@ -274,8 +252,7 @@ public class SheepWarsModule extends AbstractModule
             itemStack = event.getPlayer().getInventory().getItemInMainHand();
         ItemMeta meta;
         if (itemStack != null && itemStack.getType() == Material.WOOL && (meta = itemStack.getItemMeta()) != null && meta.getDisplayName() != null && meta.getDisplayName().contains("Mouton") &&
-                (woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == itemStack.getDurability()).findFirst().orElse(null)) != null)
-        {
+                (woolType = this.woolTypes.stream().filter(type -> type.getDyeColor().getWoolData() == itemStack.getDurability()).findFirst().orElse(null)) != null) {
             event.setCancelled(true);
 
             ItemStack newItemStack = new ItemStack(Material.WOOL, itemStack.getAmount() - 1, itemStack.getDurability());
@@ -297,15 +274,11 @@ public class SheepWarsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onPreCraft(PrepareItemCraftEvent event)
-    {
+    public void onPreCraft(PrepareItemCraftEvent event) {
         if (event.getRecipe().getResult().getType() == Material.WOOL)
-            try
-            {
+            try {
                 Reflection.setValue(event.getRecipe(), "output", new ItemStack(Material.AIR));
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 this.logger.log(Level.SEVERE, "Reflection error", ex);
             }
     }
@@ -316,16 +289,11 @@ public class SheepWarsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onCraft(CraftItemEvent event)
-    {
-        if (event.getRecipe().getResult().getType() == Material.WOOL)
-        {
-            try
-            {
+    public void onCraft(CraftItemEvent event) {
+        if (event.getRecipe().getResult().getType() == Material.WOOL) {
+            try {
                 Reflection.setValue(event.getRecipe(), "output", new ItemStack(Material.AIR));
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 this.logger.log(Level.SEVERE, "Reflection error", ex);
             }
             event.setResult(Event.Result.DENY);
@@ -339,8 +307,7 @@ public class SheepWarsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onRename(PrepareAnvilEvent event)
-    {
+    public void onRename(PrepareAnvilEvent event) {
         if (event.getResult().getItemMeta().getDisplayName().contains("Mouton"))
             event.setResult(new ItemStack(Material.AIR));
     }
@@ -351,8 +318,7 @@ public class SheepWarsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onBreed(EntityBreedEvent event)
-    {
+    public void onBreed(EntityBreedEvent event) {
         if (event.getEntity() instanceof Sheep)
             event.setCancelled(true);
     }
@@ -363,11 +329,10 @@ public class SheepWarsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onSheepDamage(EntityDamageEvent event)
-    {
+    public void onSheepDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Sheep && event.getEntity().hasMetadata("sg-type") && (event.getCause() == EntityDamageEvent.DamageCause.FALL
                 || (event.getEntity().getMetadata("sg-type").get(0).value() instanceof ThunderSheep
                 && Arrays.asList(EntityDamageEvent.DamageCause.FIRE, EntityDamageEvent.DamageCause.FIRE_TICK, EntityDamageEvent.DamageCause.LIGHTNING).contains(event.getCause()))))
-                event.setCancelled(true);
+            event.setCancelled(true);
     }
 }

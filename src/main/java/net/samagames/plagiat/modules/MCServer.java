@@ -16,8 +16,7 @@ package net.samagames.plagiat.modules;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public enum MCServer
-{
+public enum MCServer {
     SAMAGAMES("SamaGames"),
     EPICUBE("Epicube"),
     HYPIXEL("Hypixel"),
@@ -31,15 +30,14 @@ public enum MCServer
     //TODO HEXION("Hexion")
     ;
 
-    private String name;
+    private final String name;
 
     /**
      * Private enum constructor
      *
      * @param name The server name, formatted with case
      */
-    MCServer(String name)
-    {
+    MCServer(String name) {
         this.name = name;
     }
 
@@ -49,8 +47,7 @@ public enum MCServer
      * @return The real server name
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.name;
     }
 }

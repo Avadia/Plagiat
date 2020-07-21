@@ -30,9 +30,46 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-class PlagiatKit
-{
-    private static List<PlagiatKit> kits = new ArrayList<>();
+class PlagiatKit {
+    private static final List<PlagiatKit> kits = new ArrayList<>();
+
+    static {
+        // Register all kits
+        PlagiatKit defaultKit = new PlagiatKit("Défaut", -1, new ItemStack(Material.STONE_PICKAXE), new String[]{"Kit par défaut", "", "Pioche en pierre", "Hache en pierre", "Pelle en pierre"});
+        defaultKit.addItem(new ItemStack(Material.STONE_PICKAXE));
+        defaultKit.addItem(new ItemStack(Material.STONE_AXE));
+        defaultKit.addItem(new ItemStack(Material.STONE_SPADE));
+        PlagiatKit.kits.add(defaultKit);
+
+        ItemStack frogHead = ItemUtils.getCustomHead("eyJ0aW1lc3RhbXAiOjE0OTA1MzMyMzE0NjMsInByb2ZpbGVJZCI6Ijc5ZmI4NDEwNWQ2ZDQ2YmY5MGFmOTA1NzE5YjliMzAzIiwicHJvZmlsZU5hbWUiOiJGcm9nXyIsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9mYTcyZDdkMjE5NWE1MWZiZTU0NmU3MzQ4YTZiNzVkZTExOTdiY2UyMWVhMWRlYzYyMjdkZjFmMmVkOGI3MyJ9fX0=");
+        PlagiatKit frogKit = new PlagiatKit("Grenouille", -1, frogHead, new String[]{"Kit Grenouille", "", "Tête de grenouille", "Plastron en cuir", "Jambes en cuir", "Bottes en cuir", "Potion de grenouille"});
+        frogKit.addItem(frogHead);
+        ItemStack greenChest = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta greenChestMeta = (LeatherArmorMeta) greenChest.getItemMeta();
+        greenChestMeta.setColor(Color.GREEN);
+        greenChest.setItemMeta(greenChestMeta);
+        frogKit.addItem(greenChest);
+        ItemStack greenLegs = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta greenLegsMeta = (LeatherArmorMeta) greenLegs.getItemMeta();
+        greenLegsMeta.setColor(Color.GREEN);
+        greenLegs.setItemMeta(greenLegsMeta);
+        frogKit.addItem(greenLegs);
+        ItemStack greenBoots = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta greenBootsMeta = (LeatherArmorMeta) greenBoots.getItemMeta();
+        greenBootsMeta.setColor(Color.GREEN);
+        greenBoots.setItemMeta(greenBootsMeta);
+        frogKit.addItem(greenBoots);
+        ItemStack frogPotion = new ItemStack(Material.SPLASH_POTION);
+        PotionMeta frogPotionMeta = (PotionMeta) frogPotion.getItemMeta();
+        frogPotionMeta.setDisplayName(ChatColor.GREEN + "Potion de grenouille");
+        frogPotionMeta.addCustomEffect(PotionEffectType.JUMP.createEffect(200, 2), true);
+        frogPotionMeta.addCustomEffect(PotionEffectType.SPEED.createEffect(200, 2), true);
+        frogPotion.setItemMeta(frogPotionMeta);
+        frogKit.addItem(frogPotion);
+        PlagiatKit.kits.add(frogKit);
+
+        // TODO
+    }
 
     private final String name;
     private final int dbId;
@@ -48,8 +85,7 @@ class PlagiatKit
      * @param icon Kit icon
      * @param lore Kit icon lore
      */
-    private PlagiatKit(String name, int dbId, ItemStack icon, String[] lore)
-    {
+    private PlagiatKit(String name, int dbId, ItemStack icon, String[] lore) {
         this.name = name;
         this.dbId = dbId;
         this.icon = icon;
@@ -63,7 +99,7 @@ class PlagiatKit
         itemMeta.setLore(Arrays.asList(lore));
         this.icon.setItemMeta(itemMeta);
 
-        this.lockedIcon = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte)14);
+        this.lockedIcon = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 14);
         itemMeta = this.lockedIcon.getItemMeta();
         itemMeta.setDisplayName(ChatColor.RED + this.name);
         itemMeta.setLore(Arrays.asList(lore));
@@ -71,12 +107,20 @@ class PlagiatKit
     }
 
     /**
+     * Get all kits
+     *
+     * @return List of PlagiatKit instances
+     */
+    static List<PlagiatKit> getKits() {
+        return PlagiatKit.kits;
+    }
+
+    /**
      * Add an item into this kit
      *
      * @param itemStack Bukkit ItemStack instance
      */
-    private void addItem(ItemStack itemStack)
-    {
+    private void addItem(ItemStack itemStack) {
         this.items.add(itemStack);
     }
 
@@ -85,8 +129,7 @@ class PlagiatKit
      *
      * @return Name as String
      */
-    String getName()
-    {
+    String getName() {
         return this.name;
     }
 
@@ -95,8 +138,7 @@ class PlagiatKit
      *
      * @return Database id as Integer
      */
-    int getDbId()
-    {
+    int getDbId() {
         return this.dbId;
     }
 
@@ -105,8 +147,7 @@ class PlagiatKit
      *
      * @return Icon as Bukkit ItemStack instance
      */
-    ItemStack getIcon()
-    {
+    ItemStack getIcon() {
         return this.icon;
     }
 
@@ -115,8 +156,7 @@ class PlagiatKit
      *
      * @return Items as a List of Bukkit ItemStack instances
      */
-    List<ItemStack> getItems()
-    {
+    List<ItemStack> getItems() {
         return this.items;
     }
 
@@ -125,57 +165,7 @@ class PlagiatKit
      *
      * @return Icon as Bukkit ItemStack instance
      */
-    ItemStack getLockedIcon()
-    {
+    ItemStack getLockedIcon() {
         return this.lockedIcon;
-    }
-
-    /**
-     * Get all kits
-     *
-     * @return List of PlagiatKit instances
-     */
-    static List<PlagiatKit> getKits()
-    {
-        return PlagiatKit.kits;
-    }
-
-    static
-    {
-        // Register all kits
-        PlagiatKit defaultKit = new PlagiatKit("Défaut", -1, new ItemStack(Material.STONE_PICKAXE), new String[] { "Kit par défaut", "", "Pioche en pierre", "Hache en pierre", "Pelle en pierre" });
-        defaultKit.addItem(new ItemStack(Material.STONE_PICKAXE));
-        defaultKit.addItem(new ItemStack(Material.STONE_AXE));
-        defaultKit.addItem(new ItemStack(Material.STONE_SPADE));
-        PlagiatKit.kits.add(defaultKit);
-
-        ItemStack frogHead = ItemUtils.getCustomHead("eyJ0aW1lc3RhbXAiOjE0OTA1MzMyMzE0NjMsInByb2ZpbGVJZCI6Ijc5ZmI4NDEwNWQ2ZDQ2YmY5MGFmOTA1NzE5YjliMzAzIiwicHJvZmlsZU5hbWUiOiJGcm9nXyIsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9mYTcyZDdkMjE5NWE1MWZiZTU0NmU3MzQ4YTZiNzVkZTExOTdiY2UyMWVhMWRlYzYyMjdkZjFmMmVkOGI3MyJ9fX0=");
-        PlagiatKit frogKit = new PlagiatKit("Grenouille", -1, frogHead, new String[] { "Kit Grenouille", "", "Tête de grenouille", "Plastron en cuir", "Jambes en cuir", "Bottes en cuir", "Potion de grenouille" });
-        frogKit.addItem(frogHead);
-        ItemStack greenChest = new ItemStack(Material.LEATHER_CHESTPLATE);
-        LeatherArmorMeta greenChestMeta = (LeatherArmorMeta)greenChest.getItemMeta();
-        greenChestMeta.setColor(Color.GREEN);
-        greenChest.setItemMeta(greenChestMeta);
-        frogKit.addItem(greenChest);
-        ItemStack greenLegs = new ItemStack(Material.LEATHER_CHESTPLATE);
-        LeatherArmorMeta greenLegsMeta = (LeatherArmorMeta)greenLegs.getItemMeta();
-        greenLegsMeta.setColor(Color.GREEN);
-        greenLegs.setItemMeta(greenLegsMeta);
-        frogKit.addItem(greenLegs);
-        ItemStack greenBoots = new ItemStack(Material.LEATHER_CHESTPLATE);
-        LeatherArmorMeta greenBootsMeta = (LeatherArmorMeta)greenBoots.getItemMeta();
-        greenBootsMeta.setColor(Color.GREEN);
-        greenBoots.setItemMeta(greenBootsMeta);
-        frogKit.addItem(greenBoots);
-        ItemStack frogPotion = new ItemStack(Material.SPLASH_POTION);
-        PotionMeta frogPotionMeta = (PotionMeta)frogPotion.getItemMeta();
-        frogPotionMeta.setDisplayName(ChatColor.GREEN + "Potion de grenouille");
-        frogPotionMeta.addCustomEffect(PotionEffectType.JUMP.createEffect(200, 2), true);
-        frogPotionMeta.addCustomEffect(PotionEffectType.SPEED.createEffect(200, 2), true);
-        frogPotion.setItemMeta(frogPotionMeta);
-        frogKit.addItem(frogPotion);
-        PlagiatKit.kits.add(frogKit);
-
-        // TODO
     }
 }

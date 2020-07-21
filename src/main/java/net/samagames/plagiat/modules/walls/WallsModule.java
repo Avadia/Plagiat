@@ -39,8 +39,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class WallsModule extends AbstractModule
-{
+public class WallsModule extends AbstractModule {
     private boolean run;
     private Location[] locations;
     private Area[] walls;
@@ -50,8 +49,7 @@ public class WallsModule extends AbstractModule
      *
      * @param plugin Plagiat's plugin instance
      */
-    public WallsModule(Plagiat plugin)
-    {
+    public WallsModule(Plagiat plugin) {
         super(plugin, "walls", MCServer.HYPIXEL);
         this.run = false;
     }
@@ -61,8 +59,7 @@ public class WallsModule extends AbstractModule
      * {@link AbstractModule#handleGameStart()}
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         JsonObject jsonObject = this.getConfigRoot();
         JsonArray spawnsArray = jsonObject.get("spawns").getAsJsonArray();
         JsonArray wallsArray = jsonObject.get("walls").getAsJsonArray();
@@ -83,13 +80,11 @@ public class WallsModule extends AbstractModule
      * @return false if deathmatch should start
      */
     @Override
-    public boolean handleGameEnd()
-    {
+    public boolean handleGameEnd() {
         Map<UUID, PlagiatPlayer> players = this.plugin.getGame().getInGamePlayers();
-        if (players.size() > 1 && players.size() <= 4 && !this.run)
-        {
+        if (players.size() > 1 && players.size() <= 4 && !this.run) {
             this.run = true;
-            int i[] = {0};
+            int[] i = {0};
             players.forEach((uuid, plagiatPlayer) ->
             {
                 Player player = plagiatPlayer.getPlayerIfOnline();
@@ -115,14 +110,12 @@ public class WallsModule extends AbstractModule
     /**
      * Break the walls 10 seconds after start
      */
-    private void breakWalls()
-    {
+    private void breakWalls() {
         List<Material> blacklist = Arrays.asList(Material.GRASS, Material.DIRT);
         for (Area wall : this.walls)
             for (int i = 0; i <= wall.getSizeX(); i++)
                 for (int j = 0; j <= wall.getSizeY(); j++)
-                    for (int k = 0; k <= wall.getSizeZ(); k++)
-                    {
+                    for (int k = 0; k <= wall.getSizeZ(); k++) {
                         Block block = wall.getMin().getWorld().getBlockAt(wall.getMin().getBlockX() + i, wall.getMin().getBlockY() + j, wall.getMin().getBlockZ() + k);
                         if (!blacklist.contains(block.getType()))
                             block.setType(Material.AIR);
@@ -135,8 +128,7 @@ public class WallsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event)
-    {
+    public void onBlockBreak(BlockBreakEvent event) {
         event.setCancelled(this.run);
 
         if (this.run)
@@ -149,8 +141,7 @@ public class WallsModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onBlockPlace(BlockPlaceEvent event)
-    {
+    public void onBlockPlace(BlockPlaceEvent event) {
         event.setCancelled(this.run);
 
         if (this.run)

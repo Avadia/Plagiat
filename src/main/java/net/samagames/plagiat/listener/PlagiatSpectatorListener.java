@@ -33,17 +33,15 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatSpectatorListener implements Listener
-{
-    private Plagiat plugin;
+public class PlagiatSpectatorListener implements Listener {
+    private final Plagiat plugin;
 
     /**
      * Plagiat Spectator Listener constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public PlagiatSpectatorListener(Plagiat plugin)
-    {
+    public PlagiatSpectatorListener(Plagiat plugin) {
         this.plugin = plugin;
     }
 
@@ -53,8 +51,7 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryChange(InventoryClickEvent event)
-    {
+    public void onInventoryChange(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player)
             this.cancelIfSpectator(event.getWhoClicked().getUniqueId(), event);
     }
@@ -65,8 +62,7 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onDamage(EntityDamageEvent event)
-    {
+    public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player)
             this.cancelIfSpectator(event.getEntity().getUniqueId(), event);
     }
@@ -77,8 +73,7 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onDamage(EntityDamageByEntityEvent event)
-    {
+    public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player)
             this.cancelIfSpectator(event.getDamager().getUniqueId(), event);
     }
@@ -89,8 +84,7 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onDrop(PlayerDropItemEvent event)
-    {
+    public void onDrop(PlayerDropItemEvent event) {
         this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
     }
 
@@ -101,11 +95,9 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onInteract(PlayerInteractEvent event)
-    {
+    public void onInteract(PlayerInteractEvent event) {
         PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId());
-        if (plagiatPlayer != null && plagiatPlayer.isSpectator())
-        {
+        if (plagiatPlayer != null && plagiatPlayer.isSpectator()) {
             event.setCancelled(true);
             if (event.getItem() != null && event.getItem().getType() == Material.BED)
                 this.plugin.getSamaGamesAPI().getGameManager().kickPlayer(event.getPlayer(), null);
@@ -118,8 +110,7 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onBlockBread(BlockBreakEvent event)
-    {
+    public void onBlockBread(BlockBreakEvent event) {
         this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
     }
 
@@ -129,19 +120,17 @@ public class PlagiatSpectatorListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event)
-    {
+    public void onBlockPlace(BlockPlaceEvent event) {
         this.cancelIfSpectator(event.getPlayer().getUniqueId(), event);
     }
 
     /**
      * Cancel an event if the player is spectator
      *
-     * @param uuid Player uuid
+     * @param uuid  Player uuid
      * @param event Bukkit event instance
      */
-    private void cancelIfSpectator(UUID uuid, Cancellable event)
-    {
+    private void cancelIfSpectator(UUID uuid, Cancellable event) {
         PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(uuid);
         if (plagiatPlayer == null || plagiatPlayer.isSpectator())
             event.setCancelled(true);

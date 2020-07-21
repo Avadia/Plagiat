@@ -39,19 +39,17 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GravityModule extends AbstractModule
-{
+public class GravityModule extends AbstractModule {
+    private final SecureRandom random;
     private List<Location> parkourSpawns;
     private Area parkourLandingArea;
-    private final SecureRandom random;
 
     /**
      * Gravity module's constructor
      *
      * @param plugin Plagiat's plugin instance
      */
-    public GravityModule(Plagiat plugin)
-    {
+    public GravityModule(Plagiat plugin) {
         super(plugin, "gravity", MCServer.HIVEMC);
         this.random = new SecureRandom();
     }
@@ -61,8 +59,7 @@ public class GravityModule extends AbstractModule
      * {@link AbstractModule#handleGameStart()}
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         JsonObject jsonObject = this.getConfigRoot();
         JsonArray array = jsonObject.get("spawns").getAsJsonArray();
         this.parkourSpawns = new ArrayList<>();
@@ -77,16 +74,14 @@ public class GravityModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onDamage(EntityDamageEvent event)
-    {
+    public void onDamage(EntityDamageEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
-            return ;
+            return;
 
-        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.VOID)
-        {
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.VOID) {
             event.setCancelled(true);
             event.setDamage(0D);
-            Player player = (Player)event.getEntity();
+            Player player = (Player) event.getEntity();
             player.teleport(this.parkourSpawns.get(this.random.nextInt(this.parkourSpawns.size())));
             Titles.sendTitle(player, 0, 40, 0, "", ChatColor.GOLD + "Tombez dans l'eau !");
 
@@ -112,16 +107,14 @@ public class GravityModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onMove(PlayerMoveEvent event)
-    {
+    public void onMove(PlayerMoveEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME || this.parkourLandingArea == null || this.parkourSpawns.isEmpty())
-            return ;
+            return;
 
-        if (event.getTo().getBlock().getType() == Material.STATIONARY_WATER && this.parkourLandingArea.isInArea(event.getTo()))
-        {
+        if (event.getTo().getBlock().getType() == Material.STATIONARY_WATER && this.parkourLandingArea.isInArea(event.getTo())) {
             PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId());
             if (plagiatPlayer == null || plagiatPlayer.isSpectator())
-                return ;
+                return;
 
             this.plugin.getGame().getCoherenceMachine().getMessageManager().writeCustomMessage(event.getPlayer().getDisplayName() + ChatColor.YELLOW + " a réussi son saut de dropper. Il revient donc en jeu.", true);
             event.getPlayer().setFallDistance(0F);

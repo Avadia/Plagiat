@@ -3,6 +3,7 @@ package net.samagames.plagiat.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import fr.farmvivi.api.commons.Servers;
 import net.samagames.api.games.Game;
 import net.samagames.api.games.GamePlayer;
 import net.samagames.api.games.IGameProperties;
@@ -21,11 +22,7 @@ import net.samagames.tools.Area;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.RulesBook;
 import net.samagames.tools.Titles;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -33,12 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 /*
@@ -57,26 +49,24 @@ import java.util.logging.Level;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatGame extends Game<PlagiatPlayer>
-{
+public class PlagiatGame extends Game<PlagiatPlayer> {
     protected Plagiat plugin;
     protected List<AbstractModule> modules;
-    private Location lobby;
-    private Area lobbyArea;
+    private final Location lobby;
+    private final Area lobbyArea;
+    private final List<PlagiatChest> chests;
     private boolean damagesActivated;
     private boolean buildActivated;
-    private List<PlagiatChest> chests;
-    private boolean insane;
-    private int time;
+    private final boolean insane;
     List<Location> spawns;
+    private int time;
 
     /**
      * PlagiatGame constructor
      *
      * @param plugin Plagiat's plugin instance
      */
-    public PlagiatGame(Plagiat plugin, boolean insane)
-    {
+    public PlagiatGame(Plagiat plugin, boolean insane) {
         super("plagiat", "Plagiat" + (insane ? ChatColor.RED + " " + ChatColor.BOLD + "INSANE" : ""), "Copié ? Collé", PlagiatPlayer.class);
         this.plugin = plugin;
         this.modules = new ArrayList<>();
@@ -87,11 +77,11 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.insane = insane;
         this.time = 0;
 
-        this.gameManager.getGameProperties().getConfig("spawns", new JsonArray()).getAsJsonArray().forEach(element -> this.spawns.add(LocationUtils.str2loc(element.getAsString())));
-        this.gameManager.getGameProperties().getConfig("chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), false)));
-        this.gameManager.getGameProperties().getConfig("middle_chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), true)));
-        this.lobby = LocationUtils.str2loc(this.gameManager.getGameProperties().getConfig("lobby", new JsonPrimitive("world, 0, 128, 0")).getAsString());
-        this.lobbyArea = Area.str2area(this.gameManager.getGameProperties().getConfig("lobbyArea", new JsonPrimitive("world, -10, 120, -10, 10, 128, 10")).getAsString());
+        this.gameManager.getGameProperties().getMapProperty("spawns", new JsonArray()).getAsJsonArray().forEach(element -> this.spawns.add(LocationUtils.str2loc(element.getAsString())));
+        this.gameManager.getGameProperties().getMapProperty("chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), false)));
+        this.gameManager.getGameProperties().getMapProperty("middle_chests", new JsonArray()).getAsJsonArray().forEach(element -> this.chests.add(PlagiatChest.fromString(element.getAsJsonArray(), true)));
+        this.lobby = LocationUtils.str2loc(this.gameManager.getGameProperties().getMapProperty("lobby", new JsonPrimitive("world, 0, 128, 0")).getAsString());
+        this.lobbyArea = Area.str2area(this.gameManager.getGameProperties().getMapProperty("lobbyArea", new JsonPrimitive("world, -10, 120, -10, 10, 128, 10")).getAsString());
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.chests.forEach(plagiatChest -> plagiatChest.generate(this.insane)), 10L);
 
@@ -103,8 +93,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     /**
      * Register all modules in the game
      */
-    public void registerModules()
-    {
+    public void registerModules() {
         this.registerModule(SheepWarsModule.class);
         this.registerModule(QuakeModule.class);
         this.registerModule(GravityModule.class);
@@ -122,9 +111,8 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @return Rules book as Bukkit ItemStack
      */
-    private ItemStack buildRules()
-    {
-        RulesBook rulesBook = new RulesBook("Plagiat");
+    private ItemStack buildRules() {
+        RulesBook rulesBook = new RulesBook("Plagiat", Servers.SAMAGAMES);
 
         rulesBook.addOwner("Rigner");
 
@@ -146,21 +134,17 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @param moduleClass Module class
      */
-    private void registerModule(Class<? extends AbstractModule> moduleClass)
-    {
-        try
-        {
+    private void registerModule(Class<? extends AbstractModule> moduleClass) {
+        try {
             IGameProperties gameProperties = this.gameManager.getGameProperties();
-            JsonArray blacklist = gameProperties.getConfig("disableModules", new JsonArray()).getAsJsonArray();
+            JsonArray blacklist = gameProperties.getMapProperty("disableModules", new JsonArray()).getAsJsonArray();
             boolean ok = true;
             for (JsonElement element : blacklist)
                 if (element.getAsString().equalsIgnoreCase(moduleClass.getSimpleName()))
                     ok = false;
             if (ok)
                 this.modules.add(moduleClass.getConstructor(Plagiat.class).newInstance(this.plugin));
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             this.plugin.getLogger().log(Level.SEVERE, "Error loading module " + moduleClass.getName(), ex);
         }
     }
@@ -169,8 +153,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * Event method overridden to handle start of the game
      */
     @Override
-    public void startGame()
-    {
+    public void startGame() {
         super.startGame();
 
         this.teleport();
@@ -178,12 +161,11 @@ public class PlagiatGame extends Game<PlagiatPlayer>
 
         this.modules.forEach(AbstractModule::handleGameStart);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             int n = 5;
+
             @Override
-            public void run()
-            {
+            public void run() {
                 String msg = ChatColor.GOLD + ChatColor.BOLD.toString() + this.n;
                 PlagiatGame.this.getCoherenceMachine().getMessageManager().writeCustomMessage(ChatColor.YELLOW + "Début dans " + this.n + " seconde" + (this.n == 1 ? "" : "s"), true);
                 PlagiatGame.this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 1, 18, 1, msg, ""));
@@ -215,27 +197,24 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     /**
      * Give kits to players
      */
-    private void giveKits()
-    {
+    private void giveKits() {
         this.getInGamePlayers().values().forEach(plagiatPlayer ->
         {
             Player player = plagiatPlayer.getPlayerIfOnline();
-            if (player != null)
-            {
+            if (player != null) {
                 player.getInventory().clear();
                 PlagiatKit selectedKit = this.getKitForPlayer(player.getUniqueId());
                 if (selectedKit != null)
                     selectedKit.getItems().forEach(item ->
                     {
-                        switch (item.getType())
-                        {
+                        switch (item.getType()) {
                             case LEATHER_HELMET:
                             case CHAINMAIL_HELMET:
                             case GOLD_HELMET:
                             case IRON_HELMET:
                             case DIAMOND_HELMET:
                                 player.getInventory().setHelmet(item);
-                                break ;
+                                break;
 
                             case LEATHER_CHESTPLATE:
                             case CHAINMAIL_CHESTPLATE:
@@ -243,7 +222,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                             case IRON_CHESTPLATE:
                             case DIAMOND_CHESTPLATE:
                                 player.getInventory().setHelmet(item);
-                                break ;
+                                break;
 
                             case LEATHER_LEGGINGS:
                             case CHAINMAIL_LEGGINGS:
@@ -251,7 +230,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                             case IRON_LEGGINGS:
                             case DIAMOND_LEGGINGS:
                                 player.getInventory().setHelmet(item);
-                                break ;
+                                break;
 
                             case LEATHER_BOOTS:
                             case CHAINMAIL_BOOTS:
@@ -259,7 +238,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
                             case IRON_BOOTS:
                             case DIAMOND_BOOTS:
                                 player.getInventory().setHelmet(item);
-                                break ;
+                                break;
 
                             default:
                                 if (player.getInventory().firstEmpty() != -1)
@@ -276,8 +255,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * @param uuid Player UUID
      * @return Selected kit, default free kit if not found, or null if edge case
      */
-    PlagiatKit getKitForPlayer(UUID uuid)
-    {
+    PlagiatKit getKitForPlayer(UUID uuid) {
         IPlayerShop playerShop = this.plugin.getSamaGamesAPI().getShopsManager().getPlayer(uuid);
         if (playerShop == null)
             return PlagiatKit.getKits().stream().filter(kit -> kit.getDbId() == -1).findFirst().orElse(null);
@@ -285,13 +263,10 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         int[] ids = new int[PlagiatKit.getKits().size()];
         final int[] i = {0};
         PlagiatKit.getKits().forEach(kit -> ids[i[0]++] = kit.getDbId());
-        try
-        {
+        try {
             int selected = playerShop.getSelectedItemFromList(ids);
             return PlagiatKit.getKits().stream().filter(kit -> kit.getDbId() == selected).findFirst().orElse(null);
-        }
-        catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
             return PlagiatKit.getKits().stream().filter(kit -> kit.getDbId() == -1).findFirst().orElse(null);
         }
     }
@@ -300,16 +275,14 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * Teleport players to their spawn
      * Reimplement it to handle team system
      */
-    protected void teleport()
-    {
+    protected void teleport() {
         List<PlagiatPlayer> players = new ArrayList<>(this.getInGamePlayers().values());
         Iterator<Location> iterator = this.spawns.iterator();
         players.forEach(plagiatPlayer ->
         {
             if (!iterator.hasNext())
                 this.gameManager.kickPlayer(plagiatPlayer.getPlayerIfOnline(), "Il n'y a plus de place dans la partie.");
-            else
-            {
+            else {
                 Location location = iterator.next();
                 this.createCage(plagiatPlayer.getCage(), location);
                 Player player = plagiatPlayer.getPlayerIfOnline();
@@ -322,10 +295,9 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     /**
      * Refill all chests
      */
-    private void refillChests()
-    {
+    private void refillChests() {
         if (this.status == Status.FINISHED)
-            return ;
+            return;
 
         this.chests.forEach(chest -> chest.generate(this.insane));
         this.plugin.getServer().getOnlinePlayers().forEach(player -> Titles.sendTitle(player, 5, 50, 5, "", ChatColor.YELLOW + "Coffres remplis !"));
@@ -335,14 +307,13 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     /**
      * Destroy all cages
      */
-    private void destroyCages()
-    {
+    private void destroyCages() {
         this.spawns.forEach(location ->
         {
             for (int i = -1; i < 4; i++)
                 for (int j = -1; j <= 1; j++)
                     for (int k = -1; k <= 1; k++)
-                            location.getWorld().getBlockAt(location.getBlockX() + j, location.getBlockY() + i, location.getBlockZ() + k).setType(Material.AIR);
+                        location.getWorld().getBlockAt(location.getBlockX() + j, location.getBlockY() + i, location.getBlockZ() + k).setType(Material.AIR);
             location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ()).setType(Material.AIR);
             location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 3, location.getBlockZ()).setType(Material.AIR);
         });
@@ -352,27 +323,23 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * Respawn a player far away from battles
      * Need two arguments for optimisation
      *
-     * @param player Bukkit player instance
+     * @param player        Bukkit player instance
      * @param plagiatPlayer Plagiat player instance
      */
     @SuppressWarnings("UnusedParameters") //TODO: Teams
-    public void respawnPlayer(Player player, PlagiatPlayer plagiatPlayer)
-    {
+    public void respawnPlayer(Player player, PlagiatPlayer plagiatPlayer) {
         Location better = null;
         double distance = -1;
-        for (Location spawn : this.spawns)
-        {
+        for (Location spawn : this.spawns) {
             if (better == null)
                 better = spawn;
-            else
-            {
+            else {
                 double d = -1;
                 double tmp;
                 for (PlagiatPlayer player2 : this.getInGamePlayers().values())
                     if ((tmp = player2.getPlayerIfOnline().getLocation().distanceSquared(spawn)) < d || d == -1)
                         d = tmp;
-                if (distance == -1 || d > distance)
-                {
+                if (distance == -1 || d > distance) {
                     distance = d;
                     better = spawn;
                 }
@@ -384,11 +351,10 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     /**
      * Creates a small cage at given location
      *
-     * @param cage Type of the cage
+     * @param cage     Type of the cage
      * @param location Base location of the cage
      */
-    void createCage(EnumCage cage, Location location)
-    {
+    void createCage(EnumCage cage, Location location) {
         for (int i = -1; i < 4; i++)
             for (int j = -1; j <= 1; j++)
                 for (int k = -1; k <= 1; k++)
@@ -404,8 +370,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * @param player Bukkit player instance
      */
     @Override
-    public void handleLogin(Player player)
-    {
+    public void handleLogin(Player player) {
         super.handleLogin(player);
         player.setGameMode(GameMode.SURVIVAL);
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> this.getPlayer(player.getUniqueId()).loadCage());
@@ -424,8 +389,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
     /**
      * Destroy lobby zone
      */
-    private void destroyLobby()
-    {
+    private void destroyLobby() {
         Location min = this.lobbyArea.getMin();
         for (int i = 0; i <= this.lobbyArea.getSizeX(); i++)
             for (int j = 0; j <= this.lobbyArea.getSizeY(); j++)
@@ -438,8 +402,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @return {@code true} if damages are activated
      */
-    public boolean areDamagesActivated()
-    {
+    public boolean areDamagesActivated() {
         return this.damagesActivated;
     }
 
@@ -448,8 +411,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @return {@code true} if build is activated
      */
-    public boolean isBuildActivated()
-    {
+    public boolean isBuildActivated() {
         return this.buildActivated;
     }
 
@@ -458,8 +420,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @return {@code true} if game is insane
      */
-    public boolean isInsane()
-    {
+    public boolean isInsane() {
         return this.insane;
     }
 
@@ -467,11 +428,10 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * Stump a player
      *
      * @param plagiatPlayer Plagiat player instance
-     * @param player Bukkit player instance
-     * @param logout {@code true} if this player has disconnected
+     * @param player        Bukkit player instance
+     * @param logout        {@code true} if this player has disconnected
      */
-    public void stumpPlayer(PlagiatPlayer plagiatPlayer, Player player, boolean logout)
-    {
+    public void stumpPlayer(PlagiatPlayer plagiatPlayer, Player player, boolean logout) {
         plagiatPlayer.setSpectator();
         player.setMaxHealth(20D);
         player.setHealth(20D);
@@ -490,8 +450,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         if (logout)
             deathMessage = " s'est déconnecté";
         else
-            switch (player.getLastDamageCause().getCause())
-            {
+            switch (player.getLastDamageCause().getCause()) {
                 case ENTITY_ATTACK:
                 case PROJECTILE:
                     deathMessage = " a été tué par " + (player.getKiller() == null ? "un inconnu" : player.getKiller().getDisplayName());
@@ -537,8 +496,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         this.getCoherenceMachine().getMessageManager().writeCustomMessage(player.getDisplayName() + ChatColor.YELLOW + deathMessage, true);
 
 
-        if (player.getKiller() != null)
-        {
+        if (player.getKiller() != null) {
             player.getKiller().playSound(player.getKiller().getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, 1F, 1F);
 
             this.addCoins(player.getKiller(), 8, "Meurtre");
@@ -551,7 +509,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         if (logout) //Do not give spectator inventory to disconnected player, to reduce CPU usage
         {
             this.checkEnd(false);
-            return ;
+            return;
         }
 
         {
@@ -602,10 +560,9 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @param forceEnd If game should end anyway
      */
-    public void checkEnd(boolean forceEnd)
-    {
+    public void checkEnd(boolean forceEnd) {
         if (this.status == Status.FINISHED)
-            return ;
+            return;
 
         Map<UUID, PlagiatPlayer> playerMap = this.getInGamePlayers();
         if (playerMap.size() > 1 && !forceEnd)
@@ -616,7 +573,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
             shouldNotEnd |= module.handleGameEnd();
 
         if (shouldNotEnd)
-            return ;
+            return;
 
         this.status = Status.FINISHED;
         this.damagesActivated = false;
@@ -629,8 +586,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
         if (gamePlayer != null)
             this.handleWinner(gamePlayer.getUUID());
 
-        if (player != null)
-        {
+        if (player != null) {
             this.effectsOnWinner(player);
             this.getCoherenceMachine().getTemplateManager().getPlayerWinTemplate().execute(player);
         }
@@ -644,8 +600,7 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      * @param player Bukkit player instance
      */
     @Override
-    public void handleLogout(Player player)
-    {
+    public void handleLogout(Player player) {
         PlagiatPlayer plagiatPlayer = this.getPlayer(player.getUniqueId());
         super.handleLogout(player);
         if (plagiatPlayer != null && this.status == Status.IN_GAME)
@@ -657,16 +612,14 @@ public class PlagiatGame extends Game<PlagiatPlayer>
      *
      * @return Lobby as Bukkit Location instance
      */
-    public Location getLobby()
-    {
+    public Location getLobby() {
         return this.lobby;
     }
 
     /**
      * Update player scoreboards
      */
-    private void updateScoreboard()
-    {
+    private void updateScoreboard() {
         this.getRegisteredGamePlayers().values().forEach(player ->
         {
             if (this.time == 0)

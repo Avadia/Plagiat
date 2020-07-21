@@ -24,17 +24,15 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatGameListener implements Listener
-{
-    private Plagiat plugin;
+public class PlagiatGameListener implements Listener {
+    private final Plagiat plugin;
 
     /**
      * Plagiat Game Listener constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public PlagiatGameListener(Plagiat plugin)
-    {
+    public PlagiatGameListener(Plagiat plugin) {
         this.plugin = plugin;
     }
 
@@ -45,8 +43,7 @@ public class PlagiatGameListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onVoidDamage(EntityDamageEvent event)
-    {
+    public void onVoidDamage(EntityDamageEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.VOID)
             event.setDamage(Double.MAX_VALUE);
     }
@@ -57,8 +54,7 @@ public class PlagiatGameListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onDeath(PlayerDeathEvent event)
-    {
+    public void onDeath(PlayerDeathEvent event) {
         event.setDeathMessage(null);
         PlagiatPlayer plagiatPlayer = this.plugin.getGame().getPlayer(event.getEntity().getUniqueId());
         if (plagiatPlayer != null)

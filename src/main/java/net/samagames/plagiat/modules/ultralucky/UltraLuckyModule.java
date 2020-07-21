@@ -40,20 +40,18 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class UltraLuckyModule extends AbstractModule
-{
-    private List<Location> blocks;
-    private Random random;
+public class UltraLuckyModule extends AbstractModule {
+    private final List<Location> blocks;
+    private final Random random;
     private BukkitTask effectTask;
-    private boolean insane;
+    private final boolean insane;
 
     /**
      * UltraLuckyModule constructor
      *
      * @param plugin Plagiat's plugin instance
      */
-    public UltraLuckyModule(Plagiat plugin)
-    {
+    public UltraLuckyModule(Plagiat plugin) {
         super(plugin, "ultralucky", MCServer.UHCGAMES);
 
         this.blocks = new ArrayList<>();
@@ -67,8 +65,7 @@ public class UltraLuckyModule extends AbstractModule
      * {@link AbstractModule#handleGameStart()}
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         JsonObject jsonObject = this.getConfigRoot();
         JsonArray jsonArray = jsonObject.getAsJsonArray("blocks");
         if (jsonArray != null)
@@ -85,8 +82,7 @@ public class UltraLuckyModule extends AbstractModule
      * @return false, to avoid disabling end
      */
     @Override
-    public boolean handleGameEnd()
-    {
+    public boolean handleGameEnd() {
         if (this.effectTask != null)
             this.effectTask.cancel();
 
@@ -99,10 +95,9 @@ public class UltraLuckyModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEntitySpawn(ItemSpawnEvent event)
-    {
+    public void onEntitySpawn(ItemSpawnEvent event) {
         if (event.getEntity().getItemStack().getType() != Material.SPONGE)
-            return ;
+            return;
 
         Map<Map<ItemStack, Integer>, Integer> list = this.insane ? PlagiatChest.ITEMS_MIDDLE_INSANE : PlagiatChest.ITEMS_MIDDLE_NORMAL;
         Map<ItemStack, Integer> stuff = new ArrayList<>(list.keySet()).get(this.random.nextInt(list.size()));

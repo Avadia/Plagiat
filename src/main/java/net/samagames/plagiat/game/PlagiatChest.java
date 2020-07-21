@@ -34,113 +34,13 @@ import java.util.Map;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatChest
-{
-    private static final Map<Map<ItemStack, Integer>, Integer> ITEMS_NORMAL = new HashMap<>();
-    private static final Map<Map<ItemStack, Integer>, Integer> ITEMS_INSANE = new HashMap<>();
+public class PlagiatChest {
     public static final Map<Map<ItemStack, Integer>, Integer> ITEMS_MIDDLE_NORMAL = new HashMap<>();
     public static final Map<Map<ItemStack, Integer>, Integer> ITEMS_MIDDLE_INSANE = new HashMap<>();
+    private static final Map<Map<ItemStack, Integer>, Integer> ITEMS_NORMAL = new HashMap<>();
+    private static final Map<Map<ItemStack, Integer>, Integer> ITEMS_INSANE = new HashMap<>();
 
-    private List<Location> locations;
-    private boolean middle;
-
-    /**
-     * Plagiat Chest constructor
-     *
-     * @param locations Locations of the chest
-     */
-    private PlagiatChest(List<Location> locations, boolean middle)
-    {
-        this.locations = locations;
-        this.middle = middle;
-    }
-
-    /**
-     * Generate chest contents
-     *
-     * @param insane true if game is insane
-     */
-    void generate(boolean insane)
-    {
-        List<Inventory> inventories = new ArrayList<>(this.locations.size());
-        this.locations.forEach(location ->
-        {
-            BlockState blockState = location.getBlock().getState();
-            if (blockState instanceof Chest)
-                inventories.add(((Chest)blockState).getBlockInventory());
-        });
-
-        if (inventories.isEmpty())
-            return ;
-
-        SecureRandom secureRandom = new SecureRandom();
-        Map<Map<ItemStack, Integer>, Integer> list = insane ? this.middle ? PlagiatChest.ITEMS_MIDDLE_INSANE : PlagiatChest.ITEMS_INSANE : this.middle ? PlagiatChest.ITEMS_MIDDLE_NORMAL : PlagiatChest.ITEMS_NORMAL;
-        list.forEach((subList, probability) ->
-        {
-            if (secureRandom.nextInt(10000) < probability)
-            {
-                int random = secureRandom.nextInt(10000);
-                for (Map.Entry<ItemStack, Integer> item : subList.entrySet())
-                {
-                    if (random < item.getValue())
-                    {
-                        Inventory inventory = inventories.get(secureRandom.nextInt(inventories.size()));
-                        if (inventory.firstEmpty() == -1)
-                            break ;
-
-                        int slot;
-                        ItemStack current;
-                        do
-                        {
-                            slot = secureRandom.nextInt(27);
-                            current = inventory.getItem(slot);
-                        } while (current != null && current.getType() != Material.AIR);
-                        inventory.setItem(slot, item.getKey());
-
-                        if (item.getKey().getType() == Material.BOW && inventory.firstEmpty() != -1)
-                        {
-                            do
-                            {
-                                slot = secureRandom.nextInt(27);
-                                current = inventory.getItem(slot);
-                            } while (current != null && current.getType() != Material.AIR);
-                            inventory.setItem(slot, new ItemStack(Material.ARROW, 10));
-                        }
-                        break;
-                    }
-                    random -= item.getValue();
-                }
-            }
-        });
-    }
-
-    /**
-     * Create PlagiatChest instance from string
-     *
-     * @param jsonArray Array to parse
-     * @return New PlagiatChest instance
-     */
-    static PlagiatChest fromString(JsonArray jsonArray, boolean middle)
-    {
-        List<Location> locations = new ArrayList<>();
-        jsonArray.forEach(jsonElement -> locations.add(LocationUtils.str2loc(jsonElement.getAsString())));
-        return new PlagiatChest(locations, middle);
-    }
-
-    /**
-     * Register an item into chest
-     *
-     * @param items The items to add
-     * @param probability Probability (100% = 10000)
-     * @param list List to add
-     */
-    private static void registerItems(Map<Map<ItemStack, Integer>, Integer> list, int probability, Map<ItemStack, Integer> items)
-    {
-        list.put(items, probability);
-    }
-
-    static
-    {
+    static {
         // Normal
         {
             // Helmets
@@ -180,8 +80,7 @@ public class PlagiatChest
             PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 7500, boots);
 
             // Projectiles
-            for (int i = 0; i < 2; ++i)
-            {
+            for (int i = 0; i < 2; ++i) {
                 Map<ItemStack, Integer> projectiles = new HashMap<>();
                 projectiles.put(new ItemStack(Material.FISHING_ROD), 3333);
                 projectiles.put(new ItemStack(Material.SNOW_BALL, 16), 6667);
@@ -189,8 +88,7 @@ public class PlagiatChest
             }
 
             // Blocks
-            for (int i = 0; i < 2; ++i)
-            {
+            for (int i = 0; i < 2; ++i) {
                 Map<ItemStack, Integer> blocks = new HashMap<>();
                 blocks.put(new ItemStack(Material.WOOD, 32), 4500);
                 blocks.put(new ItemStack(Material.STONE, 32), 4500);
@@ -209,8 +107,7 @@ public class PlagiatChest
             PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 10000, food);
 
             // Swords
-            for (int i = 0; i < 2; i++)
-            {
+            for (int i = 0; i < 2; i++) {
                 Map<ItemStack, Integer> swords = new HashMap<>();
                 swords.put(new ItemStack(Material.STONE_SWORD), 5000);
                 swords.put(new ItemStack(Material.IRON_SWORD), 2000);
@@ -347,5 +244,93 @@ public class PlagiatChest
             pearls.put(new ItemStack(Material.ENDER_PEARL, 2), 10000);
             PlagiatChest.registerItems(PlagiatChest.ITEMS_NORMAL, 1000, pearls);
         }
+    }
+
+    private final List<Location> locations;
+    private final boolean middle;
+
+    /**
+     * Plagiat Chest constructor
+     *
+     * @param locations Locations of the chest
+     */
+    private PlagiatChest(List<Location> locations, boolean middle) {
+        this.locations = locations;
+        this.middle = middle;
+    }
+
+    /**
+     * Create PlagiatChest instance from string
+     *
+     * @param jsonArray Array to parse
+     * @return New PlagiatChest instance
+     */
+    static PlagiatChest fromString(JsonArray jsonArray, boolean middle) {
+        List<Location> locations = new ArrayList<>();
+        jsonArray.forEach(jsonElement -> locations.add(LocationUtils.str2loc(jsonElement.getAsString())));
+        return new PlagiatChest(locations, middle);
+    }
+
+    /**
+     * Register an item into chest
+     *
+     * @param items       The items to add
+     * @param probability Probability (100% = 10000)
+     * @param list        List to add
+     */
+    private static void registerItems(Map<Map<ItemStack, Integer>, Integer> list, int probability, Map<ItemStack, Integer> items) {
+        list.put(items, probability);
+    }
+
+    /**
+     * Generate chest contents
+     *
+     * @param insane true if game is insane
+     */
+    void generate(boolean insane) {
+        List<Inventory> inventories = new ArrayList<>(this.locations.size());
+        this.locations.forEach(location ->
+        {
+            BlockState blockState = location.getBlock().getState();
+            if (blockState instanceof Chest)
+                inventories.add(((Chest) blockState).getBlockInventory());
+        });
+
+        if (inventories.isEmpty())
+            return;
+
+        SecureRandom secureRandom = new SecureRandom();
+        Map<Map<ItemStack, Integer>, Integer> list = insane ? this.middle ? PlagiatChest.ITEMS_MIDDLE_INSANE : PlagiatChest.ITEMS_INSANE : this.middle ? PlagiatChest.ITEMS_MIDDLE_NORMAL : PlagiatChest.ITEMS_NORMAL;
+        list.forEach((subList, probability) ->
+        {
+            if (secureRandom.nextInt(10000) < probability) {
+                int random = secureRandom.nextInt(10000);
+                for (Map.Entry<ItemStack, Integer> item : subList.entrySet()) {
+                    if (random < item.getValue()) {
+                        Inventory inventory = inventories.get(secureRandom.nextInt(inventories.size()));
+                        if (inventory.firstEmpty() == -1)
+                            break;
+
+                        int slot;
+                        ItemStack current;
+                        do {
+                            slot = secureRandom.nextInt(27);
+                            current = inventory.getItem(slot);
+                        } while (current != null && current.getType() != Material.AIR);
+                        inventory.setItem(slot, item.getKey());
+
+                        if (item.getKey().getType() == Material.BOW && inventory.firstEmpty() != -1) {
+                            do {
+                                slot = secureRandom.nextInt(27);
+                                current = inventory.getItem(slot);
+                            } while (current != null && current.getType() != Material.AIR);
+                            inventory.setItem(slot, new ItemStack(Material.ARROW, 10));
+                        }
+                        break;
+                    }
+                    random -= item.getValue();
+                }
+            }
+        });
     }
 }

@@ -14,11 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /*
  * This file is part of Plagiat.
@@ -36,8 +32,7 @@ import java.util.Set;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class IceSheep extends WoolType
-{
+public class IceSheep extends WoolType {
     private final Map<Integer, BukkitTask> tasks;
     private final Map<Integer, Set<Block>> blocks;
     private final Random random;
@@ -45,10 +40,9 @@ public class IceSheep extends WoolType
     /**
      * Ice Sheep constructor
      *
-     * @param plugin    Plagiat plugin instance
+     * @param plugin Plagiat plugin instance
      */
-    public IceSheep(Plagiat plugin)
-    {
+    public IceSheep(Plagiat plugin) {
         super(plugin, DyeColor.LIGHT_BLUE, ChatColor.AQUA, "de glace");
 
         this.tasks = new HashMap<>();
@@ -60,12 +54,11 @@ public class IceSheep extends WoolType
      * Cancel task on sheep death
      * Remove all snow blocks
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
     @Override
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
         BukkitTask bukkitTask = this.tasks.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();
@@ -82,36 +75,31 @@ public class IceSheep extends WoolType
      */
     @SuppressWarnings("deprecation")
     @Override
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
         double radius = 5D;
         this.tasks.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
             sheep.getWorld().getNearbyEntities(sheep.getLocation(), radius, radius, radius).forEach(entity ->
             {
                 if (entity instanceof Player)
-                    ((Player)entity).addPotionEffect(PotionEffectType.SLOW.createEffect(40, 1));
+                    ((Player) entity).addPotionEffect(PotionEffectType.SLOW.createEffect(40, 1));
             });
 
             Set<Block> blocks = this.getAllBlocksInSphere(sheep.getLocation(), radius);
             Set<Block> modifiedBlocks = new HashSet<>();
             blocks.forEach(block ->
             {
-               Material material = block.getType();
-               if (material == Material.SNOW)
-               {
-                   if (block.getData() < 3 && this.random.nextInt(20) < 6)
-                   {
-                       block.setData((byte) (block.getData() + 1));
-                       modifiedBlocks.add(block);
-                   }
-               }
-               else if (!material.isSolid() && block.getRelative(BlockFace.DOWN).getType().isSolid())
-               {
-                   block.setType(Material.SNOW);
-                   block.setData((byte)0);
-                   modifiedBlocks.add(block);
-               }
+                Material material = block.getType();
+                if (material == Material.SNOW) {
+                    if (block.getData() < 3 && this.random.nextInt(20) < 6) {
+                        block.setData((byte) (block.getData() + 1));
+                        modifiedBlocks.add(block);
+                    }
+                } else if (!material.isSolid() && block.getRelative(BlockFace.DOWN).getType().isSolid()) {
+                    block.setType(Material.SNOW);
+                    block.setData((byte) 0);
+                    modifiedBlocks.add(block);
+                }
             });
 
             if (this.blocks.containsKey(sheep.getEntityId()))

@@ -30,18 +30,16 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class HealingSheep extends WoolType
-{
-    private Map<Integer, BukkitTask> healingTask;
-    private Random random;
+public class HealingSheep extends WoolType {
+    private final Map<Integer, BukkitTask> healingTask;
+    private final Random random;
 
     /**
      * Healing Sheep constructor
      *
      * @param plagiat Plagiat plugin's instance
      */
-    public HealingSheep(Plagiat plagiat)
-    {
+    public HealingSheep(Plagiat plagiat) {
         super(plagiat, DyeColor.PINK, ChatColor.LIGHT_PURPLE, "soigneur");
         this.healingTask = new HashMap<>();
         this.random = new Random();
@@ -54,14 +52,13 @@ public class HealingSheep extends WoolType
      * @param sheep The sheep entity
      */
     @Override
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
         this.healingTask.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
             sheep.getWorld().getNearbyEntities(sheep.getLocation(), 6D, 6D, 6D).forEach(entity ->
             {
                 if (entity instanceof Player)
-                    ((Player)entity).setHealth(((Player)entity).getHealth() >= ((Player)entity).getMaxHealth() ? ((Player)entity).getHealth() : ((Player)entity).getHealth() + 1);
+                    ((Player) entity).setHealth(((Player) entity).getHealth() >= ((Player) entity).getMaxHealth() ? ((Player) entity).getHealth() : ((Player) entity).getHealth() + 1);
             });
             sheep.getWorld().spawnParticle(Particle.HEART, sheep.getLocation(), 8, this.random.nextDouble() % 1D, this.random.nextDouble() % 1D, this.random.nextDouble() % 1D);
         }, 20L, 20L));
@@ -70,12 +67,11 @@ public class HealingSheep extends WoolType
     /**
      * Event method on sheep death
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
     @Override
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
         BukkitTask bukkitTask = this.healingTask.get(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();
@@ -87,8 +83,7 @@ public class HealingSheep extends WoolType
      * @return false to disable launch
      */
     @Override
-    protected boolean shouldLaunch()
-    {
+    protected boolean shouldLaunch() {
         return false;
     }
 
@@ -98,8 +93,7 @@ public class HealingSheep extends WoolType
      * @return -1 to disable automatic despawn
      */
     @Override
-    public int getSpawnTime()
-    {
+    public int getSpawnTime() {
         return -1;
     }
 }

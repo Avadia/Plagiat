@@ -23,27 +23,24 @@ import org.bukkit.entity.Sheep;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BoardingSheep extends WoolType
-{
+public class BoardingSheep extends WoolType {
     /**
      * Boarding Sheep constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public BoardingSheep(Plagiat plugin)
-    {
+    public BoardingSheep(Plagiat plugin) {
         super(plugin, DyeColor.WHITE, ChatColor.WHITE, "d'abordage");
     }
 
     /**
      * Ride player on sheep
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param player Bukkit player instance
      */
     @Override
-    protected void onLaunch(Sheep sheep, Player player)
-    {
+    protected void onLaunch(Sheep sheep, Player player) {
         sheep.setPassenger(player);
     }
 
@@ -53,8 +50,7 @@ public class BoardingSheep extends WoolType
      * @param sheep The sheep entity
      */
     @Override
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
         sheep.eject();
         sheep.remove();
     }

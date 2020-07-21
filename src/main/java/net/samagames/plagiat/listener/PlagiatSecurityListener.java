@@ -36,17 +36,15 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatSecurityListener implements Listener
-{
-    private Plagiat plugin;
+public class PlagiatSecurityListener implements Listener {
+    private final Plagiat plugin;
 
     /**
      * Plagiat listener constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public PlagiatSecurityListener(Plagiat plugin)
-    {
+    public PlagiatSecurityListener(Plagiat plugin) {
         this.plugin = plugin;
     }
 
@@ -56,8 +54,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onDamage(EntityDamageEvent event)
-    {
+    public void onDamage(EntityDamageEvent event) {
         if (!this.plugin.getGame().areDamagesActivated())
             event.setCancelled(true);
         if (event.getCause() == EntityDamageEvent.DamageCause.VOID && !this.plugin.getGame().isGameStarted())
@@ -70,8 +67,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event)
-    {
+    public void onBlockBreak(BlockBreakEvent event) {
         if (!this.plugin.getGame().isBuildActivated())
             event.setCancelled(true);
     }
@@ -82,8 +78,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onBlockBreak(BlockPlaceEvent event)
-    {
+    public void onBlockBreak(BlockPlaceEvent event) {
         if (!this.plugin.getGame().isBuildActivated())
             event.setCancelled(true);
     }
@@ -94,8 +89,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onWeatherChange(WeatherChangeEvent event)
-    {
+    public void onWeatherChange(WeatherChangeEvent event) {
         if (event.toWeatherState())
             event.setCancelled(true);
     }
@@ -106,13 +100,11 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onFoodLevelChange(FoodLevelChangeEvent event)
-    {
-        if (!this.plugin.getGame().areDamagesActivated())
-        {
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
+        if (!this.plugin.getGame().areDamagesActivated()) {
             event.setCancelled(true);
             if (event.getEntity() instanceof Player)
-                ((Player)event.getEntity()).setFoodLevel(20);
+                ((Player) event.getEntity()).setFoodLevel(20);
         }
     }
 
@@ -123,8 +115,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onInteract(PlayerInteractEvent event)
-    {
+    public void onInteract(PlayerInteractEvent event) {
         if (event.getItem() != null && event.getItem().equals(this.plugin.getGame().getCoherenceMachine().getLeaveItem()))
             event.getPlayer().kickPlayer("");
 
@@ -142,8 +133,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onEntityInteract(PlayerInteractEntityEvent event)
-    {
+    public void onEntityInteract(PlayerInteractEntityEvent event) {
         ItemStack itemStack;
         itemStack = event.getHand() == EquipmentSlot.OFF_HAND ? event.getPlayer().getInventory().getItemInOffHand() : event.getPlayer().getInventory().getItemInMainHand();
         if (itemStack != null && itemStack.equals(this.plugin.getGame().getCoherenceMachine().getLeaveItem()))
@@ -162,8 +152,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onMerchantModify(VillagerAcquireTradeEvent event)
-    {
+    public void onMerchantModify(VillagerAcquireTradeEvent event) {
         event.setCancelled(true);
     }
 
@@ -173,8 +162,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent event)
-    {
+    public void onInventoryClick(InventoryClickEvent event) {
         if (!this.plugin.getGame().isGameStarted())
             event.setCancelled(true);
     }
@@ -185,8 +173,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onDrop(PlayerDropItemEvent event)
-    {
+    public void onDrop(PlayerDropItemEvent event) {
         if (!this.plugin.getGame().isGameStarted())
             event.setCancelled(true);
     }
@@ -197,8 +184,7 @@ public class PlagiatSecurityListener implements Listener
      * @param event Bukkit event instance
      */
     @EventHandler(ignoreCancelled = true)
-    public void onSwitch(PlayerSwapHandItemsEvent event)
-    {
+    public void onSwitch(PlayerSwapHandItemsEvent event) {
         if (!this.plugin.getGame().isGameStarted())
             event.setCancelled(true);
     }

@@ -5,11 +5,7 @@ import net.samagames.plagiat.Plagiat;
 import net.samagames.plagiat.modules.AbstractModule;
 import net.samagames.plagiat.modules.MCServer;
 import net.samagames.plagiat.modules.dimensions.InternalBlockBreakEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
@@ -38,17 +34,15 @@ import org.bukkit.util.BlockIterator;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SpleggModule extends AbstractModule
-{
-    private ItemStack egg;
+public class SpleggModule extends AbstractModule {
+    private final ItemStack egg;
 
     /**
      * Splegg module constructor
      *
      * @param plugin Plagiat's plugin instance
      */
-    public SpleggModule(Plagiat plugin)
-    {
+    public SpleggModule(Plagiat plugin) {
         super(plugin, "quake", MCServer.HIVEMC);
 
         this.egg = new ItemStack(Material.EGG, 64);
@@ -63,8 +57,7 @@ public class SpleggModule extends AbstractModule
      * Start the egg trail on start
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
             World world = this.plugin.getServer().getWorlds().get(0);
@@ -79,18 +72,15 @@ public class SpleggModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onEntityInteract(PlayerInteractAtEntityEvent event)
-    {
+    public void onEntityInteract(PlayerInteractAtEntityEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         if (event.getRightClicked() instanceof ArmorStand
-                && ((ArmorStand)event.getRightClicked()).getItemInHand() != null
-                && ((ArmorStand)event.getRightClicked()).getItemInHand().getType() == Material.EGG)
-        {
-            if (event.getPlayer().getInventory().firstEmpty() == -1)
-            {
+                && ((ArmorStand) event.getRightClicked()).getItemInHand() != null
+                && ((ArmorStand) event.getRightClicked()).getItemInHand().getType() == Material.EGG) {
+            if (event.getPlayer().getInventory().firstEmpty() == -1) {
                 event.getPlayer().sendMessage(ChatColor.RED + "Votre inventaire est plein.");
-                return ;
+                return;
             }
             event.getRightClicked().remove();
             event.setCancelled(true);
@@ -106,22 +96,20 @@ public class SpleggModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onEggLand(PlayerEggThrowEvent event)
-    {
+    public void onEggLand(PlayerEggThrowEvent event) {
         BlockIterator blockIterator = new BlockIterator(event.getEgg().getWorld(), event.getEgg().getLocation().toVector(), event.getEgg().getVelocity().normalize(), 0.0D, 4);
         Block hitBlock = null;
-        while (blockIterator.hasNext())
-        {
+        while (blockIterator.hasNext()) {
             hitBlock = blockIterator.next();
             if (hitBlock.getType() != Material.AIR)
-                break ;
+                break;
         }
 
         if (hitBlock != null)
             hitBlock.setType(Material.AIR);
 
         event.setHatching(false);
-        event.setNumHatches((byte)0);
+        event.setNumHatches((byte) 0);
         this.plugin.getServer().getPluginManager().callEvent(new InternalBlockBreakEvent(hitBlock));
     }
 }

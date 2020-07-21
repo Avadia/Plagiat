@@ -6,7 +6,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
-import org.bukkit.craftbukkit.v1_10_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -34,24 +34,22 @@ import java.util.Set;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class WoolType
-{
+public abstract class WoolType {
     protected Plagiat plugin;
-    private DyeColor dyeColor;
-    private ChatColor chatColor;
-    private String name;
-    private List<Sheep> sheeps;
+    private final DyeColor dyeColor;
+    private final ChatColor chatColor;
+    private final String name;
+    private final List<Sheep> sheeps;
 
     /**
      * Abstract constructor
      *
-     * @param plugin Plagiat's plugin
-     * @param dyeColor The wool color
+     * @param plugin    Plagiat's plugin
+     * @param dyeColor  The wool color
      * @param chatColor The chat color
-     * @param name This sheep's name
+     * @param name      This sheep's name
      */
-    protected WoolType(Plagiat plugin, DyeColor dyeColor, ChatColor chatColor, String name)
-    {
+    protected WoolType(Plagiat plugin, DyeColor dyeColor, ChatColor chatColor, String name) {
         this.sheeps = new ArrayList<>();
         this.plugin = plugin;
         this.dyeColor = dyeColor;
@@ -65,8 +63,7 @@ public abstract class WoolType
      * @param player The launching player
      * @param vector New speed of the sheep
      */
-    final void launchSheep(Player player, Vector vector)
-    {
+    final void launchSheep(Player player, Vector vector) {
         Sheep sheep = player.getWorld().spawn(player.getLocation(), Sheep.class);
         sheep.setSheared(false);
         sheep.setColor(this.dyeColor);
@@ -83,13 +80,11 @@ public abstract class WoolType
 
         BukkitTask task = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
-            if (!sheep.isDead() && sheep.isOnGround())
-            {
-                ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
+            if (!sheep.isDead() && sheep.isOnGround()) {
+                ((BukkitTask) sheep.getMetadata("sg-land").get(0).value()).cancel();
                 this.onLand(sheep);
-            }
-            else if (sheep.isDead())
-                ((BukkitTask)sheep.getMetadata("sg-land").get(0).value()).cancel();
+            } else if (sheep.isDead())
+                ((BukkitTask) sheep.getMetadata("sg-land").get(0).value()).cancel();
         }, 20L, 2);
 
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> sheep.damage(100D), this.getSpawnTime());
@@ -100,11 +95,10 @@ public abstract class WoolType
     /**
      * Kill a sheep
      *
-     * @param sheep The sheep instance
+     * @param sheep  The sheep instance
      * @param player The killer of the sheep, or null
      */
-    final void killSheep(Sheep sheep, @Nullable Player player)
-    {
+    final void killSheep(Sheep sheep, @Nullable Player player) {
         this.onDeath(sheep, player);
         this.sheeps.remove(sheep);
     }
@@ -112,11 +106,10 @@ public abstract class WoolType
     /**
      * Event method, should be overridden to custom behaviour
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param player Bukkit player instance
      */
-    protected void onLaunch(Sheep sheep, Player player)
-    {
+    protected void onLaunch(Sheep sheep, Player player) {
     }
 
     /**
@@ -124,18 +117,16 @@ public abstract class WoolType
      *
      * @param sheep The sheep entity
      */
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
     }
 
     /**
      * Event method, should be overridden to custom behaviour
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
     }
 
     /**
@@ -143,16 +134,14 @@ public abstract class WoolType
      *
      * @return If should be launched
      */
-    protected boolean shouldLaunch()
-    {
+    protected boolean shouldLaunch() {
         return true;
     }
 
     /**
      * Kill all sheeps spawned
      */
-    final void killSheeps()
-    {
+    final void killSheeps() {
         this.sheeps.forEach(Sheep::remove);
     }
 
@@ -161,8 +150,7 @@ public abstract class WoolType
      *
      * @return Name as String
      */
-    String getName()
-    {
+    String getName() {
         return this.name;
     }
 
@@ -171,8 +159,7 @@ public abstract class WoolType
      *
      * @return Color as ChatColor
      */
-    ChatColor getChatColor()
-    {
+    ChatColor getChatColor() {
         return this.chatColor;
     }
 
@@ -181,8 +168,7 @@ public abstract class WoolType
      *
      * @return Color as DyeColor
      */
-    DyeColor getDyeColor()
-    {
+    DyeColor getDyeColor() {
         return this.dyeColor;
     }
 
@@ -194,8 +180,7 @@ public abstract class WoolType
      * @param radius Radius
      * @return List as a set, to avoid duplicates {@link CraftBlock#hashCode()}
      */
-    protected Set<Block> getAllBlocksInSphere(Location origin, double radius)
-    {
+    protected Set<Block> getAllBlocksInSphere(Location origin, double radius) {
         double radiusSquared = radius * radius;
         Set<Block> blocks = new HashSet<>();
 
@@ -214,8 +199,7 @@ public abstract class WoolType
      *
      * @return -1 if infinite, tick count otherwise
      */
-    public int getSpawnTime()
-    {
+    public int getSpawnTime() {
         return 240;
     }
 }

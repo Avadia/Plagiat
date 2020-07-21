@@ -25,8 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Plagiat extends JavaPlugin
-{
+public class Plagiat extends JavaPlugin {
     private SamaGamesAPI samaGamesAPI;
     private PlagiatGame game;
 
@@ -34,12 +33,11 @@ public class Plagiat extends JavaPlugin
      * Initialise all components on plugin load
      */
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         this.samaGamesAPI = SamaGamesAPI.get();
 
-        boolean insane = this.samaGamesAPI.getGameManager().getGameProperties().getOption("insane", new JsonPrimitive(false)).getAsBoolean();
-        int playersPerTeam = this.samaGamesAPI.getGameManager().getGameProperties().getOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
+        boolean insane = this.samaGamesAPI.getGameManager().getGameProperties().getGameOption("insane", new JsonPrimitive(false)).getAsBoolean();
+        int playersPerTeam = this.samaGamesAPI.getGameManager().getGameProperties().getGameOption("playersPerTeam", new JsonPrimitive(1)).getAsInt();
         this.game = playersPerTeam == 1 ? new PlagiatGame(this, insane) : new PlagiatTeamGame(this, insane, playersPerTeam);
 
         this.game.registerModules();
@@ -56,8 +54,7 @@ public class Plagiat extends JavaPlugin
      *
      * @return SamaGamesAPI Instance
      */
-    public SamaGamesAPI getSamaGamesAPI()
-    {
+    public SamaGamesAPI getSamaGamesAPI() {
         return this.samaGamesAPI;
     }
 
@@ -66,8 +63,7 @@ public class Plagiat extends JavaPlugin
      *
      * @return PlagiatGame instance
      */
-    public PlagiatGame getGame()
-    {
+    public PlagiatGame getGame() {
         return this.game;
     }
 }

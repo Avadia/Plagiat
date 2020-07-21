@@ -35,17 +35,15 @@ import java.util.Set;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class EarthQuakeSheep extends WoolType
-{
-    private Map<Integer, BukkitTask> tasks;
+public class EarthQuakeSheep extends WoolType {
+    private final Map<Integer, BukkitTask> tasks;
 
     /**
      * Abstract constructor
      *
-     * @param plugin    Plagiat's plugin
+     * @param plugin Plagiat's plugin
      */
-    public EarthQuakeSheep(Plagiat plugin)
-    {
+    public EarthQuakeSheep(Plagiat plugin) {
         super(plugin, DyeColor.BROWN, ChatColor.GOLD, "tremblement de terre");
 
         this.tasks = new HashMap<>();
@@ -57,15 +55,13 @@ public class EarthQuakeSheep extends WoolType
      * @param sheep The sheep entity
      */
     @Override
-    protected void onLand(Sheep sheep)
-    {
+    protected void onLand(Sheep sheep) {
         double radius = 5D;
         this.tasks.put(sheep.getEntityId(), this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
         {
             sheep.getWorld().getNearbyEntities(sheep.getLocation(), radius, radius, radius).forEach(entity ->
             {
-                if (entity instanceof Player && entity.isOnGround())
-                {
+                if (entity instanceof Player && entity.isOnGround()) {
                     Vector vector = entity.getVelocity();
                     vector.setY(0.8D);
                     entity.setVelocity(vector);
@@ -83,12 +79,11 @@ public class EarthQuakeSheep extends WoolType
     /**
      * Stop earthquake task
      *
-     * @param sheep The sheep entity
+     * @param sheep  The sheep entity
      * @param killer The sheep killer, or null
      */
     @Override
-    protected void onDeath(Sheep sheep, @Nullable Player killer)
-    {
+    protected void onDeath(Sheep sheep, @Nullable Player killer) {
         BukkitTask bukkitTask = this.tasks.remove(sheep.getEntityId());
         if (bukkitTask != null)
             bukkitTask.cancel();

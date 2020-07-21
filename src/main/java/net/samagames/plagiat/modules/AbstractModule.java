@@ -27,22 +27,20 @@ import java.util.logging.Logger;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class AbstractModule implements Listener
-{
+public abstract class AbstractModule implements Listener {
     protected final Plagiat plugin;
-    private final String name;
     protected final Logger logger;
+    private final String name;
     private final MCServer server;
 
     /**
      * Abstract constructor to initialise module
      *
      * @param plugin Plagiat's plugin instance
-     * @param name This module's name
+     * @param name   This module's name
      * @param server The server this game belongs to
      */
-    protected AbstractModule(Plagiat plugin, String name, MCServer server)
-    {
+    protected AbstractModule(Plagiat plugin, String name, MCServer server) {
         this.plugin = plugin;
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         this.name = name;
@@ -56,8 +54,7 @@ public abstract class AbstractModule implements Listener
      * Use it to start tasks, etc
      * {@link Game#startGame()}
      */
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
     }
 
     /**
@@ -67,8 +64,7 @@ public abstract class AbstractModule implements Listener
      *
      * @return If end should be cancelled
      */
-    public boolean handleGameEnd()
-    {
+    public boolean handleGameEnd() {
         return false;
     }
 
@@ -78,10 +74,9 @@ public abstract class AbstractModule implements Listener
      *
      * @return Configuration as JsonObject
      */
-    protected JsonObject getConfigRoot()
-    {
+    protected JsonObject getConfigRoot() {
         IGameProperties iGameProperties = this.plugin.getSamaGamesAPI().getGameManager().getGameProperties();
-        JsonObject modulesRoot = iGameProperties.getConfig("modules", new JsonObject()).getAsJsonObject();
+        JsonObject modulesRoot = iGameProperties.getMapProperty("modules", new JsonObject()).getAsJsonObject();
         JsonElement rootElement = modulesRoot.get(this.name);
         JsonObject root = rootElement == null ? null : rootElement.getAsJsonObject();
         return root == null ? new JsonObject() : root;
@@ -92,8 +87,7 @@ public abstract class AbstractModule implements Listener
      *
      * @return Suffix as String
      */
-    public String getServerSuffix()
-    {
+    public String getServerSuffix() {
         return ChatColor.GOLD + "[" + this.server.toString().charAt(0) + "]";
     }
 
@@ -102,8 +96,7 @@ public abstract class AbstractModule implements Listener
      *
      * @return Name as String
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
@@ -112,8 +105,7 @@ public abstract class AbstractModule implements Listener
      *
      * @return Rules as String array
      */
-    public String[] getRules()
-    {
+    public String[] getRules() {
         return new String[0];
     }
 
@@ -122,8 +114,7 @@ public abstract class AbstractModule implements Listener
      *
      * @return Developers user names as String array
      */
-    public String[] getDevelopers()
-    {
+    public String[] getDevelopers() {
         return new String[0];
     }
 }

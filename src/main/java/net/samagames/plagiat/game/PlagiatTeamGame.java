@@ -24,18 +24,16 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlagiatTeamGame extends PlagiatGame
-{
-    private List<PlagiatTeam> teams;
-    private int playersPerTeam; // TODO: Teams
+public class PlagiatTeamGame extends PlagiatGame {
+    private final List<PlagiatTeam> teams;
+    private final int playersPerTeam; // TODO: Teams
 
     /**
      * Plagiat Team Game constructor
      *
      * @param plugin Plagiat plugin instance
      */
-    public PlagiatTeamGame(Plagiat plugin, boolean insane, int playersPerTeam)
-    {
+    public PlagiatTeamGame(Plagiat plugin, boolean insane, int playersPerTeam) {
         super(plugin, insane);
 
         this.teams = new ArrayList<>();
@@ -46,8 +44,7 @@ public class PlagiatTeamGame extends PlagiatGame
      * Teleport teams to their spawn
      */
     @Override
-    protected void teleport()
-    {
+    protected void teleport() {
         List<PlagiatTeam> players = new ArrayList<>(this.teams);
         Collections.shuffle(players);
         Iterator<Location> iterator = this.spawns.iterator();
@@ -55,8 +52,7 @@ public class PlagiatTeamGame extends PlagiatGame
         {
             if (!iterator.hasNext())
                 plagiatTeam.getPlayers().forEach(plagiatPlayer -> this.gameManager.kickPlayer(plagiatPlayer.getPlayerIfOnline(), "Il n'y a plus de place dans la partie."));
-            else if (!plagiatTeam.getPlayers().isEmpty())
-            {
+            else if (!plagiatTeam.getPlayers().isEmpty()) {
                 Location location = iterator.next();
                 this.createCage(plagiatTeam.getPlayers().get(0).getCage(), location);
                 plagiatTeam.getPlayers().forEach(plagiatPlayer -> plagiatPlayer.getPlayerIfOnline().teleport(location));
@@ -70,8 +66,7 @@ public class PlagiatTeamGame extends PlagiatGame
      * @param forceEnd If game should end anyway
      */
     @Override
-    public void checkEnd(boolean forceEnd)
-    {
+    public void checkEnd(boolean forceEnd) {
         // TODO: Teams
     }
 }

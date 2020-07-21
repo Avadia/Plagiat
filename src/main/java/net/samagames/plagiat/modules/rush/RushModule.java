@@ -35,8 +35,7 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Plagiat.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RushModule extends AbstractModule
-{
+public class RushModule extends AbstractModule {
     private Villager ghostNPC;
 
     /**
@@ -44,8 +43,7 @@ public class RushModule extends AbstractModule
      *
      * @param plugin Plagiat's plugin
      */
-    public RushModule(Plagiat plugin)
-    {
+    public RushModule(Plagiat plugin) {
         super(plugin, "rush", MCServer.ASCENTIA);
     }
 
@@ -54,8 +52,7 @@ public class RushModule extends AbstractModule
      * {@link AbstractModule#handleGameStart()}
      */
     @Override
-    public void handleGameStart()
-    {
+    public void handleGameStart() {
         this.ghostNPC = this.plugin.getServer().getWorlds().get(0).spawn(new Location(this.plugin.getServer().getWorlds().get(0), 0D, 255D, 0D), Villager.class);
         this.ghostNPC.addPotionEffect(PotionEffectType.LEVITATION.createEffect(Integer.MAX_VALUE, 1));
         this.ghostNPC.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 1));
@@ -126,14 +123,12 @@ public class RushModule extends AbstractModule
      * @param event Bukkit event instance
      */
     @EventHandler
-    public void onEntityInteract(PlayerInteractAtEntityEvent event)
-    {
+    public void onEntityInteract(PlayerInteractAtEntityEvent event) {
         if (this.plugin.getGame().getStatus() != Status.IN_GAME)
-            return ;
+            return;
         if (event.getRightClicked() instanceof ArmorStand
-                && ((ArmorStand)event.getRightClicked()).getItemInHand() != null
-                && ((ArmorStand)event.getRightClicked()).getItemInHand().getType() == Material.EMERALD)
-        {
+                && ((ArmorStand) event.getRightClicked()).getItemInHand() != null
+                && ((ArmorStand) event.getRightClicked()).getItemInHand().getType() == Material.EMERALD) {
             event.getPlayer().openMerchant(this.ghostNPC, true);
             event.setCancelled(true);
         }
