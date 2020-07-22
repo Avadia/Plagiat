@@ -231,7 +231,7 @@ public class QuakeModule extends AbstractModule {
                 if (axis != null) {
                     AxisAlignedBB vec3d = new AxisAlignedBB(axis.a + block.getX(), axis.b + block.getY(), axis.c + block.getZ(), axis.d + block.getX(), axis.e + block.getY(), axis.f + block.getZ());
                     vec3d = vec3d.grow(0.1F, 0.1F, 0.1F);
-                    if (vec3d.a(new Vec3D(loc.getX(), loc.getY(), loc.getZ())))
+                    if (vec3d.b(new Vec3D(loc.getX(), loc.getY(), loc.getZ())))
                         break;
                 }
             }
